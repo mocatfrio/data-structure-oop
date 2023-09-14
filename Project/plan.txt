@@ -1,0 +1,18 @@
+2 class
+
+Graph  
+    
+    - Total vertex
+    - Adjacency list
+    - Adjacency matrix
+
+
+
+Vertex
+    - ID
+    - Name
+
+Edge
+    - Source
+    - Destination
+    - Weight
