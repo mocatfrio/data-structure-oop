@@ -127,3 +127,9 @@ p.s. Modifikasi dengan menambahkan representasi graf **adjacency matrix** ([full
 7. Tambahkan modifikasi lain **(1-10 poin)**
 
 Catatan: Penilaian berdasarkan poin-poin yang berhasil diselesaikan.
+
+## Bahan Renungan
+
+1. Jika diperhatikan, pada Class terdapat kata-kata "public" dan "private". Apa fungsi dari kedua kata kunci ini dan apa perbedaan keduanya?
+2. Constructor dalam sebuah class berfungsi untuk melakukan inisialisasi awal terhadap objek yang dibuat dari class tersebut. Sementara itu, ada pula destructor. Apa fungsi dari destructor dan kapan destructor dipanggil?
+3. Apakah Anda dapat membuat 10 objek menggunakan 1 kelas?
