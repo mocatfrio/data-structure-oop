@@ -14,7 +14,9 @@
 
 Before going into the content, please read this article first: https://medium.com/@Ariobarxan/what-is-a-programming-paradigm-ec6c5879952b
 
-![img2](img/img2.webp)
+<p align="center">
+  <img src="img/img2.webp" />
+</p>
 
 Paradigma pemrograman adalah suatu pendekatan atau cara berpikir dalam menulis kode program komputer. Hal ini mencakup aturan, konsep, dan pola desain yang mengarahkan proses pengembangan perangkat lunak.
 
