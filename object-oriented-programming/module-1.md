@@ -119,10 +119,10 @@ p.s. Modifikasi dengan menambahkan representasi graf **adjacency matrix** ([full
 **Tugas Individu**
 
 1. Gambarkan peta sekitar rumah kalian dengan minimal 10 titik dalam bentuk graf berarah **(20 poin)**
-2. Dengan menggunakan Class Peta yang telah saya contohkan, implementasikan peta yang telah kalian buat (nomor 1) ke dalam sebuah program dengan representasi graf adjacency list **(30 poin)**
-3. Tampilkan hasil adjacency listnya **(10 poin)**
-4. Buatkan Class baru bernama "Titik" untuk menyimpan ID titik, nama tempat (misal "Rumah", "Minimarket", "Apotek", dll), titik koordinat x, dan titik koordinat y. Instansiasi class "Titik" untuk menyimpan info titik pada peta. **(10 poin)**
-5. Tampilkan hasil adjacency list berupa nama tempat **(10 poin)**
+2. Dengan menggunakan Class Peta yang telah saya contohkan, implementasikan peta yang telah kalian buat (nomor 1) ke dalam sebuah program dengan representasi graf adjacency list **(20 poin)**
+3. Tampilkan hasil adjacency listnya **(5 poin)**
+4. Buatkan Class baru bernama "Titik" untuk menyimpan ID titik, nama tempat (misal "Rumah", "Minimarket", "Apotek", dll), titik koordinat x, dan titik koordinat y. Instansiasi class "Titik" untuk menyimpan info titik pada peta. **(20 poin)**
+5. Tampilkan hasil adjacency list berupa nama tempat **(15 poin)**
 6. Tampilkan hasil graf menggunakan library graphics.h **(10 poin)**
 7. Tambahkan modifikasi lain **(1-10 poin)**
 
