@@ -13,7 +13,6 @@ Paradigma ini memungkinkan untuk memodelkan sistem kompleks dengan lebih baik, m
     * Class and Object
     * Property and Method
     * Constructor dan Destructor
-    * Practice
 2. Module 2
     * Inheritance
     * Polymorphism

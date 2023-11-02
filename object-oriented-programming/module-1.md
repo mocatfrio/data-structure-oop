@@ -17,11 +17,11 @@ Seorang mahasiswa ingin membuat program yang dapat mengelola data **peta** disek
 
 Dalam pemrograman berbasis objek (OOP), **Class** adalah blueprint untuk menciptakan objek. Class mendefinisikan karakteristik dan perilaku dari objek yang akan diciptakan berdasarkan class tersebut.
 
-1. **Property (Atribut atau Variabel Anggota)**: Data atau informasi yang dimiliki oleh objek dari suatu class. Mereka merepresentasikan karakteristik atau keadaan dari objek tersebut. Misalnya, jika kita ingin membuat sebuah class "Peta", maka property nya adalah 
+* **Property (Atribut)**: Data atau informasi yang dimiliki oleh objek dari suatu class. Mereka merepresentasikan karakteristik atau keadaan dari objek tersebut. Misalnya, jika kita ingin membuat sebuah class "Peta", maka property nya adalah 
     * Jumlah titik / tempat pada peta
     * Representasi peta berupa adjacency list, adjacency matrix, atau incidence list
 
-2. **Method (Metode atau Fungsi Anggota)**: Fungsi atau tindakan yang dapat dilakukan oleh objek dari suatu class. Mereka merepresentasikan perilaku atau aksi yang dapat dilakukan oleh objek tersebut. Misalnya, jika kita memiliki class "Peta", method-nya bisa mencakup fungsi seperti "tambahkanLintasan", "tampilkanAdjList", dan sebagainya.
+* **Method (Metode atau Fungsi)**: Fungsi atau tindakan yang dapat dilakukan oleh objek dari suatu class. Mereka merepresentasikan perilaku atau aksi yang dapat dilakukan oleh objek tersebut. Misalnya, jika kita memiliki class "Peta", method-nya bisa mencakup fungsi seperti "tambahkanLintasan", "tampilkanAdjList", dan sebagainya.
 
 
 ```C++
@@ -105,10 +105,11 @@ int main() {
 ### 3. Compile
 
 Output 
+p.s. Modifikasi dengan menambahkan representasi graf **adjacency matrix** ([full code](code/peta.cpp))
 
 ![img5](img/img5.png)
 
-p.s. Modifikasi dengan menambahkan representasi graf **adjacency matrix**
+
 
 
 ## Practice
