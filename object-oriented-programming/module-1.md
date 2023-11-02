@@ -11,7 +11,9 @@ sembari langsung mengimplementasikannya dengan studi kasus yang diberikan.
 
 Seorang mahasiswa ingin membuat program yang dapat mengelola data **peta** disekitar rumahnya. Representasi graph yang dipakai adalah adjacency list. Rancanglah sebuah **class** yang dapat mengelola data tersebut. Apa saja properties dan methods yang dibutuhkan?
 
-![img4](img/img4.png)
+<p align="center">
+  <img src="img/img4.png" />
+</p>
 
 ### 1. Mendefinisikan Class Peta
 
@@ -107,9 +109,9 @@ int main() {
 Output 
 p.s. Modifikasi dengan menambahkan representasi graf **adjacency matrix** ([full code](code/peta.cpp))
 
-![img5](img/img5.png)
-
-
+<p align="center">
+  <img src="img/img5.png" />
+</p>
 
 
 ## Practice

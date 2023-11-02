@@ -36,7 +36,10 @@ Setiap paradigma pemrograman memiliki **karakteristik uniknya sendiri**, dan mem
 14. Berbasis Masalah (Problem-Solving)
 
 ## Declarative and Imperative Programming
-![img2](img/img3.webp)
+
+<p align="center">
+  <img src="img/img3.webp" />
+</p>
 
 Pada dasarnya, paradigma pemrograman ada 2, yaitu:
 1. **Paradigma Imperatif**
@@ -76,7 +79,7 @@ Pada dasarnya, paradigma pemrograman ada 2, yaitu:
 
 Seorang dosen ingin mengembangkan **sistem manajemen tugas** untuk  memasukkan nilai tugas mahasiswa dan menghitung nilai akhir mahasiswa di setiap mata kuliah.
 
-**Imperatif:**
+**Imperatif**
 
 ```
 1. Memasukkan jumlah mahasiswa
