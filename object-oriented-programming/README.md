@@ -18,10 +18,10 @@ Paradigma ini memungkinkan untuk memodelkan sistem kompleks dengan lebih baik, m
     * Property and Method
     * Constructor dan Destructor
 2. Module 2
+    * Abstraction
+    * Abstract Class
+    * Encapsulation
     * Inheritance
     * Polymorphism
-    * Abstraction
-    * Encapsulation
     * Interface
-    * Abstract Class
-  
+3. [Final Project](final-project.md)
