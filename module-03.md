@@ -101,7 +101,6 @@ public class AppFinal {
 
 ## List of Contents
 
-  - [List of Contents](#list-of-contents)
   - [1. Abstract Class](#1-abstract-class)
     - [1.1 Abstract Class vs Class biasa sebagai Parent](#11-abstract-class-vs-class-biasa-sebagai-parent)
     - [1.2 Abstract Method](#12-abstract-method)

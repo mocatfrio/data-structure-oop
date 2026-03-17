@@ -7,7 +7,6 @@ Berikut adalah contoh kode yang digunakan dalam modul ini:
 
 ## List of Contents
 
-  - [List of Contents](#list-of-contents)
   - [1. Class dan Object](#1-class-dan-object)
     - [1.1 Class](#11-class)
     - [1.2 Object](#12-object)

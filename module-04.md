@@ -4,6 +4,29 @@
 >
 > -Wikipedia
 
+## Table of Contents
+
+  - [Class Diagram](#class-diagram)
+  - [1. Kelas (Class)](#1-kelas-class)
+    - [A. Konvensi Penamaan Kelas dalam Java](#a-konvensi-penamaan-kelas-dalam-java)
+  - [2. Atribut dan Metode dalam Kelas](#2-atribut-dan-metode-dalam-kelas)
+    - [A. Konvensi Penamaan Method](#a-konvensi-penamaan-method)
+    - [B. Konvensi Penamaan Atribut](#b-konvensi-penamaan-atribut)
+    - [C. Return Type (Tipe Kembalian)](#c-return-type-tipe-kembalian)
+    - [D. Visibilitas](#d-visibilitas)
+    - [D. Classifiers](#d-classifiers)
+    - [E. Constructor](#e-constructor)
+    - [F. Konvensi Penamaan Konstanta](#f-konvensi-penamaan-konstanta)
+  - [3. Relasi antar Kelas](#3-relasi-antar-kelas)
+    - [A. Relasi Dua Arah](#a-relasi-dua-arah)
+  - [4. Kardinalitas pada Relasi (Cardinality)](#4-kardinalitas-pada-relasi-cardinality)
+  - [5. Anotasi pada Kelas (Class)](#5-anotasi-pada-kelas-class)
+    - [A. Konvensi Penamaan Interface](#a-konvensi-penamaan-interface)
+  - [6. Perbaikan](#6-perbaikan)
+
+
+## Class Diagram
+
 **Class Diagram** adalah salah satu jenis diagram dalam **UML (Unified Modeling Language)** yang digunakan untuk menggambarkan struktur statis suatu sistem. Diagram ini menunjukkan:
 
 - **Kelas (class)**
@@ -679,3 +702,22 @@ Perbaikan
 
 Hasil perbaikan di atas bisa diakses pada kode berikut:
 [AppFinal.java](java/1-oop-car/src/AppFinal.java)
+
+## Activity 04
+
+Sifat : Tugas Individu
+
+1. Cari case / problem di sekitar Anda yang bisa diselesaikan dengan paradigma OOP
+2. Rancanglah Class Diagram-nya menggunakan Mermaid.ai
+3. Setelah itu, coba implementasikan ke kode Java
+4. Buatkan dokumentasi di Github Markdown, mencakup hal-hal berikut:
+   - Deskripsi kasus
+   - Class diagram
+   - Kode program Java
+   - Screenshot output
+   - Penjelasan prinsip-prinsip OOP apa saja yang diterapkan
+   - Penjelasan keunikan yang membedakan dengan individu lain
+
+5. Setiap mahasiswa harus menonjolkan keunikan dari program yang dibuatnya
+6. Code akan dicek similarity antar individu dan AI-generated percentage-nya
+7. Selamat mengerjakan dan berlibur :)
