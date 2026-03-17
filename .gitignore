@@ -1,3 +1,7 @@
 *.dSYM
 .vscode
 .*
+*.class
+out/
+build/
+target/
