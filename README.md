@@ -28,3 +28,5 @@ The learning objectives associated with this course are:
 | 2      | Basic Concepts of OOP    | [Go to module](module-02.md) |
 | 3      | Advanced Concepts of OOP | [Go to module](module-03.md) |
 | 4      | Class Diagrams           | [Go to module](module-04.md) |
+| 5      | Linked List , Stack, and Queue using OOP    | [Go to module](module-05.md) |
+| 6      | Hashing and Map using OOP                   | [Go to module](module-06.md) |
