@@ -23,10 +23,12 @@ The learning objectives associated with this course are:
 
 | Module | Title                    | Link                      |
 | ------ | ------------------------ | ------------------------- |
-| 0      | Programming Paradigms    | [Go to module](module-00.md) |
-| 1      | Introduction to Java     | [Go to module](module-01.md) |
-| 2      | Basic Concepts of OOP    | [Go to module](module-02.md) |
-| 3      | Advanced Concepts of OOP | [Go to module](module-03.md) |
-| 4      | Class Diagrams           | [Go to module](module-04.md) |
-| 5      | Linked List , Stack, and Queue using OOP    | [Go to module](module-05.md) |
-| 6      | Hashing and Map using OOP                   | [Go to module](module-06.md) |
+| 1      | Programming Paradigms    | [Go to module](module-01.md) |
+| 2      | Introduction to Java     | [Go to module](module-02.md) |
+| 3      | Basic Concepts of OOP    | [Go to module](module-03.md) |
+| 4      | Advanced Concepts of OOP | [Go to module](module-04.md) |
+| 5      | Class Diagrams           | [Go to module](module-05.md) |
+| 6      | Analisis Kompleksitas Struktur Data       | [Go to module](module-06.md) |
+| 7      | Linked List using OOP    | [Go to module](module-07.md) |
+| 8      | Stack and Queue using OOP    | [Go to module](module-08.md) |
+| 9      | Hashing and Map using OOP    | [Go to module](module-09.md) |
