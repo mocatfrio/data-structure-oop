@@ -1,7 +1,43 @@
-# Module 03. Advanced Concept of OOP
+# Module 03: Konsep Dasar OOP
 
-Modul ini membahas konsep OOP tingkat lanjut dengan melanjutkan studi kasus dari modul sebelumnya. Berikut adalah contoh kode yang digunakan dalam modul ini:
-[AppFinal.java](java/1-oop-car/src/AppFinal.java)
+Object-Oriented Programming (OOP) adalah cara menulis program dengan memodelkan **objek** seperti di dunia nyata.
+
+Berikut adalah contoh kode yang digunakan dalam modul ini:
+[App.java](java/1-oop-car/src/App.java)
+
+## Daftar Isi
+
+  - [1. Class dan Object](#1-class-dan-object)
+    - [1.1 Class](#11-class)
+    - [1.2 Object](#12-object)
+  - [2. Atribut dan Method](#2-atribut-dan-method)
+    - [2.1 Atribut](#21-atribut)
+    - [2.2 Method](#22-method)
+  - [3. Constructor](#3-constructor)
+    - [3.1 Default Constructor](#31-default-constructor)
+    - [3.2 Parameterized Constructor](#32-parameterized-constructor)
+    - [3.3 Constructor Overloading](#33-constructor-overloading)
+    - [3.4 Copy Constructor](#34-copy-constructor)
+    - [3.5 Private Constructor](#35-private-constructor)
+    - [3.6 Constructor pada Inheritance](#36-constructor-pada-inheritance)
+  - [4. Empat Konsep OOP](#4-empat-konsep-oop)
+    - [4.1 Abstraction](#41-abstraction)
+      - [Interface juga bagian dari Abstraction](#interface-juga-bagian-dari-abstraction)
+    - [4.2 Inheritance](#42-inheritance)
+    - [4.3 Polymorphism](#43-polymorphism)
+    - [4.4 Encapsulation](#44-encapsulation)
+  - [Kesimpulan](#kesimpulan)
+
+
+## 1. Class dan Object
+
+![1773736746240](image/module-02/1773736746240.png)
+
+### 1.1 Class
+
+**Class** adalah blueprint atau cetakan untuk membuat object.
+
+Pada kode ini:
 
 ```java
 abstract class Car {
@@ -9,260 +45,427 @@ abstract class Car {
   protected String type;
   protected String color;
   private int speed;
-  protected TollPayment tollPayment;
+}
+```
 
-  public Car() {
-  }
+`Car` adalah class yang mendefinisikan data dan perilaku dasar dari sebuah mobil.
 
-  public Car(String brand, String type, String color, int speed, TollPayment tollPayment) {
-    this.brand = brand;
-    this.type = type;
-    this.color = color;
-    this.speed = speed;
-    this.tollPayment = tollPayment;
-  }
+Class lain juga ada, misalnya:
 
-  public abstract void startEngine();
+* `ElectricCar`
+* `CashPayment`
 
-  public int getSpeed() {
-    return speed;
-  }
+### 1.2 Object
 
-  public void setSpeed(int speed) {
-    this.speed = speed;
-  }
+**Object** adalah hasil nyata dari class.
 
-  public void payToll(int amount) {
-    if (tollPayment != null) {
-      tollPayment.payToll(amount);
-    } else {
-      System.out.println("Metode pembayaran tol belum tersedia.");
-    }
-  }
+Contoh pada `main()`:
 
-  public void showCarInfo() {
-    System.out.println("Brand : " + brand);
-    System.out.println("Type  : " + type);
-    System.out.println("Color : " + color);
-    System.out.println("Speed : " + speed + " km/h");
-  }
+```java
+ElectricCar myCar = new ElectricCar("Honda", "Brio", "Kuning", 0);
+```
+
+`myCar` adalah object dari class `ElectricCar`.
+
+Artinya object `myCar` punya data:
+
+* `brand = "Honda"`
+* `type = "Brio"`
+* `color = "Kuning"`
+* `speed = 0`
+
+Lalu object ini bisa menjalankan method seperti:
+
+```java
+myCar.getSpeed();
+myCar.startEngine();
+myCar.payToll(100000);
+```
+
+## 2. Atribut dan Method
+
+![1773736770758](image/module-02/1773736770758.png)
+
+### 2.1 Atribut
+
+**Atribut** adalah sifat-sifat yang dimiliki object.
+
+Pada class `Car`:
+
+```java
+protected String brand;
+protected String type;
+protected String color;
+private int speed;
+protected CashPayment cashPayment = new CashPayment();
+```
+
+Penjelasan:
+
+* `brand` → merek mobil
+* `type` → tipe mobil
+* `color` → warna mobil
+* `speed` → kecepatan mobil
+* `cashPayment` → object untuk proses pembayaran tol
+
+### 2.2 Method
+
+**Method** adalah aksi atau perilaku yang bisa dilakukan object.
+
+Contoh method pada `Car`:
+
+```java
+public int getSpeed() {
+  return speed;
 }
 
-interface TollPayment {
-  void payToll(int amount);
+public void setSpeed(int speedNew) {
+  this.speed = speedNew;
 }
 
-class CashPayment implements TollPayment {
-  @Override
-  public void payToll(int amount) {
-    System.out.println("Pembayaran tol tunai sebesar Rp" + amount + " berhasil.");
-  }
+public void payToll(int number) {
+  cashPayment.payToll(number);
 }
+```
 
-class ElectricCar extends Car {
-  public ElectricCar(String brand, String type, String color, int speed, TollPayment tollPayment) {
-    super(brand, type, color, speed, tollPayment);
-  }
+Contoh method pada `ElectricCar`:
 
-  @Override
-  public void startEngine() {
-    System.out.println("Mobil listrik dinyalakan tanpa suara.");
-  }
+```java
+void startEngine() {
+  System.out.println("Ini electric car");
 }
+```
 
-public class AppFinal {
-  public static void main(String[] args) {
-    TollPayment payment = new CashPayment();
+## 3. Constructor
 
-    ElectricCar car = new ElectricCar(
-        "Tesla",
-        "Model 3",
-        "Merah",
-        120,
-        payment);
+Constructor adalah method khusus yang otomatis dipanggil saat object dibuat. Fungsi utamanya adalah untuk **menginisialisasi nilai awal** dari object.
 
-    System.out.println("=== DATA MOBIL ===");
-    car.showCarInfo();
+![1773736915369](image/module-02/1773736915369.png)
 
-    System.out.println("\n=== MENYALAKAN MOBIL ===");
-    car.startEngine();
+Ciri-ciri constructor:
 
-    System.out.println("\n=== PEMBAYARAN TOL ===");
-    car.payToll(15000);
+- Nama constructor harus sama dengan nama class
+- Tidak memiliki return type
+- Dipanggil saat object dibuat dengan keyword `new`
 
-    System.out.println("\n=== UBAH KECEPATAN ===");
-    car.setSpeed(140);
-    System.out.println("Kecepatan sekarang: " + car.getSpeed() + " km/h");
+Contoh sederhana:
+
+```java
+Car myCar = new Car();
+```
+
+Saat baris di atas dijalankan, constructor `Car()` akan dipanggil.
+
+Secara garis besar, ada 2 jenis constructor, yaitu:
+
+1. Default Constructor
+2. Parameterized Constructor
+
+Dalam implementasinya, berkembang jadi beberapa jenis, yaitu:
+
+1. Overloading Constructor
+2. Copy Constructor
+3. Private Constructor
+4. Constructor pada Inheritance
+
+### 3.1 Default Constructor
+
+**Default constructor** adalah constructor tanpa parameter. Constructor ini cocok digunakan ketika object ingin langsung punya nilai awal default tanpa harus mengisi data dari luar.
+
+Contoh:
+
+```java
+class Car {
+  String brand;
+
+  Car() {
+    brand = "Honda";
   }
 }
 ```
 
-![1773768243009](image/module-03/1773768243009.png)
+Pemakaian di Main:
 
-## List of Contents
+```java
+Car myCar = new Car();
+System.out.println(myCar.brand);
+```
 
-  - [1. Abstract Class](#1-abstract-class)
-    - [1.1 Abstract Class vs Class biasa sebagai Parent](#11-abstract-class-vs-class-biasa-sebagai-parent)
-    - [1.2 Abstract Method](#12-abstract-method)
-  - [2. Interface](#2-interface)
-    - [2.1 Implementasi Interface](#21-implementasi-interface)
-  - [3. Inheritance](#3-inheritance)
-    - [3.1 Constructor Inheritance](#31-constructor-inheritance)
-  - [4. Polymorphism](#4-polymorphism)
-    - [4.1 Polymorphism pada Abstract Method](#41-polymorphism-pada-abstract-method)
-    - [4.2 Polymorphism pada Interface](#42-polymorphism-pada-interface)
-  - [5. Encapsulation](#5-encapsulation)
-  - [6. Composition](#6-composition)
-  - [7. Dependency Injection Sederhana](#7-dependency-injection-sederhana)
-  - [8. Loose Coupling](#8-loose-coupling)
-  - [9. Method Overriding](#9-method-overriding)
-  - [10. Constructor Overloading](#10-constructor-overloading)
-  - [11. Null Handling Sederhana](#11-null-handling-sederhana)
-  - [12. Access Modifier](#12-access-modifier)
-    - [12.1 `private`](#121-private)
-    - [12.2 `protected`](#122-protected)
-    - [12.3 `public`](#123-public)
+Output:
 
+```java
+Honda
+```
 
-## 1. Abstract Class
+### 3.2 Parameterized Constructor
 
-**Abstract class** adalah class yang tidak ditujukan untuk dibuat object secara langsung, tetapi digunakan sebagai class dasar untuk diturunkan.
+**Parameterized constructor** adalah constructor yang memiliki parameter. Constructor ini dipakai ketika nilai object ingin diisi langsung saat object dibuat.
 
-Pada kode:
+Contoh:
+
+```java
+class Car {
+    String brand;
+    String type;
+    String color;
+    int speed;
+
+    public Car(String brand, String type, String color, int speed) {
+        this.brand = brand;
+        this.type = type;
+        this.color = color;
+        this.speed = speed;
+    }
+}
+```
+
+Pemakaian di Main:
+
+```java
+Car myCar = new Car("Honda", "Brio", "Merah", 100);
+System.out.println(myCar.brand);
+System.out.println(myCar.color);
+```
+
+Output:
+
+```java
+Honda
+Merah
+```
+
+### 3.3 Constructor Overloading
+
+**Constructor overloading** adalah satu class memiliki lebih dari satu constructor, tetapi dengan parameter yang berbeda. Dengan overloading, object bisa dibuat dengan beberapa cara sesuai kebutuhan.
+
+Misalnya:
+
+* tanpa parameter
+* dengan 1 parameter
+* dengan 2 parameter
+
+Contoh:
+
+```java
+class Car {
+  String brand;
+  String color;
+
+  Car() {
+    brand = "Default Brand";
+    color = "Hitam";
+  }
+
+  Car(String brand) {
+    this.brand = brand;
+    this.color = "Putih";
+  }
+
+  Car(String brand, String color) {
+    this.brand = brand;
+    this.color = color;
+  }
+}
+```
+
+Pemakaian:
+
+```java
+Car car1 = new Car();
+Car car2 = new Car("Honda");
+Car car3 = new Car("Suzuki", "Biru");
+```
+
+### 3.4 Copy Constructor
+
+Di Java, **copy constructor** adalah constructor yang menerima object sejenis lalu menyalin nilainya ke object baru. Constructor ini berguna untuk membuat object baru berdasarkan object yang sudah ada.
+
+Contoh:
+
+```java
+class Car {
+  String brand;
+  String color;
+
+  Car(String brand, String color) {
+    this.brand = brand;
+    this.color = color;
+  }
+
+  Car(Car other) {
+    this.brand = other.brand;
+    this.color = other.color;
+  }
+}
+```
+
+Pemakaian:
+
+```java
+Car car1 = new Car("Honda", "Kuning");
+Car car2 = new Car(car1);
+
+System.out.println(car2.brand);
+System.out.println(car2.color);
+```
+
+Output:
+
+```java
+Honda
+Kuning
+```
+
+### 3.5 Private Constructor
+
+**Private constructor** adalah constructor yang dibuat dengan access modifier `private`.
+
+Contoh:
+
+```java
+class Database {
+  private Database() {
+    System.out.println("Constructor dipanggil");
+  }
+}
+```
+
+Constructor ini tidak bisa dipanggil dari luar class. Biasanya digunakan untuk:
+
+* pattern **Singleton**
+* mencegah object dibuat sembarangan
+* class utility
+
+Contoh Singleton sederhana:
+
+```java
+class Database {
+  private static Database instance;
+
+  private Database() {}
+
+  public static Database getInstance() {
+    if (instance == null) {
+      instance = new Database();
+    }
+    return instance;
+  }
+}
+```
+
+Pemakaian:
+
+```java
+Database db = Database.getInstance();
+```
+
+### 3.6 Constructor pada Inheritance
+
+Dalam pewarisan, constructor parent bisa dipanggil menggunakan `super()`.
+
+Contoh:
+
+```java
+class Car {
+    String brand;
+    String type;
+    String color;
+    int speed;
+
+    public Car(String brand, String type, String color, int speed) {
+        this.brand = brand;
+        this.type = type;
+        this.color = color;
+        this.speed = speed;
+    }
+}
+
+class ElectricCar extends Car {
+    public ElectricCar(String brand, String type, String color, int speed) {
+        super(brand, type, color, speed);
+    }
+}
+```
+
+Kata kunci `super(...)` digunakan untuk memanggil constructor milik parent class, yaitu `Car`.
+
+Saat kode ini dijalankan:
+
+```java
+ElectricCar myCar = new ElectricCar("Honda", "Brio", "Kuning", 0);
+```
+
+Maka constructor `ElectricCar` dipanggil, lalu meneruskan data ke constructor `Car`.
+
+## 4. Empat Konsep OOP
+
+4 pilar utama Pemrograman Berorientasi Objek (OOP) adalah
+
+1. Enkapsulasi
+2. Pewarisan (Inheritance)
+3. Polimorfisme, dan
+4. Abstraksi
+
+Pilar-pilar ini berfungsi untuk meningkatkan modularitas, keamanan, dan reusabilitas kode, membuat perangkat lunak lebih mudah dikelola serta dikembangkan.
+
+![1773736399143](image/module-02/1773736399143.png)
+
+### 4.1 Abstraction
+
+**Abstraction** adalah menyembunyikan detail implementasi dan hanya menampilkan hal penting.
+
+![1773737067530](image/module-02/1773737067530.png)
+
+Pada kode ini, abstraction terlihat dari:
 
 ```java
 abstract class Car {
+  abstract void startEngine();
+}
 ```
 
-Artinya `Car` adalah class abstrak.
+Class `Car` hanya mengatakan bahwa setiap mobil harus punya method `startEngine()`,
+tetapi **cara menyalakan mesin** tidak dijelaskan di `Car`.
 
-Kita **tidak bisa** membuat object seperti ini:
+Implementasinya diberikan di class turunan:
 
 ```java
-Car car = new Car(); // tidak bisa
+@Override
+void startEngine() {
+  System.out.println("Ini electric car");
+}
 ```
 
-Karena `Car` adalah abstract class.
+Jadi:
 
-Abstract Class `Car` digunakan sebagai blueprint umum untuk semua jenis mobil.
-Setiap mobil pasti punya:
+* `Car` mendefinisikan konsep umum mobil
+* `ElectricCar` mengisi detail implementasinya
 
-* brand
-* type
-* color
-* speed
-* method menyalakan mesin
+#### Interface juga bagian dari abstraction
 
-Tetapi cara menyalakan mesin bisa berbeda-beda tergantung jenis mobil.
-
-### 1.1 Abstract Class vs Class biasa sebagai Parent
-
-Kita bisa saja pakai **class biasa**, tapi `abstract class` lebih cocok kalau class tersebut masih terlalu umum.
-
-Contoh: 
-`Car` adalah konsep umum.  
-Yang biasanya dibuat object adalah:
-  - `ElectricCar`
-  - `GasCar`
-  - `HybridCar`
-
-Kita menggunakan **Abstract Class**, jika:
-
-* `Car` hanya menjadi **template / blueprint**
-* `Car` **tidak bisa dibuat object langsung**
-* subclass seperti `ElectricCar` **wajib** mengisi method penting, misalnya `startEngine()`
-
-Kalau semua perilaku sudah sama dan class boleh langsung dibuat object, maka kita menggunakan **class biasa** saja sudah cukup.
-
-
-### 1.2 Abstract Method
-
-Di dalam abstract class ada abstract method:
-
-```java
-public abstract void startEngine();
-```
-
-Method abstrak adalah method yang:
-
-* Hanya memiliki deklarasi
-* Tidak memiliki isi
-* **Wajib diimplementasikan oleh class turunan**
-
-Artinya setiap jenis mobil harus menentukan sendiri cara `startEngine()`.
-
-Abstract method juga biasanya ada di dalam **interface**.
-
-## 2. Interface
-
-**Interface** adalah kontrak yang berisi method yang harus diimplementasikan oleh class yang menggunakannya.
-
-![1773769233080](image/module-03/1773769233080.png)
-
-Pada kode:
+Pada kode ini juga ada:
 
 ```java
 interface TollPayment {
-  void payToll(int amount);
+  void payToll(int number);
 }
 ```
 
-Interface `TollPayment` menyatakan bahwa semua class yang mengimplementasikannya harus punya method:
+Interface `TollPayment` hanya menentukan aturan bahwa class yang mengimplementasikannya harus punya method `payToll(int number)`.
 
-```java
-void payToll(int amount)
-```
+### 4.2 Inheritance
 
-### 2.1 Implementasi Interface
+**Inheritance** adalah pewarisan, yaitu class anak mewarisi atribut dan method dari class induk.
 
-Class `CashPayment` mengimplementasikan interface tersebut:
+![1773736981604](image/module-02/1773736981604.png)
 
-```java
-class CashPayment implements TollPayment {
-  @Override
-  public void payToll(int amount) {
-    System.out.println("Pembayaran tol tunai sebesar Rp" + amount + " berhasil.");
-  }
-}
-```
-
-Artinya `CashPayment` memenuhi kontrak `TollPayment`.
-
-Interface cocok digunakan saat kita ingin membuat **aturan umum** untuk banyak kemungkinan implementasi.
-
-Contoh lain yang bisa ditambahkan:
-
-```java
-class EmoneyPayment implements TollPayment {
-  @Override
-  public void payToll(int amount) {
-    System.out.println("Pembayaran tol e-money sebesar Rp" + amount + " berhasil.");
-  }
-}
-
-class QRISPayment implements TollPayment {
-  @Override
-  public void payToll(int amount) {
-    System.out.println("Pembayaran tol dengan QRIS sebesar Rp" + amount + " berhasil.");
-  }
-}
-```
-
-Jadi satu interface bisa punya banyak implementasi.
-
-## 3. Inheritance
-
-**Inheritance** adalah pewarisan sifat dari parent class ke child class.
-
-Pada kode:
+Contoh:
 
 ```java
 class ElectricCar extends Car {
 ```
 
-Artinya `ElectricCar` mewarisi atribut dan method dari `Car`.
-
-Jadi `ElectricCar` otomatis memiliki:
+`ElectricCar` mewarisi isi dari `Car`, seperti:
 
 * `brand`
 * `type`
@@ -270,313 +473,125 @@ Jadi `ElectricCar` otomatis memiliki:
 * `getSpeed()`
 * `setSpeed()`
 * `payToll()`
-* `showCarInfo()`
 
-### 3.1 Constructor Inheritance
-
-Constructor pada `ElectricCar` memanggil constructor parent dengan `super(...)`.
+Karena itu object `myCar` bisa langsung memakai:
 
 ```java
-public ElectricCar(String brand, String type, String color, int speed, TollPayment tollPayment) {
-  super(brand, type, color, speed, tollPayment);
-}
+myCar.getSpeed();
+myCar.payToll(100000);
 ```
 
-Kata kunci `super` digunakan untuk meneruskan nilai ke constructor milik parent classnya, yaitu `Car`.
+padahal method tersebut didefinisikan di class `Car`.
 
-## 4. Polymorphism
+Keuntungan inheritance:
 
-**Polymorphism** berarti satu bentuk dapat memiliki banyak perilaku.
+* kode lebih rapi
+* bisa digunakan ulang
+* tidak perlu menulis ulang fitur yang sama
 
-Pada kode ini, polymorphism muncul dalam dua bentuk utama.
+### 4.3 Polymorphism
 
-### 4.1 Polymorphism pada Abstract Method
+**Polymorphism** berarti "satu bentuk, banyak perilaku".
 
-Method:
+![1773737025648](image/module-02/1773737025648.png)
+
+Dalam OOP, method yang sama bisa punya implementasi berbeda pada class yang berbeda.
+
+Contoh pada method abstract:
 
 ```java
-public abstract void startEngine();
+abstract void startEngine();
 ```
 
-diimplementasikan berbeda oleh `ElectricCar`:
+Lalu di `ElectricCar` di-override menjadi:
 
 ```java
 @Override
-public void startEngine() {
-  System.out.println("Mobil listrik dinyalakan tanpa suara.");
+void startEngine() {
+  System.out.println("Ini electric car");
 }
 ```
 
-Kalau nanti ada class lain:
+Kalau nanti ada class lain, misalnya `GasCar`, maka method `startEngine()` bisa diisi berbeda, misalnya:
 
 ```java
-class GasCar extends Car {
-  public GasCar(String brand, String type, String color, int speed, TollPayment tollPayment) {
-    super(brand, type, color, speed, tollPayment);
-  }
+@Override
+void startEngine() {
+  System.out.println("Mesin bensin dinyalakan");
+}
+```
 
+Artinya:
+
+* nama method sama → `startEngine()`
+* perilaku bisa berbeda tergantung jenis object
+
+Contoh lain polymorphism juga terlihat pada interface:
+
+```java
+interface TollPayment {
+  void payToll(int number);
+}
+```
+
+Lalu class:
+
+```java
+class CashPayment implements TollPayment {
   @Override
-  public void startEngine() {
-    System.out.println("Mobil bensin dinyalakan dengan suara mesin.");
+  public void payToll(int number) {
+    System.out.println("Pembayaran Cash sejumlah: " + number);
   }
 }
 ```
 
-Method `startEngine()` tetap sama, tetapi perilakunya berbeda.
+Kalau nanti ada `DebitPayment` atau `EWaletPayment`, semua bisa punya method `payToll()` dengan cara pembayaran berbeda.
 
+### 4.4 Encapsulation
 
-### 4.2 Polymorphism pada Interface
+**Encapsulation** adalah membungkus data dan mengontrol akses terhadap data tersebut.
 
-Di `main()`:
+![1773737271167](image/module-02/1773737271167.png)
 
-```java
-TollPayment payment = new CashPayment();
-```
-
-Variabel `payment` bertipe interface `TollPayment`, tetapi object yang diberikan adalah `CashPayment`.
-
-Ini artinya program fokus pada **kontrak**, bukan pada implementasi detail.
-
-Kalau suatu saat diganti menjadi:
-
-```java
-TollPayment payment = new EmoneyPayment();
-```
-
-maka kode `Car` tidak perlu diubah.
-
-## 5. Encapsulation
-
-**Encapsulation** adalah membungkus data dan membatasi akses langsung ke data tersebut.
-
-Pada class `Car`, atribut `speed` dibuat `private`:
+Contoh paling jelas ada pada property `speed`:
 
 ```java
 private int speed;
 ```
 
-Artinya `speed` tidak bisa diakses langsung dari luar class.
+Karena `speed` bersifat `private`, property ini **tidak bisa diakses langsung dari luar class**.
 
-Akses dilakukan melalui getter dan setter:
+Aksesnya harus lewat method:
 
 ```java
 public int getSpeed() {
   return speed;
 }
 
-public void setSpeed(int speed) {
-  this.speed = speed;
+public void setSpeed(int speedNew) {
+  this.speed = speedNew;
 }
 ```
 
-Dengan encapsulation:
-
-* Data lebih aman
-* Perubahan nilai bisa dikontrol
-* Mencegah manipulasi langsung dari luar class
-
-Contoh pengembangan yang lebih baik:
+Jadi daripada langsung menulis:
 
 ```java
-public void setSpeed(int speed) {
-  if (speed >= 0) {
-    this.speed = speed;
-  } else {
-    System.out.println("Kecepatan tidak boleh negatif.");
-  }
-}
+myCar.speed = 100; // tidak bisa, karena private
 ```
 
-Dengan begitu, object tidak akan menerima nilai kecepatan yang tidak valid.
-
-
-## 6. Composition
-
-**Composition** adalah hubungan “has-a”, yaitu sebuah object memiliki object lain sebagai bagian dari dirinya.
-
-Pada class `Car`:
+kita harus menggunakan:
 
 ```java
-protected TollPayment tollPayment;
+myCar.setSpeed(100);
+System.out.println(myCar.getSpeed());
 ```
 
-Artinya mobil **memiliki** metode pembayaran tol.
+Keuntungan encapsulation:
 
-Ini menunjukkan bahwa `Car` tidak menangani pembayaran sendiri, tetapi menggunakan object lain untuk tugas tersebut.
+* data lebih aman
+* akses bisa dikontrol
+* mencegah perubahan sembarangan dari luar class
 
-Hubungan ini disebut composition karena:
+## Kesimpulan
 
-* `Car` memiliki referensi ke object `TollPayment`
-* `TollPayment` menjadi bagian dari perilaku `Car`
-
-Dibanding menulis logika pembayaran langsung di `Car`, composition memberi keuntungan:
-
-* Lebih fleksibel
-* Lebih mudah mengganti strategi pembayaran
-* Kode lebih modular
-* Class lebih fokus pada tanggung jawab utamanya
-
-## 7. Dependency Injection Sederhana
-
-**Dependency Injection** adalah teknik memberikan dependency dari luar class, bukan membuatnya sendiri di dalam class.
-
-Pada constructor `Car`:
-
-```java
-public Car(String brand, String type, String color, int speed, TollPayment tollPayment) {
-  this.brand = brand;
-  this.type = type;
-  this.color = color;
-  this.speed = speed;
-  this.tollPayment = tollPayment;
-}
-```
-
-`TollPayment` diberikan dari luar, bukan dibuat langsung di dalam `Car`.
-
-Di `main()`:
-
-```java
-TollPayment payment = new CashPayment();
-```
-
-Lalu dimasukkan ke object mobil:
-
-```java
-ElectricCar car = new ElectricCar("Tesla", "Model 3", "Merah", 120, payment);
-```
-
-Dengan pendekatan ini:
-
-* Object `Car` tidak tergantung langsung pada `CashPayment`
-* Lebih mudah mengganti implementasi
-* Lebih mudah diuji
-* Kode menjadi lebih longgar keterikatannya
-
-Kalau `Car` langsung membuat object seperti ini:
-
-```java
-tollPayment = new CashPayment();
-```
-
-maka class `Car` akan terlalu bergantung pada satu jenis pembayaran saja.
-
-## 8. Loose Coupling
-
-**Loose coupling** berarti hubungan antar class dibuat longgar agar perubahan pada satu class tidak banyak memengaruhi class lain. Pada kode ini, `Car` tidak tergantung pada `CashPayment`, tetapi tergantung pada interface:
-
-```java
-protected TollPayment tollPayment;
-```
-
-Ini lebih baik daripada:
-
-```java
-protected CashPayment tollPayment;
-```
-
-Karena jika memakai interface:
-
-* Implementasi bisa diganti
-* Class lebih fleksibel
-* Lebih mudah dimaintenance
-
-## 9. Method Overriding
-
-**Method overriding** adalah ketika child class menulis ulang method dari parent class dengan signature yang sama.
-
-Contohnya:
-
-```java
-@Override
-public void startEngine() {
-  System.out.println("Mobil listrik dinyalakan tanpa suara.");
-}
-```
-
-Method ini menimpa method abstrak dari parent `Car`.
-
-`@Override` digunakan untuk memberi tahu compiler bahwa method ini memang override dari parent.
-
-## 10. Constructor Overloading
-
-Pada class `Car` ada dua constructor:
-
-```java
-public Car() {
-}
-```
-
-dan
-
-```java
-public Car(String brand, String type, String color, int speed, TollPayment tollPayment) {
-  this.brand = brand;
-  this.type = type;
-  this.color = color;
-  this.speed = speed;
-  this.tollPayment = tollPayment;
-}
-```
-
-Ini disebut **constructor overloading** karena satu class memiliki lebih dari satu constructor dengan parameter berbeda. Tujuannya adalah:
-
-* Memberi fleksibilitas saat membuat object
-* Object bisa dibuat kosong terlebih dahulu
-* Atau langsung diisi semua nilainya
-
-## 11. Null Handling Sederhana
-
-Pada method `payToll()`:
-
-```java
-public void payToll(int amount) {
-  if (tollPayment != null) {
-    tollPayment.payToll(amount);
-  } else {
-    System.out.println("Metode pembayaran tol belum tersedia.");
-  }
-}
-```
-
-Ini menunjukkan pemeriksaan `null` sebelum method dipanggil. Tujuannya:
-
-* Mencegah error `NullPointerException`
-* Memberikan pesan yang lebih aman ke pengguna
-
-Ini adalah praktik dasar penting dalam Java saat bekerja dengan object reference.
-
-## 12. Access Modifier
-
-Kode ini juga menunjukkan penggunaan beberapa access modifier.
-
-### 12.1 `private`
-
-```java
-private int speed;
-```
-
-Hanya bisa diakses dari dalam class `Car`.
-
-### 12.2 `protected`
-
-```java
-protected String brand;
-protected String type;
-protected String color;
-protected TollPayment tollPayment;
-```
-
-Bisa diakses oleh class turunan seperti `ElectricCar`.
-
-### 12.3 `public`
-
-Digunakan pada constructor dan method yang ingin diakses dari luar class.
-
-Contoh:
-
-```java
-public int getSpeed()
-public void setSpeed(int speed)
-public void payToll(int amount)
-```
+![1773737179695](image/module-02/1773737179695.png)

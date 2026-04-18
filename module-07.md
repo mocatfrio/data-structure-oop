@@ -1,1115 +1,3358 @@
-# Module 07: Analisis Kompleksitas Struktur Data
+# Module 07: Linked List dan Variasinya
 
 ## Daftar Isi
-1. [Pengenalan Kompleksitas](#pengenalan-kompleksitas)
-2. [Big O Notation](#big-o-notation)
-3. [Jenis-jenis Kompleksitas Waktu](#jenis-jenis-kompleksitas-waktu)
-4. [Kompleksitas Ruang (Space Complexity)](#kompleksitas-ruang-space-complexity)
-5. [Analisis Kompleksitas Struktur Data](#analisis-kompleksitas-struktur-data)
-   - [Array](#kompleksitas-array)
-   - [Linked List](#kompleksitas-linked-list)
-   - [Stack](#kompleksitas-stack)
-   - [Queue](#kompleksitas-queue)
-6. [Perbandingan Struktur Data](#perbandingan-struktur-data)
-7. [Contoh Analisis Algoritma](#contoh-analisis-algoritma)
-8. [Best, Average, dan Worst Case](#best-average-dan-worst-case)
-9. [Tips Optimasi](#tips-optimasi)
-10. [Latihan Analisis](#latihan-analisis)
+1. [Pengenalan Linked List](#pengenalan-linked-list)
+2. [Single Linked List](#single-linked-list)
+   - [Single Linked List tanpa OOP](#single-linked-list-tanpa-oop)
+   - [Single Linked List dengan OOP](#single-linked-list-dengan-oop)
+3. [Double Linked List](#double-linked-list)
+   - [Double Linked List tanpa OOP](#double-linked-list-tanpa-oop)
+   - [Double Linked List dengan OOP](#double-linked-list-dengan-oop)
+4. [Circular Single Linked List](#circular-single-linked-list)
+   - [Circular Single Linked List tanpa OOP](#circular-single-linked-list-tanpa-oop)
+   - [Circular Single Linked List dengan OOP](#circular-single-linked-list-dengan-oop)
+5. [Circular Double Linked List](#circular-double-linked-list)
+   - [Circular Double Linked List tanpa OOP](#circular-double-linked-list-tanpa-oop)
+   - [Circular Double Linked List dengan OOP](#circular-double-linked-list-dengan-oop)
+6. [Kapan Menggunakan Linked List](#kapan-menggunakan-linked-list)
+7. [Kompleksitas Linked List](#kompleksitas-linked-list)
+8. [Latihan Praktikum](#latihan-praktikum)
 
 ---
 
-## Pengenalan Kompleksitas
+## Pengenalan Linked List
 
-### Apa itu Kompleksitas Algoritma?
+### Apa itu Linked List?
 
-Kompleksitas algoritma adalah ukuran yang digunakan untuk menganalisis efisiensi algoritma dan struktur data. Analisis kompleksitas membantu kita memahami bagaimana performa algoritma berubah seiring bertambahnya ukuran input.
+Linked List adalah struktur data linear yang terdiri dari kumpulan node yang saling terhubung melalui pointer/referensi. Berbeda dengan array yang menyimpan data secara kontinu di memori, linked list menyimpan data secara tersebar dan dihubungkan dengan pointer.
 
-### Mengapa Kompleksitas Penting?
+### Komponen Linked List
 
-1. **Prediksi Performa** - Memperkirakan waktu eksekusi dan penggunaan memori
-2. **Perbandingan Algoritma** - Memilih algoritma terbaik untuk masalah tertentu
-3. **Skalabilitas** - Memahami bagaimana algoritma berperilaku dengan data besar
-4. **Optimasi** - Mengidentifikasi bottleneck dan area perbaikan
+Setiap node dalam linked list minimal memiliki:
+- **Data**: Nilai yang disimpan
+- **Pointer/Next**: Referensi ke node berikutnya
 
-### Dua Jenis Kompleksitas
+### Jenis-jenis Linked List
 
-| Jenis | Deskripsi | Pertanyaan |
-|-------|-----------|------------|
-| **Time Complexity** | Jumlah operasi yang dilakukan | "Berapa lama waktu yang dibutuhkan?" |
-| **Space Complexity** | Jumlah memori yang digunakan | "Berapa banyak memori yang dibutuhkan?" |
+| Jenis | Deskripsi | Karakteristik |
+|-------|-----------|---------------|
+| **Single Linked List** | Setiap node memiliki satu pointer ke node berikutnya | Traversal satu arah |
+| **Double Linked List** | Setiap node memiliki pointer ke node sebelum dan sesudahnya | Traversal dua arah |
+| **Circular Single Linked List** | Node terakhir menunjuk ke node pertama | Membentuk lingkaran |
+| **Circular Double Linked List** | Kombinasi double dan circular | Lingkaran dua arah |
+
+### Class Diagram Linked List
+
+Berikut adalah class diagram untuk semua jenis Linked List yang akan dibahas dalam modul ini:
+
+```mermaid
+classDiagram
+    class Node {
+        -int data
+        -Node next
+        +Node(data: int)
+        +getData() int
+        +setData(data: int) void
+        +getNext() Node
+        +setNext(next: Node) void
+    }
+
+    class DoubleNode {
+        -int data
+        -DoubleNode prev
+        -DoubleNode next
+        +DoubleNode(data: int)
+        +getData() int
+        +getPrev() DoubleNode
+        +getNext() DoubleNode
+        +setPrev(prev: DoubleNode) void
+        +setNext(next: DoubleNode) void
+    }
+
+    class SingleLinkedList {
+        -Node head
+        -int size
+        +insertAtBeginning(data: int) void
+        +insertAtEnd(data: int) void
+        +insertAtPosition(data: int, pos: int) void
+        +deleteAtBeginning() int
+        +deleteAtEnd() int
+        +deleteByValue(value: int) boolean
+        +search(value: int) int
+        +display() void
+        +getSize() int
+        +isEmpty() boolean
+    }
+
+    class DoubleLinkedList {
+        -DoubleNode head
+        -DoubleNode tail
+        -int size
+        +insertAtBeginning(data: int) void
+        +insertAtEnd(data: int) void
+        +deleteAtBeginning() int
+        +deleteAtEnd() int
+        +displayForward() void
+        +displayBackward() void
+        +getSize() int
+        +isEmpty() boolean
+    }
+
+    class CircularSingleLinkedList {
+        -Node head
+        -Node tail
+        -int size
+        +insertAtBeginning(data: int) void
+        +insertAtEnd(data: int) void
+        +delete(value: int) boolean
+        +display() void
+        +getSize() int
+    }
+
+    class CircularDoubleLinkedList {
+        -DoubleNode head
+        -int size
+        +insertAtBeginning(data: int) void
+        +insertAtEnd(data: int) void
+        +delete(value: int) boolean
+        +displayForward() void
+        +displayBackward() void
+        +getSize() int
+    }
+
+    SingleLinkedList --> Node : contains
+    CircularSingleLinkedList --> Node : contains
+    DoubleLinkedList --> DoubleNode : contains
+    CircularDoubleLinkedList --> DoubleNode : contains
+```
+
+### Keuntungan Linked List
+- Ukuran dinamis (tidak perlu deklarasi ukuran di awal)
+- Efisien untuk insert dan delete di awal/tengah
+- Tidak ada pemborosan memori
+
+### Kekurangan Linked List
+- Tidak mendukung akses random (harus traverse dari awal)
+- Membutuhkan memori ekstra untuk menyimpan pointer
+- Cache performance kurang optimal
 
 ---
 
-## Big O Notation
+## Single Linked List
 
-### Apa itu Big O Notation?
+### Konsep Single Linked List
 
-Big O Notation adalah notasi matematika yang menggambarkan batas atas (upper bound) dari kompleksitas algoritma. Big O fokus pada pertumbuhan fungsi saat input mendekati tak hingga, mengabaikan konstanta dan terms yang lebih kecil.
-
-### Contoh:
-```
-f(n) = 3n² + 5n + 100
-
-Big O: O(n²)
-```
-- Konstanta 3 diabaikan
-- Term 5n diabaikan (lebih kecil dari n²)
-- Konstanta 100 diabaikan
-
-### Notasi Kompleksitas Umum
-
-| Notasi | Nama | Deskripsi | Contoh |
-|--------|------|-----------|--------|
-| O(1) | Constant | Tidak bergantung pada ukuran input | Akses array dengan index |
-| O(log n) | Logarithmic | Berkurang setengah setiap iterasi | Binary search |
-| O(n) | Linear | Berbanding lurus dengan input | Linear search |
-| O(n log n) | Linearithmic | n kali logaritma | Merge sort, Quick sort |
-| O(n²) | Quadratic | Kuadrat dari input | Bubble sort, Selection sort |
-| O(n³) | Cubic | Kubik dari input | Matrix multiplication naif |
-| O(2ⁿ) | Exponential | Dua pangkat n | Fibonacci rekursif |
-| O(n!) | Factorial | Faktorial dari n | Permutasi brute force |
-
-### Urutan Kompleksitas (Tercepat ke Terlambat)
+Single Linked List adalah jenis linked list paling sederhana dimana setiap node hanya memiliki satu pointer yang menunjuk ke node berikutnya.
 
 ```
-O(1) < O(log n) < O(√n) < O(n) < O(n log n) < O(n²) < O(n³) < O(2ⁿ) < O(n!)
+[HEAD] -> [Data|Next] -> [Data|Next] -> [Data|Next] -> NULL
 ```
 
-### Visualisasi Pertumbuhan
-
-```
-Untuk n = 1000:
-
-O(1)       = 1
-O(log n)   = ~10
-O(n)       = 1,000
-O(n log n) = ~10,000
-O(n²)      = 1,000,000
-O(n³)      = 1,000,000,000
-O(2ⁿ)      = Tidak terhitung (terlalu besar)
-```
-
-### Grafik Pertumbuhan
-
-```
-    ^
-    |                                          O(n!)
-    |                                       O(2ⁿ)
-    |                                    O(n³)
-Time|                              O(n²)
-    |                         O(n log n)
-    |                    O(n)
-    |               O(√n)
-    |          O(log n)
-    |     O(1)
-    +------------------------------------------------->
-                          n (ukuran input)
-```
-
----
-
-## Jenis-jenis Kompleksitas Waktu
-
-### O(1) - Constant Time
-
-Waktu eksekusi tetap sama tidak peduli ukuran input.
+### Single Linked List tanpa OOP
 
 ```java
-// Contoh O(1)
-public int getFirst(int[] arr) {
-    return arr[0];  // Selalu satu operasi
-}
+public class SingleLinkedListNoOOP {
+    // Menggunakan array untuk simulasi linked list
+    static int[] data = new int[100];
+    static int[] next = new int[100];
+    static int head = -1;
+    static int size = 0;
+    static int freeIndex = 0;
 
-public void push(int value) {
-    stack[++top] = value;  // Operasi konstan
-}
+    // Mendapatkan index kosong
+    public static int getNewIndex() {
+        if (freeIndex >= 100) {
+            return -1;
+        }
+        return freeIndex++;
+    }
 
-public int peek() {
-    return stack[top];  // Akses langsung
-}
-```
+    // Insert di awal
+    public static void insertAtBeginning(int value) {
+        int newIndex = getNewIndex();
+        if (newIndex == -1) {
+            System.out.println("List penuh!");
+            return;
+        }
 
-**Karakteristik:**
-- Tidak ada loop yang bergantung pada n
-- Operasi langsung tanpa iterasi
+        data[newIndex] = value;
+        next[newIndex] = head;
+        head = newIndex;
+        size++;
+        System.out.println("Insert di awal: " + value);
+    }
 
----
+    // Insert di akhir
+    public static void insertAtEnd(int value) {
+        int newIndex = getNewIndex();
+        if (newIndex == -1) {
+            System.out.println("List penuh!");
+            return;
+        }
 
-### O(log n) - Logarithmic Time
+        data[newIndex] = value;
+        next[newIndex] = -1;
 
-Waktu eksekusi meningkat secara logaritmik. Biasanya terjadi ketika masalah dipecah menjadi setengah setiap iterasi.
-
-```java
-// Binary Search - O(log n)
-public int binarySearch(int[] arr, int target) {
-    int left = 0;
-    int right = arr.length - 1;
-
-    while (left <= right) {
-        int mid = left + (right - left) / 2;
-
-        if (arr[mid] == target) {
-            return mid;
-        } else if (arr[mid] < target) {
-            left = mid + 1;  // Abaikan setengah kiri
+        if (head == -1) {
+            head = newIndex;
         } else {
-            right = mid - 1; // Abaikan setengah kanan
-        }
-    }
-    return -1;
-}
-```
-
-**Karakteristik:**
-- Masalah dipecah menjadi setengah setiap iterasi
-- Contoh: Binary search, operasi pada balanced BST
-
-**Analisis:**
-```
-n = 16
-Iterasi 1: n = 16
-Iterasi 2: n = 8
-Iterasi 3: n = 4
-Iterasi 4: n = 2
-Iterasi 5: n = 1
-
-Total iterasi = log₂(16) = 4
-```
-
----
-
-### O(n) - Linear Time
-
-Waktu eksekusi berbanding lurus dengan ukuran input.
-
-```java
-// Linear Search - O(n)
-public int linearSearch(int[] arr, int target) {
-    for (int i = 0; i < arr.length; i++) {  // Loop n kali
-        if (arr[i] == target) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-// Traverse Linked List - O(n)
-public void display() {
-    Node current = head;
-    while (current != null) {  // Loop n kali
-        System.out.print(current.data + " ");
-        current = current.next;
-    }
-}
-
-// Mencari nilai dalam stack - O(n)
-public int search(int value) {
-    for (int i = top; i >= 0; i--) {  // Loop n kali
-        if (stack[i] == value) {
-            return top - i + 1;
-        }
-    }
-    return -1;
-}
-```
-
-**Karakteristik:**
-- Satu loop yang iterasi n kali
-- Setiap elemen diproses sekali
-
----
-
-### O(n log n) - Linearithmic Time
-
-Kombinasi linear dan logarithmic. Biasanya terjadi pada algoritma divide and conquer.
-
-```java
-// Merge Sort - O(n log n)
-public void mergeSort(int[] arr, int left, int right) {
-    if (left < right) {
-        int mid = left + (right - left) / 2;
-
-        mergeSort(arr, left, mid);       // T(n/2)
-        mergeSort(arr, mid + 1, right);  // T(n/2)
-        merge(arr, left, mid, right);    // O(n)
-    }
-}
-
-// Recurrence: T(n) = 2T(n/2) + O(n) = O(n log n)
-```
-
-**Karakteristik:**
-- Divide: membagi masalah (log n level)
-- Conquer: menggabungkan hasil (n operasi per level)
-- Total: n × log n
-
----
-
-### O(n²) - Quadratic Time
-
-Waktu eksekusi meningkat secara kuadratik.
-
-```java
-// Bubble Sort - O(n²)
-public void bubbleSort(int[] arr) {
-    int n = arr.length;
-    for (int i = 0; i < n - 1; i++) {           // Loop n kali
-        for (int j = 0; j < n - i - 1; j++) {   // Loop n kali
-            if (arr[j] > arr[j + 1]) {
-                // Swap
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
+            int current = head;
+            while (next[current] != -1) {
+                current = next[current];
             }
+            next[current] = newIndex;
         }
+        size++;
+        System.out.println("Insert di akhir: " + value);
     }
-}
 
-// Nested Loop - O(n²)
-public void printPairs(int[] arr) {
-    for (int i = 0; i < arr.length; i++) {
-        for (int j = 0; j < arr.length; j++) {
-            System.out.println(arr[i] + ", " + arr[j]);
+    // Insert di posisi tertentu
+    public static void insertAtPosition(int value, int position) {
+        if (position < 0 || position > size) {
+            System.out.println("Posisi tidak valid!");
+            return;
         }
+
+        if (position == 0) {
+            insertAtBeginning(value);
+            return;
+        }
+
+        int newIndex = getNewIndex();
+        if (newIndex == -1) {
+            System.out.println("List penuh!");
+            return;
+        }
+
+        data[newIndex] = value;
+
+        int current = head;
+        for (int i = 0; i < position - 1; i++) {
+            current = next[current];
+        }
+
+        next[newIndex] = next[current];
+        next[current] = newIndex;
+        size++;
+        System.out.println("Insert " + value + " di posisi " + position);
+    }
+
+    // Delete di awal
+    public static void deleteAtBeginning() {
+        if (head == -1) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        int deletedValue = data[head];
+        head = next[head];
+        size--;
+        System.out.println("Delete di awal: " + deletedValue);
+    }
+
+    // Delete di akhir
+    public static void deleteAtEnd() {
+        if (head == -1) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        if (next[head] == -1) {
+            int deletedValue = data[head];
+            head = -1;
+            size--;
+            System.out.println("Delete di akhir: " + deletedValue);
+            return;
+        }
+
+        int current = head;
+        while (next[next[current]] != -1) {
+            current = next[current];
+        }
+
+        int deletedValue = data[next[current]];
+        next[current] = -1;
+        size--;
+        System.out.println("Delete di akhir: " + deletedValue);
+    }
+
+    // Delete berdasarkan nilai
+    public static void deleteByValue(int value) {
+        if (head == -1) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        if (data[head] == value) {
+            head = next[head];
+            size--;
+            System.out.println("Delete nilai: " + value);
+            return;
+        }
+
+        int current = head;
+        while (next[current] != -1 && data[next[current]] != value) {
+            current = next[current];
+        }
+
+        if (next[current] == -1) {
+            System.out.println("Nilai " + value + " tidak ditemukan!");
+            return;
+        }
+
+        next[current] = next[next[current]];
+        size--;
+        System.out.println("Delete nilai: " + value);
+    }
+
+    // Search
+    public static int search(int value) {
+        int current = head;
+        int position = 0;
+        while (current != -1) {
+            if (data[current] == value) {
+                return position;
+            }
+            current = next[current];
+            position++;
+        }
+        return -1;
+    }
+
+    // Display
+    public static void display() {
+        if (head == -1) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        System.out.print("List: ");
+        int current = head;
+        while (current != -1) {
+            System.out.print(data[current]);
+            if (next[current] != -1) {
+                System.out.print(" -> ");
+            }
+            current = next[current];
+        }
+        System.out.println(" -> NULL");
+        System.out.println("Size: " + size);
+    }
+
+    // Reverse
+    public static void reverse() {
+        int prev = -1;
+        int current = head;
+        int nextNode;
+
+        while (current != -1) {
+            nextNode = next[current];
+            next[current] = prev;
+            prev = current;
+            current = nextNode;
+        }
+        head = prev;
+        System.out.println("List berhasil di-reverse");
+    }
+
+    public static void main(String[] args) {
+        System.out.println("=== SINGLE LINKED LIST TANPA OOP ===\n");
+
+        // Test insert
+        insertAtBeginning(10);
+        insertAtBeginning(20);
+        insertAtEnd(5);
+        insertAtEnd(15);
+        display();
+
+        // Test insert di posisi
+        System.out.println();
+        insertAtPosition(25, 2);
+        display();
+
+        // Test search
+        System.out.println();
+        int pos = search(25);
+        System.out.println("Posisi nilai 25: " + (pos != -1 ? pos : "Tidak ditemukan"));
+        pos = search(100);
+        System.out.println("Posisi nilai 100: " + (pos != -1 ? pos : "Tidak ditemukan"));
+
+        // Test delete
+        System.out.println();
+        deleteAtBeginning();
+        display();
+
+        System.out.println();
+        deleteAtEnd();
+        display();
+
+        System.out.println();
+        deleteByValue(25);
+        display();
+
+        // Test reverse
+        System.out.println();
+        reverse();
+        display();
     }
 }
 ```
 
-**Karakteristik:**
-- Nested loop (loop di dalam loop)
-- Setiap elemen dibandingkan dengan setiap elemen lain
-
----
-
-### O(2ⁿ) - Exponential Time
-
-Waktu eksekusi berlipat ganda setiap penambahan input.
-
-```java
-// Fibonacci Rekursif - O(2ⁿ)
-public int fibonacci(int n) {
-    if (n <= 1) {
-        return n;
-    }
-    return fibonacci(n - 1) + fibonacci(n - 2);
-}
-
-// Setiap pemanggilan menghasilkan dua pemanggilan baru
-// Tree rekursi:
-//                    fib(5)
-//                   /      \
-//              fib(4)      fib(3)
-//             /    \       /    \
-//         fib(3) fib(2) fib(2) fib(1)
-//         ...
+**Output:**
 ```
+=== SINGLE LINKED LIST TANPA OOP ===
 
-**Karakteristik:**
-- Setiap langkah menghasilkan dua atau lebih submasalah
-- Sangat tidak efisien untuk input besar
+Insert di awal: 10
+Insert di awal: 20
+Insert di akhir: 5
+Insert di akhir: 15
+List: 20 -> 10 -> 5 -> 15 -> NULL
+Size: 4
 
----
+Insert 25 di posisi 2
+List: 20 -> 10 -> 25 -> 5 -> 15 -> NULL
+Size: 5
 
-## Kompleksitas Ruang (Space Complexity)
+Posisi nilai 25: 2
+Posisi nilai 100: Tidak ditemukan
 
-### Apa itu Space Complexity?
+Delete di awal: 20
+List: 10 -> 25 -> 5 -> 15 -> NULL
+Size: 4
 
-Space complexity mengukur jumlah memori yang digunakan oleh algoritma, termasuk:
+Delete di akhir: 15
+List: 10 -> 25 -> 5 -> NULL
+Size: 3
 
-1. **Input space** - Memori untuk menyimpan input
-2. **Auxiliary space** - Memori tambahan yang digunakan algoritma
-3. **Total space** = Input space + Auxiliary space
+Delete nilai: 25
+List: 10 -> 5 -> NULL
+Size: 2
 
-### Contoh Space Complexity
-
-```java
-// O(1) Space - Konstanta
-public int sum(int[] arr) {
-    int total = 0;  // Satu variabel
-    for (int i = 0; i < arr.length; i++) {
-        total += arr[i];
-    }
-    return total;
-}
-// Hanya menggunakan variabel total dan i, tidak bergantung pada n
-
-// O(n) Space - Linear
-public int[] copy(int[] arr) {
-    int[] newArr = new int[arr.length];  // Array baru ukuran n
-    for (int i = 0; i < arr.length; i++) {
-        newArr[i] = arr[i];
-    }
-    return newArr;
-}
-
-// O(n) Space - Rekursi
-public int factorial(int n) {
-    if (n <= 1) return 1;
-    return n * factorial(n - 1);  // Call stack depth = n
-}
-// Setiap rekursi menambah frame di call stack
-```
-
-### Space Complexity Struktur Data
-
-| Struktur Data | Space Complexity |
-|---------------|------------------|
-| Array | O(n) |
-| Linked List | O(n) |
-| Stack (array) | O(n) |
-| Stack (linked list) | O(n) |
-| Queue (array) | O(n) |
-| Queue (linked list) | O(n) |
-
----
-
-## Analisis Kompleksitas Struktur Data
-
-### Kompleksitas Array
-
-| Operasi | Time Complexity | Space Complexity |
-|---------|----------------|------------------|
-| Access by index | O(1) | O(1) |
-| Search (unsorted) | O(n) | O(1) |
-| Search (sorted) | O(log n) | O(1) |
-| Insert at end | O(1) amortized | O(1) |
-| Insert at beginning | O(n) | O(1) |
-| Insert at middle | O(n) | O(1) |
-| Delete at end | O(1) | O(1) |
-| Delete at beginning | O(n) | O(1) |
-| Delete at middle | O(n) | O(1) |
-
-**Penjelasan:**
-
-```java
-// Access by index - O(1)
-int value = arr[5];  // Langsung mengakses alamat memori
-
-// Insert at beginning - O(n)
-public void insertAtBeginning(int[] arr, int value) {
-    // Shift semua elemen ke kanan
-    for (int i = arr.length - 1; i > 0; i--) {  // O(n)
-        arr[i] = arr[i - 1];
-    }
-    arr[0] = value;
-}
-
-// Delete at middle - O(n)
-public void deleteAt(int[] arr, int index) {
-    // Shift semua elemen setelah index ke kiri
-    for (int i = index; i < arr.length - 1; i++) {  // O(n)
-        arr[i] = arr[i + 1];
-    }
-}
+List berhasil di-reverse
+List: 5 -> 10 -> NULL
+Size: 2
 ```
 
 ---
 
-### Kompleksitas Linked List
-
-#### Single Linked List
-
-| Operasi | Time Complexity | Penjelasan |
-|---------|----------------|------------|
-| Access by index | O(n) | Harus traverse dari head |
-| Search | O(n) | Harus cek setiap node |
-| Insert at beginning | O(1) | Update head pointer |
-| Insert at end (tanpa tail) | O(n) | Traverse ke akhir |
-| Insert at end (dengan tail) | O(1) | Akses tail langsung |
-| Insert at middle | O(n) | Traverse ke posisi |
-| Delete at beginning | O(1) | Update head pointer |
-| Delete at end | O(n) | Cari node sebelum tail |
-| Delete at middle | O(n) | Traverse ke posisi |
+### Single Linked List dengan OOP
 
 ```java
-// Insert at beginning - O(1)
-public void insertAtBeginning(int data) {
-    Node newNode = new Node(data);  // O(1)
-    newNode.next = head;            // O(1)
-    head = newNode;                 // O(1)
+// File: Node.java
+class Node {
+    int data;
+    Node next;
+
+    public Node(int data) {
+        this.data = data;
+        this.next = null;
+    }
 }
-// Total: O(1)
 
-// Insert at end tanpa tail pointer - O(n)
-public void insertAtEnd(int data) {
-    Node newNode = new Node(data);
+// File: SingleLinkedList.java
+class SingleLinkedList {
+    private Node head;
+    private int size;
 
-    if (head == null) {
+    public SingleLinkedList() {
+        this.head = null;
+        this.size = 0;
+    }
+
+    // Getter
+    public int getSize() {
+        return size;
+    }
+
+    public boolean isEmpty() {
+        return head == null;
+    }
+
+    // Insert di awal - O(1)
+    public void insertAtBeginning(int data) {
+        Node newNode = new Node(data);
+        newNode.next = head;
         head = newNode;
-        return;
+        size++;
+        System.out.println("Insert di awal: " + data);
     }
 
-    Node current = head;
-    while (current.next != null) {  // O(n) - traverse
-        current = current.next;
-    }
-    current.next = newNode;
-}
-// Total: O(n)
+    // Insert di akhir - O(n)
+    public void insertAtEnd(int data) {
+        Node newNode = new Node(data);
 
-// Search - O(n)
-public boolean search(int value) {
-    Node current = head;
-    while (current != null) {       // O(n) - worst case semua node
-        if (current.data == value) {
-            return true;
+        if (head == null) {
+            head = newNode;
+        } else {
+            Node current = head;
+            while (current.next != null) {
+                current = current.next;
+            }
+            current.next = newNode;
         }
-        current = current.next;
+        size++;
+        System.out.println("Insert di akhir: " + data);
     }
-    return false;
-}
-```
 
-#### Double Linked List
-
-| Operasi | Time Complexity | Penjelasan |
-|---------|----------------|------------|
-| Insert at beginning | O(1) | Update head dan prev pointer |
-| Insert at end | O(1) | Update tail dan next pointer |
-| Delete at beginning | O(1) | Update head |
-| Delete at end | O(1) | Update tail (berbeda dari single LL) |
-| Delete by value | O(n) | Cari node dulu |
-
-```java
-// Delete at end (Double LL) - O(1)
-public void deleteAtEnd() {
-    if (tail == null) return;
-
-    if (head == tail) {
-        head = tail = null;
-    } else {
-        tail = tail.prev;    // O(1) - langsung akses prev
-        tail.next = null;    // O(1)
-    }
-}
-// Total: O(1) - berbeda dari Single LL yang O(n)
-```
-
-#### Perbandingan Jenis Linked List
-
-| Operasi | Single LL | Double LL | Circular Single | Circular Double |
-|---------|-----------|-----------|-----------------|-----------------|
-| Insert at head | O(1) | O(1) | O(1) | O(1) |
-| Insert at tail | O(n)* | O(1) | O(1) | O(1) |
-| Delete at head | O(1) | O(1) | O(1) | O(1) |
-| Delete at tail | O(n) | O(1) | O(n) | O(1) |
-| Search | O(n) | O(n) | O(n) | O(n) |
-| Reverse | O(n) | O(n) | O(n) | O(n) |
-
-*O(1) jika ada tail pointer
-
----
-
-### Kompleksitas Stack
-
-| Operasi | Array-based | Linked List-based |
-|---------|-------------|-------------------|
-| Push | O(1) amortized | O(1) |
-| Pop | O(1) | O(1) |
-| Peek/Top | O(1) | O(1) |
-| isEmpty | O(1) | O(1) |
-| isFull | O(1) | N/A |
-| Search | O(n) | O(n) |
-| Size | O(1) | O(1) |
-
-**Space Complexity:** O(n) untuk keduanya
-
-```java
-// Push (Array) - O(1) amortized
-public void push(int value) {
-    if (top == stack.length - 1) {
-        // Resize array - O(n), tapi jarang terjadi
-        resize();
-    }
-    stack[++top] = value;  // O(1)
-}
-// Amortized O(1) karena resize tidak sering
-
-// Push (Linked List) - O(1)
-public void push(int value) {
-    StackNode newNode = new StackNode(value);  // O(1)
-    newNode.next = top;                         // O(1)
-    top = newNode;                              // O(1)
-}
-// Total: O(1) - selalu konstan, tidak ada resize
-
-// Search - O(n)
-public int search(int value) {
-    Node current = top;
-    int position = 1;
-    while (current != null) {  // O(n) worst case
-        if (current.data == value) {
-            return position;
+    // Insert di posisi tertentu - O(n)
+    public void insertAtPosition(int data, int position) {
+        if (position < 0 || position > size) {
+            System.out.println("Posisi tidak valid!");
+            return;
         }
-        current = current.next;
-        position++;
-    }
-    return -1;
-}
-```
 
----
-
-### Kompleksitas Queue
-
-| Operasi | Linear Array | Circular Array | Linked List |
-|---------|--------------|----------------|-------------|
-| Enqueue | O(1) | O(1) | O(1) |
-| Dequeue | O(n)* | O(1) | O(1) |
-| Peek Front | O(1) | O(1) | O(1) |
-| Peek Rear | O(1) | O(1) | O(1) |
-| isEmpty | O(1) | O(1) | O(1) |
-| isFull | O(1) | O(1) | N/A |
-
-*O(n) karena harus shift elemen
-
-**Space Complexity:** O(n) untuk semua implementasi
-
-```java
-// Dequeue (Linear Array) - O(n)
-public int dequeue() {
-    int value = queue[front];
-
-    // Shift semua elemen ke kiri
-    for (int i = 0; i < rear; i++) {  // O(n)
-        queue[i] = queue[i + 1];
-    }
-    rear--;
-
-    return value;
-}
-// Total: O(n) - operasi shift mahal
-
-// Dequeue (Circular Array) - O(1)
-public int dequeue() {
-    int value = queue[front];
-    front = (front + 1) % maxSize;  // O(1) - hanya update index
-    size--;
-    return value;
-}
-// Total: O(1) - tidak ada shift
-
-// Dequeue (Linked List) - O(1)
-public int dequeue() {
-    int value = front.data;
-    front = front.next;  // O(1) - hanya pindah pointer
-    if (front == null) {
-        rear = null;
-    }
-    size--;
-    return value;
-}
-// Total: O(1)
-```
-
----
-
-## Perbandingan Struktur Data
-
-### Tabel Perbandingan Komprehensif
-
-| Operasi | Array | Single LL | Double LL | Stack | Queue | Circular Queue |
-|---------|-------|-----------|-----------|-------|-------|----------------|
-| Access | O(1) | O(n) | O(n) | O(n)* | O(n)* | O(n)* |
-| Search | O(n) | O(n) | O(n) | O(n) | O(n) | O(n) |
-| Insert (front) | O(n) | O(1) | O(1) | - | - | - |
-| Insert (end) | O(1)** | O(n)*** | O(1) | O(1) | O(1) | O(1) |
-| Delete (front) | O(n) | O(1) | O(1) | - | O(1) | O(1) |
-| Delete (end) | O(1) | O(n) | O(1) | O(1) | - | - |
-| Space | O(n) | O(n) | O(n) | O(n) | O(n) | O(n) |
-
-*Tidak sesuai use case
-**Amortized O(1), bisa O(n) saat resize
-***O(1) dengan tail pointer
-
-### Kapan Menggunakan Apa?
-
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                    PANDUAN PEMILIHAN STRUKTUR DATA                   │
-├─────────────────────────────────────────────────────────────────────┤
-│ Kebutuhan                          │ Pilihan Terbaik                 │
-├─────────────────────────────────────────────────────────────────────┤
-│ Akses random cepat                 │ Array                           │
-│ Insert/delete di awal              │ Linked List                     │
-│ Insert/delete di kedua ujung       │ Double Linked List / Deque      │
-│ LIFO (Last In First Out)           │ Stack                           │
-│ FIFO (First In First Out)          │ Queue                           │
-│ Traversal berulang (circular)      │ Circular Linked List            │
-│ Traversal dua arah                 │ Double Linked List              │
-│ Memory terbatas, ukuran fixed      │ Array                           │
-│ Ukuran dinamis                     │ Linked List                     │
-│ Cache performance penting          │ Array                           │
-└─────────────────────────────────────────────────────────────────────┘
-```
-
----
-
-## Contoh Analisis Algoritma
-
-### Contoh 1: Reverse Linked List
-
-```java
-public void reverse() {
-    Node prev = null;      // O(1)
-    Node current = head;   // O(1)
-    Node next = null;      // O(1)
-
-    while (current != null) {      // Loop n kali
-        next = current.next;       // O(1)
-        current.next = prev;       // O(1)
-        prev = current;            // O(1)
-        current = next;            // O(1)
-    }
-
-    head = prev;  // O(1)
-}
-```
-
-**Analisis:**
-- Inisialisasi: O(1) + O(1) + O(1) = O(1)
-- Loop: n × O(1) = O(n)
-- Assignment akhir: O(1)
-- **Total Time Complexity: O(n)**
-- **Space Complexity: O(1)** - hanya 3 variabel pointer
-
----
-
-### Contoh 2: Palindrome Check dengan Stack
-
-```java
-public boolean isPalindrome(String str) {
-    ArrayStack stack = new ArrayStack(str.length());  // O(n) space
-
-    // Push semua karakter - O(n)
-    for (int i = 0; i < str.length(); i++) {
-        stack.push(str.charAt(i));  // O(1) per operasi
-    }
-
-    // Pop dan compare - O(n)
-    for (int i = 0; i < str.length(); i++) {
-        if (str.charAt(i) != stack.pop()) {  // O(1) per operasi
-            return false;
+        if (position == 0) {
+            insertAtBeginning(data);
+            return;
         }
+
+        Node newNode = new Node(data);
+        Node current = head;
+
+        for (int i = 0; i < position - 1; i++) {
+            current = current.next;
+        }
+
+        newNode.next = current.next;
+        current.next = newNode;
+        size++;
+        System.out.println("Insert " + data + " di posisi " + position);
     }
 
-    return true;
+    // Delete di awal - O(1)
+    public void deleteAtBeginning() {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        int deletedData = head.data;
+        head = head.next;
+        size--;
+        System.out.println("Delete di awal: " + deletedData);
+    }
+
+    // Delete di akhir - O(n)
+    public void deleteAtEnd() {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        if (head.next == null) {
+            int deletedData = head.data;
+            head = null;
+            size--;
+            System.out.println("Delete di akhir: " + deletedData);
+            return;
+        }
+
+        Node current = head;
+        while (current.next.next != null) {
+            current = current.next;
+        }
+
+        int deletedData = current.next.data;
+        current.next = null;
+        size--;
+        System.out.println("Delete di akhir: " + deletedData);
+    }
+
+    // Delete berdasarkan nilai - O(n)
+    public void deleteByValue(int value) {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        if (head.data == value) {
+            head = head.next;
+            size--;
+            System.out.println("Delete nilai: " + value);
+            return;
+        }
+
+        Node current = head;
+        while (current.next != null && current.next.data != value) {
+            current = current.next;
+        }
+
+        if (current.next == null) {
+            System.out.println("Nilai " + value + " tidak ditemukan!");
+            return;
+        }
+
+        current.next = current.next.next;
+        size--;
+        System.out.println("Delete nilai: " + value);
+    }
+
+    // Delete di posisi tertentu - O(n)
+    public void deleteAtPosition(int position) {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        if (position < 0 || position >= size) {
+            System.out.println("Posisi tidak valid!");
+            return;
+        }
+
+        if (position == 0) {
+            deleteAtBeginning();
+            return;
+        }
+
+        Node current = head;
+        for (int i = 0; i < position - 1; i++) {
+            current = current.next;
+        }
+
+        int deletedData = current.next.data;
+        current.next = current.next.next;
+        size--;
+        System.out.println("Delete di posisi " + position + ": " + deletedData);
+    }
+
+    // Search - O(n)
+    public int search(int value) {
+        Node current = head;
+        int position = 0;
+        while (current != null) {
+            if (current.data == value) {
+                return position;
+            }
+            current = current.next;
+            position++;
+        }
+        return -1;
+    }
+
+    // Get data di posisi tertentu - O(n)
+    public int get(int position) {
+        if (position < 0 || position >= size) {
+            throw new IndexOutOfBoundsException("Posisi tidak valid!");
+        }
+
+        Node current = head;
+        for (int i = 0; i < position; i++) {
+            current = current.next;
+        }
+        return current.data;
+    }
+
+    // Update data di posisi tertentu - O(n)
+    public void update(int position, int newData) {
+        if (position < 0 || position >= size) {
+            System.out.println("Posisi tidak valid!");
+            return;
+        }
+
+        Node current = head;
+        for (int i = 0; i < position; i++) {
+            current = current.next;
+        }
+        int oldData = current.data;
+        current.data = newData;
+        System.out.println("Update posisi " + position + ": " + oldData + " -> " + newData);
+    }
+
+    // Reverse - O(n)
+    public void reverse() {
+        Node prev = null;
+        Node current = head;
+        Node next = null;
+
+        while (current != null) {
+            next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+        head = prev;
+        System.out.println("List berhasil di-reverse");
+    }
+
+    // Display - O(n)
+    public void display() {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        System.out.print("List: ");
+        Node current = head;
+        while (current != null) {
+            System.out.print(current.data);
+            if (current.next != null) {
+                System.out.print(" -> ");
+            }
+            current = current.next;
+        }
+        System.out.println(" -> NULL");
+        System.out.println("Size: " + size);
+    }
+
+    // Clear list - O(1)
+    public void clear() {
+        head = null;
+        size = 0;
+        System.out.println("List dikosongkan");
+    }
+}
+
+// File: SingleLinkedListDemo.java
+public class SingleLinkedListDemo {
+    public static void main(String[] args) {
+        System.out.println("=== SINGLE LINKED LIST DENGAN OOP ===\n");
+
+        SingleLinkedList list = new SingleLinkedList();
+
+        // Test insert
+        list.insertAtBeginning(10);
+        list.insertAtBeginning(20);
+        list.insertAtEnd(5);
+        list.insertAtEnd(15);
+        list.display();
+
+        // Test insert di posisi
+        System.out.println();
+        list.insertAtPosition(25, 2);
+        list.display();
+
+        // Test get dan update
+        System.out.println();
+        System.out.println("Data di posisi 2: " + list.get(2));
+        list.update(2, 30);
+        list.display();
+
+        // Test search
+        System.out.println();
+        int pos = list.search(30);
+        System.out.println("Posisi nilai 30: " + (pos != -1 ? pos : "Tidak ditemukan"));
+
+        // Test delete
+        System.out.println();
+        list.deleteAtBeginning();
+        list.display();
+
+        System.out.println();
+        list.deleteAtEnd();
+        list.display();
+
+        System.out.println();
+        list.deleteByValue(30);
+        list.display();
+
+        System.out.println();
+        list.deleteAtPosition(1);
+        list.display();
+
+        // Test reverse
+        System.out.println();
+        list.insertAtEnd(100);
+        list.insertAtEnd(200);
+        list.display();
+        list.reverse();
+        list.display();
+    }
 }
 ```
 
-**Analisis:**
-- Membuat stack: O(n) space
-- Loop push: n × O(1) = O(n)
-- Loop compare: n × O(1) = O(n)
-- **Total Time Complexity: O(n) + O(n) = O(2n) = O(n)**
-- **Space Complexity: O(n)** - stack menyimpan n karakter
+**Output:**
+```
+=== SINGLE LINKED LIST DENGAN OOP ===
 
----
+Insert di awal: 10
+Insert di awal: 20
+Insert di akhir: 5
+Insert di akhir: 15
+List: 20 -> 10 -> 5 -> 15 -> NULL
+Size: 4
 
-### Contoh 3: Find Middle of Linked List
+Insert 25 di posisi 2
+List: 20 -> 10 -> 25 -> 5 -> 15 -> NULL
+Size: 5
 
-```java
-// Metode 1: Two Pass - O(n) time, O(1) space
-public Node findMiddle1(Node head) {
-    // Pass 1: Hitung panjang
-    int length = 0;
-    Node current = head;
-    while (current != null) {  // O(n)
-        length++;
-        current = current.next;
-    }
+Data di posisi 2: 25
+Update posisi 2: 25 -> 30
+List: 20 -> 10 -> 30 -> 5 -> 15 -> NULL
+Size: 5
 
-    // Pass 2: Traverse ke tengah
-    current = head;
-    for (int i = 0; i < length / 2; i++) {  // O(n/2)
-        current = current.next;
-    }
+Posisi nilai 30: 2
 
-    return current;
-}
-// Time: O(n) + O(n/2) = O(n)
-// Space: O(1)
+Delete di awal: 20
+List: 10 -> 30 -> 5 -> 15 -> NULL
+Size: 4
 
-// Metode 2: Slow-Fast Pointer - O(n) time, O(1) space
-public Node findMiddle2(Node head) {
-    Node slow = head;
-    Node fast = head;
+Delete di akhir: 15
+List: 10 -> 30 -> 5 -> NULL
+Size: 3
 
-    while (fast != null && fast.next != null) {  // O(n/2)
-        slow = slow.next;       // Maju 1 langkah
-        fast = fast.next.next;  // Maju 2 langkah
-    }
+Delete nilai: 30
+List: 10 -> 5 -> NULL
+Size: 2
 
-    return slow;
-}
-// Time: O(n/2) = O(n)
-// Space: O(1)
+Delete di posisi 1: 5
+List: 10 -> NULL
+Size: 1
+
+Insert di akhir: 100
+Insert di akhir: 200
+List: 10 -> 100 -> 200 -> NULL
+Size: 3
+List berhasil di-reverse
+List: 200 -> 100 -> 10 -> NULL
+Size: 3
 ```
 
-**Perbandingan:**
-- Keduanya O(n) time dan O(1) space
-- Metode 2 lebih efisien (hanya satu pass)
+---
+
+## Double Linked List
+
+### Konsep Double Linked List
+
+Double Linked List adalah linked list dimana setiap node memiliki dua pointer: satu menunjuk ke node sebelumnya (prev) dan satu menunjuk ke node berikutnya (next). Ini memungkinkan traversal dua arah.
+
+```
+NULL <- [Prev|Data|Next] <-> [Prev|Data|Next] <-> [Prev|Data|Next] -> NULL
+         ^                                              ^
+        HEAD                                           TAIL
+```
+
+### Keuntungan Double Linked List
+- Traversal bisa dilakukan dari dua arah
+- Delete node lebih mudah (tidak perlu track node sebelumnya)
+- Operasi di tail menjadi O(1) jika ada tail pointer
+
+### Kekurangan Double Linked List
+- Membutuhkan memori ekstra untuk pointer prev
+- Operasi insert dan delete lebih kompleks
 
 ---
 
-### Contoh 4: Queue-based BFS
+### Double Linked List tanpa OOP
 
 ```java
-public void bfs(int[][] graph, int start) {
-    int n = graph.length;
-    boolean[] visited = new boolean[n];  // O(n) space
-    LinkedQueue queue = new LinkedQueue();
+public class DoubleLinkedListNoOOP {
+    // Array untuk simulasi double linked list
+    static int[] data = new int[100];
+    static int[] next = new int[100];
+    static int[] prev = new int[100];
+    static int head = -1;
+    static int tail = -1;
+    static int size = 0;
+    static int freeIndex = 0;
 
-    visited[start] = true;
-    queue.enqueue(start);  // O(1)
+    public static int getNewIndex() {
+        if (freeIndex >= 100) return -1;
+        return freeIndex++;
+    }
 
-    while (!queue.isEmpty()) {              // O(V) iterasi
-        int current = queue.dequeue();      // O(1)
-        System.out.print(current + " ");
+    // Insert di awal
+    public static void insertAtBeginning(int value) {
+        int newIndex = getNewIndex();
+        if (newIndex == -1) {
+            System.out.println("List penuh!");
+            return;
+        }
 
-        for (int i = 0; i < n; i++) {       // O(V) per iterasi
-            if (graph[current][i] == 1 && !visited[i]) {
-                visited[i] = true;
-                queue.enqueue(i);           // O(1)
+        data[newIndex] = value;
+        next[newIndex] = head;
+        prev[newIndex] = -1;
+
+        if (head != -1) {
+            prev[head] = newIndex;
+        } else {
+            tail = newIndex;
+        }
+
+        head = newIndex;
+        size++;
+        System.out.println("Insert di awal: " + value);
+    }
+
+    // Insert di akhir
+    public static void insertAtEnd(int value) {
+        int newIndex = getNewIndex();
+        if (newIndex == -1) {
+            System.out.println("List penuh!");
+            return;
+        }
+
+        data[newIndex] = value;
+        next[newIndex] = -1;
+        prev[newIndex] = tail;
+
+        if (tail != -1) {
+            next[tail] = newIndex;
+        } else {
+            head = newIndex;
+        }
+
+        tail = newIndex;
+        size++;
+        System.out.println("Insert di akhir: " + value);
+    }
+
+    // Insert di posisi tertentu
+    public static void insertAtPosition(int value, int position) {
+        if (position < 0 || position > size) {
+            System.out.println("Posisi tidak valid!");
+            return;
+        }
+
+        if (position == 0) {
+            insertAtBeginning(value);
+            return;
+        }
+
+        if (position == size) {
+            insertAtEnd(value);
+            return;
+        }
+
+        int newIndex = getNewIndex();
+        if (newIndex == -1) {
+            System.out.println("List penuh!");
+            return;
+        }
+
+        // Traverse ke posisi
+        int current = head;
+        for (int i = 0; i < position; i++) {
+            current = next[current];
+        }
+
+        data[newIndex] = value;
+        next[newIndex] = current;
+        prev[newIndex] = prev[current];
+
+        next[prev[current]] = newIndex;
+        prev[current] = newIndex;
+
+        size++;
+        System.out.println("Insert " + value + " di posisi " + position);
+    }
+
+    // Delete di awal
+    public static void deleteAtBeginning() {
+        if (head == -1) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        int deletedValue = data[head];
+        head = next[head];
+
+        if (head != -1) {
+            prev[head] = -1;
+        } else {
+            tail = -1;
+        }
+
+        size--;
+        System.out.println("Delete di awal: " + deletedValue);
+    }
+
+    // Delete di akhir
+    public static void deleteAtEnd() {
+        if (tail == -1) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        int deletedValue = data[tail];
+        tail = prev[tail];
+
+        if (tail != -1) {
+            next[tail] = -1;
+        } else {
+            head = -1;
+        }
+
+        size--;
+        System.out.println("Delete di akhir: " + deletedValue);
+    }
+
+    // Delete berdasarkan nilai
+    public static void deleteByValue(int value) {
+        if (head == -1) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        int current = head;
+        while (current != -1 && data[current] != value) {
+            current = next[current];
+        }
+
+        if (current == -1) {
+            System.out.println("Nilai " + value + " tidak ditemukan!");
+            return;
+        }
+
+        if (current == head) {
+            deleteAtBeginning();
+            return;
+        }
+
+        if (current == tail) {
+            deleteAtEnd();
+            return;
+        }
+
+        next[prev[current]] = next[current];
+        prev[next[current]] = prev[current];
+        size--;
+        System.out.println("Delete nilai: " + value);
+    }
+
+    // Display maju
+    public static void displayForward() {
+        if (head == -1) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        System.out.print("Forward:  NULL <- ");
+        int current = head;
+        while (current != -1) {
+            System.out.print(data[current]);
+            if (next[current] != -1) {
+                System.out.print(" <-> ");
+            }
+            current = next[current];
+        }
+        System.out.println(" -> NULL");
+    }
+
+    // Display mundur
+    public static void displayBackward() {
+        if (tail == -1) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        System.out.print("Backward: NULL <- ");
+        int current = tail;
+        while (current != -1) {
+            System.out.print(data[current]);
+            if (prev[current] != -1) {
+                System.out.print(" <-> ");
+            }
+            current = prev[current];
+        }
+        System.out.println(" -> NULL");
+    }
+
+    public static void main(String[] args) {
+        System.out.println("=== DOUBLE LINKED LIST TANPA OOP ===\n");
+
+        insertAtBeginning(10);
+        insertAtBeginning(20);
+        insertAtEnd(5);
+        insertAtEnd(15);
+
+        System.out.println();
+        displayForward();
+        displayBackward();
+        System.out.println("Size: " + size);
+
+        System.out.println();
+        insertAtPosition(25, 2);
+        displayForward();
+
+        System.out.println();
+        deleteAtBeginning();
+        displayForward();
+
+        System.out.println();
+        deleteAtEnd();
+        displayForward();
+
+        System.out.println();
+        deleteByValue(25);
+        displayForward();
+        displayBackward();
+    }
+}
+```
+
+**Output:**
+```
+=== DOUBLE LINKED LIST TANPA OOP ===
+
+Insert di awal: 10
+Insert di awal: 20
+Insert di akhir: 5
+Insert di akhir: 15
+
+Forward:  NULL <- 20 <-> 10 <-> 5 <-> 15 -> NULL
+Backward: NULL <- 15 <-> 5 <-> 10 <-> 20 -> NULL
+Size: 4
+
+Insert 25 di posisi 2
+Forward:  NULL <- 20 <-> 10 <-> 25 <-> 5 <-> 15 -> NULL
+
+Delete di awal: 20
+Forward:  NULL <- 10 <-> 25 <-> 5 <-> 15 -> NULL
+
+Delete di akhir: 15
+Forward:  NULL <- 10 <-> 25 <-> 5 -> NULL
+
+Delete nilai: 25
+Forward:  NULL <- 10 <-> 5 -> NULL
+Backward: NULL <- 5 <-> 10 -> NULL
+```
+
+---
+
+### Double Linked List dengan OOP
+
+```java
+// File: DNode.java
+class DNode {
+    int data;
+    DNode prev;
+    DNode next;
+
+    public DNode(int data) {
+        this.data = data;
+        this.prev = null;
+        this.next = null;
+    }
+}
+
+// File: DoubleLinkedList.java
+class DoubleLinkedList {
+    private DNode head;
+    private DNode tail;
+    private int size;
+
+    public DoubleLinkedList() {
+        this.head = null;
+        this.tail = null;
+        this.size = 0;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public boolean isEmpty() {
+        return head == null;
+    }
+
+    // Insert di awal - O(1)
+    public void insertAtBeginning(int data) {
+        DNode newNode = new DNode(data);
+
+        if (head == null) {
+            head = tail = newNode;
+        } else {
+            newNode.next = head;
+            head.prev = newNode;
+            head = newNode;
+        }
+
+        size++;
+        System.out.println("Insert di awal: " + data);
+    }
+
+    // Insert di akhir - O(1)
+    public void insertAtEnd(int data) {
+        DNode newNode = new DNode(data);
+
+        if (tail == null) {
+            head = tail = newNode;
+        } else {
+            newNode.prev = tail;
+            tail.next = newNode;
+            tail = newNode;
+        }
+
+        size++;
+        System.out.println("Insert di akhir: " + data);
+    }
+
+    // Insert di posisi tertentu - O(n)
+    public void insertAtPosition(int data, int position) {
+        if (position < 0 || position > size) {
+            System.out.println("Posisi tidak valid!");
+            return;
+        }
+
+        if (position == 0) {
+            insertAtBeginning(data);
+            return;
+        }
+
+        if (position == size) {
+            insertAtEnd(data);
+            return;
+        }
+
+        DNode newNode = new DNode(data);
+        DNode current = head;
+
+        for (int i = 0; i < position; i++) {
+            current = current.next;
+        }
+
+        newNode.next = current;
+        newNode.prev = current.prev;
+        current.prev.next = newNode;
+        current.prev = newNode;
+
+        size++;
+        System.out.println("Insert " + data + " di posisi " + position);
+    }
+
+    // Insert sebelum node tertentu - O(n)
+    public void insertBefore(int target, int data) {
+        DNode current = head;
+        while (current != null && current.data != target) {
+            current = current.next;
+        }
+
+        if (current == null) {
+            System.out.println("Target " + target + " tidak ditemukan!");
+            return;
+        }
+
+        DNode newNode = new DNode(data);
+
+        if (current == head) {
+            newNode.next = head;
+            head.prev = newNode;
+            head = newNode;
+        } else {
+            newNode.next = current;
+            newNode.prev = current.prev;
+            current.prev.next = newNode;
+            current.prev = newNode;
+        }
+
+        size++;
+        System.out.println("Insert " + data + " sebelum " + target);
+    }
+
+    // Insert setelah node tertentu - O(n)
+    public void insertAfter(int target, int data) {
+        DNode current = head;
+        while (current != null && current.data != target) {
+            current = current.next;
+        }
+
+        if (current == null) {
+            System.out.println("Target " + target + " tidak ditemukan!");
+            return;
+        }
+
+        DNode newNode = new DNode(data);
+
+        if (current == tail) {
+            newNode.prev = tail;
+            tail.next = newNode;
+            tail = newNode;
+        } else {
+            newNode.prev = current;
+            newNode.next = current.next;
+            current.next.prev = newNode;
+            current.next = newNode;
+        }
+
+        size++;
+        System.out.println("Insert " + data + " setelah " + target);
+    }
+
+    // Delete di awal - O(1)
+    public void deleteAtBeginning() {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        int deletedData = head.data;
+
+        if (head == tail) {
+            head = tail = null;
+        } else {
+            head = head.next;
+            head.prev = null;
+        }
+
+        size--;
+        System.out.println("Delete di awal: " + deletedData);
+    }
+
+    // Delete di akhir - O(1)
+    public void deleteAtEnd() {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        int deletedData = tail.data;
+
+        if (head == tail) {
+            head = tail = null;
+        } else {
+            tail = tail.prev;
+            tail.next = null;
+        }
+
+        size--;
+        System.out.println("Delete di akhir: " + deletedData);
+    }
+
+    // Delete berdasarkan nilai - O(n)
+    public void deleteByValue(int value) {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        DNode current = head;
+        while (current != null && current.data != value) {
+            current = current.next;
+        }
+
+        if (current == null) {
+            System.out.println("Nilai " + value + " tidak ditemukan!");
+            return;
+        }
+
+        if (current == head) {
+            deleteAtBeginning();
+            return;
+        }
+
+        if (current == tail) {
+            deleteAtEnd();
+            return;
+        }
+
+        current.prev.next = current.next;
+        current.next.prev = current.prev;
+        size--;
+        System.out.println("Delete nilai: " + value);
+    }
+
+    // Search - O(n)
+    public int search(int value) {
+        DNode current = head;
+        int position = 0;
+        while (current != null) {
+            if (current.data == value) {
+                return position;
+            }
+            current = current.next;
+            position++;
+        }
+        return -1;
+    }
+
+    // Display maju - O(n)
+    public void displayForward() {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        System.out.print("Forward:  NULL <- ");
+        DNode current = head;
+        while (current != null) {
+            System.out.print(current.data);
+            if (current.next != null) {
+                System.out.print(" <-> ");
+            }
+            current = current.next;
+        }
+        System.out.println(" -> NULL");
+    }
+
+    // Display mundur - O(n)
+    public void displayBackward() {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        System.out.print("Backward: NULL <- ");
+        DNode current = tail;
+        while (current != null) {
+            System.out.print(current.data);
+            if (current.prev != null) {
+                System.out.print(" <-> ");
+            }
+            current = current.prev;
+        }
+        System.out.println(" -> NULL");
+    }
+
+    // Reverse - O(n)
+    public void reverse() {
+        DNode temp = null;
+        DNode current = head;
+
+        while (current != null) {
+            temp = current.prev;
+            current.prev = current.next;
+            current.next = temp;
+            current = current.prev;
+        }
+
+        // Swap head dan tail
+        temp = head;
+        head = tail;
+        tail = temp;
+
+        System.out.println("List berhasil di-reverse");
+    }
+
+    // Get head data
+    public int getHead() {
+        if (isEmpty()) throw new RuntimeException("List kosong!");
+        return head.data;
+    }
+
+    // Get tail data
+    public int getTail() {
+        if (isEmpty()) throw new RuntimeException("List kosong!");
+        return tail.data;
+    }
+}
+
+// File: DoubleLinkedListDemo.java
+public class DoubleLinkedListDemo {
+    public static void main(String[] args) {
+        System.out.println("=== DOUBLE LINKED LIST DENGAN OOP ===\n");
+
+        DoubleLinkedList list = new DoubleLinkedList();
+
+        // Test insert
+        list.insertAtBeginning(10);
+        list.insertAtBeginning(20);
+        list.insertAtEnd(5);
+        list.insertAtEnd(15);
+
+        System.out.println();
+        list.displayForward();
+        list.displayBackward();
+        System.out.println("Size: " + list.getSize());
+        System.out.println("Head: " + list.getHead() + ", Tail: " + list.getTail());
+
+        // Test insert di posisi
+        System.out.println();
+        list.insertAtPosition(25, 2);
+        list.displayForward();
+
+        // Test insert before/after
+        System.out.println();
+        list.insertBefore(25, 100);
+        list.insertAfter(25, 200);
+        list.displayForward();
+
+        // Test delete
+        System.out.println();
+        list.deleteAtBeginning();
+        list.displayForward();
+
+        System.out.println();
+        list.deleteAtEnd();
+        list.displayForward();
+
+        System.out.println();
+        list.deleteByValue(25);
+        list.displayForward();
+        list.displayBackward();
+
+        // Test reverse
+        System.out.println();
+        list.reverse();
+        list.displayForward();
+        list.displayBackward();
+    }
+}
+```
+
+**Output:**
+```
+=== DOUBLE LINKED LIST DENGAN OOP ===
+
+Insert di awal: 10
+Insert di awal: 20
+Insert di akhir: 5
+Insert di akhir: 15
+
+Forward:  NULL <- 20 <-> 10 <-> 5 <-> 15 -> NULL
+Backward: NULL <- 15 <-> 5 <-> 10 <-> 20 -> NULL
+Size: 4
+Head: 20, Tail: 15
+
+Insert 25 di posisi 2
+Forward:  NULL <- 20 <-> 10 <-> 25 <-> 5 <-> 15 -> NULL
+
+Insert 100 sebelum 25
+Insert 200 setelah 25
+Forward:  NULL <- 20 <-> 10 <-> 100 <-> 25 <-> 200 <-> 5 <-> 15 -> NULL
+
+Delete di awal: 20
+Forward:  NULL <- 10 <-> 100 <-> 25 <-> 200 <-> 5 <-> 15 -> NULL
+
+Delete di akhir: 15
+Forward:  NULL <- 10 <-> 100 <-> 25 <-> 200 <-> 5 -> NULL
+
+Delete nilai: 25
+Forward:  NULL <- 10 <-> 100 <-> 200 <-> 5 -> NULL
+Backward: NULL <- 5 <-> 200 <-> 100 <-> 10 -> NULL
+
+List berhasil di-reverse
+Forward:  NULL <- 5 <-> 200 <-> 100 <-> 10 -> NULL
+Backward: NULL <- 10 <-> 100 <-> 200 <-> 5 -> NULL
+```
+
+---
+
+## Circular Single Linked List
+
+### Konsep Circular Single Linked List
+
+Circular Single Linked List adalah variasi dari single linked list dimana node terakhir menunjuk kembali ke node pertama (head), sehingga membentuk lingkaran.
+
+```
+     +--------------------------------------------------+
+     |                                                  |
+     v                                                  |
+[HEAD] -> [Data|Next] -> [Data|Next] -> [Data|Next] ---+
+```
+
+### Keuntungan Circular Linked List
+- Dapat mengakses node manapun dari node manapun
+- Berguna untuk aplikasi yang membutuhkan siklus berulang (round-robin)
+- Tidak ada null reference (kecuali list kosong)
+
+### Aplikasi Circular Linked List
+- Round-robin scheduling
+- Multiplayer game turn management
+- Music playlist repeat
+- Buffer management
+
+---
+
+### Circular Single Linked List tanpa OOP
+
+```java
+public class CircularSingleLinkedListNoOOP {
+    static int[] data = new int[100];
+    static int[] next = new int[100];
+    static int head = -1;
+    static int tail = -1;
+    static int size = 0;
+    static int freeIndex = 0;
+
+    public static int getNewIndex() {
+        if (freeIndex >= 100) return -1;
+        return freeIndex++;
+    }
+
+    // Insert di awal
+    public static void insertAtBeginning(int value) {
+        int newIndex = getNewIndex();
+        if (newIndex == -1) {
+            System.out.println("List penuh!");
+            return;
+        }
+
+        data[newIndex] = value;
+
+        if (head == -1) {
+            head = tail = newIndex;
+            next[newIndex] = newIndex; // Point to itself
+        } else {
+            next[newIndex] = head;
+            next[tail] = newIndex;
+            head = newIndex;
+        }
+
+        size++;
+        System.out.println("Insert di awal: " + value);
+    }
+
+    // Insert di akhir
+    public static void insertAtEnd(int value) {
+        int newIndex = getNewIndex();
+        if (newIndex == -1) {
+            System.out.println("List penuh!");
+            return;
+        }
+
+        data[newIndex] = value;
+
+        if (head == -1) {
+            head = tail = newIndex;
+            next[newIndex] = newIndex;
+        } else {
+            next[newIndex] = head;
+            next[tail] = newIndex;
+            tail = newIndex;
+        }
+
+        size++;
+        System.out.println("Insert di akhir: " + value);
+    }
+
+    // Delete di awal
+    public static void deleteAtBeginning() {
+        if (head == -1) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        int deletedValue = data[head];
+
+        if (head == tail) {
+            head = tail = -1;
+        } else {
+            head = next[head];
+            next[tail] = head;
+        }
+
+        size--;
+        System.out.println("Delete di awal: " + deletedValue);
+    }
+
+    // Delete di akhir
+    public static void deleteAtEnd() {
+        if (head == -1) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        int deletedValue = data[tail];
+
+        if (head == tail) {
+            head = tail = -1;
+        } else {
+            int current = head;
+            while (next[current] != tail) {
+                current = next[current];
+            }
+            tail = current;
+            next[tail] = head;
+        }
+
+        size--;
+        System.out.println("Delete di akhir: " + deletedValue);
+    }
+
+    // Display
+    public static void display() {
+        if (head == -1) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        System.out.print("List: ");
+        int current = head;
+        do {
+            System.out.print(data[current]);
+            current = next[current];
+            if (current != head) {
+                System.out.print(" -> ");
+            }
+        } while (current != head);
+        System.out.println(" -> (back to " + data[head] + ")");
+        System.out.println("Size: " + size);
+    }
+
+    // Traverse n kali (untuk demonstrasi circular)
+    public static void traverse(int n) {
+        if (head == -1) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        System.out.print("Traverse " + n + " langkah: ");
+        int current = head;
+        for (int i = 0; i < n; i++) {
+            System.out.print(data[current] + " ");
+            current = next[current];
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        System.out.println("=== CIRCULAR SINGLE LINKED LIST TANPA OOP ===\n");
+
+        insertAtBeginning(10);
+        insertAtBeginning(20);
+        insertAtEnd(5);
+        insertAtEnd(15);
+        display();
+
+        // Demonstrasi circular
+        System.out.println();
+        traverse(10);
+
+        System.out.println();
+        deleteAtBeginning();
+        display();
+
+        System.out.println();
+        deleteAtEnd();
+        display();
+    }
+}
+```
+
+**Output:**
+```
+=== CIRCULAR SINGLE LINKED LIST TANPA OOP ===
+
+Insert di awal: 10
+Insert di awal: 20
+Insert di akhir: 5
+Insert di akhir: 15
+List: 20 -> 10 -> 5 -> 15 -> (back to 20)
+Size: 4
+
+Traverse 10 langkah: 20 10 5 15 20 10 5 15 20 10
+
+Delete di awal: 20
+List: 10 -> 5 -> 15 -> (back to 10)
+Size: 3
+
+Delete di akhir: 15
+List: 10 -> 5 -> (back to 10)
+Size: 2
+```
+
+---
+
+### Circular Single Linked List dengan OOP
+
+```java
+// File: CNode.java
+class CNode {
+    int data;
+    CNode next;
+
+    public CNode(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+// File: CircularSingleLinkedList.java
+class CircularSingleLinkedList {
+    private CNode head;
+    private CNode tail;
+    private int size;
+
+    public CircularSingleLinkedList() {
+        this.head = null;
+        this.tail = null;
+        this.size = 0;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public boolean isEmpty() {
+        return head == null;
+    }
+
+    // Insert di awal - O(1)
+    public void insertAtBeginning(int data) {
+        CNode newNode = new CNode(data);
+
+        if (head == null) {
+            head = tail = newNode;
+            newNode.next = newNode;
+        } else {
+            newNode.next = head;
+            tail.next = newNode;
+            head = newNode;
+        }
+
+        size++;
+        System.out.println("Insert di awal: " + data);
+    }
+
+    // Insert di akhir - O(1)
+    public void insertAtEnd(int data) {
+        CNode newNode = new CNode(data);
+
+        if (head == null) {
+            head = tail = newNode;
+            newNode.next = newNode;
+        } else {
+            newNode.next = head;
+            tail.next = newNode;
+            tail = newNode;
+        }
+
+        size++;
+        System.out.println("Insert di akhir: " + data);
+    }
+
+    // Insert di posisi tertentu - O(n)
+    public void insertAtPosition(int data, int position) {
+        if (position < 0 || position > size) {
+            System.out.println("Posisi tidak valid!");
+            return;
+        }
+
+        if (position == 0) {
+            insertAtBeginning(data);
+            return;
+        }
+
+        if (position == size) {
+            insertAtEnd(data);
+            return;
+        }
+
+        CNode newNode = new CNode(data);
+        CNode current = head;
+
+        for (int i = 0; i < position - 1; i++) {
+            current = current.next;
+        }
+
+        newNode.next = current.next;
+        current.next = newNode;
+        size++;
+        System.out.println("Insert " + data + " di posisi " + position);
+    }
+
+    // Delete di awal - O(1)
+    public void deleteAtBeginning() {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        int deletedData = head.data;
+
+        if (head == tail) {
+            head = tail = null;
+        } else {
+            head = head.next;
+            tail.next = head;
+        }
+
+        size--;
+        System.out.println("Delete di awal: " + deletedData);
+    }
+
+    // Delete di akhir - O(n)
+    public void deleteAtEnd() {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        int deletedData = tail.data;
+
+        if (head == tail) {
+            head = tail = null;
+        } else {
+            CNode current = head;
+            while (current.next != tail) {
+                current = current.next;
+            }
+            tail = current;
+            tail.next = head;
+        }
+
+        size--;
+        System.out.println("Delete di akhir: " + deletedData);
+    }
+
+    // Delete berdasarkan nilai - O(n)
+    public void deleteByValue(int value) {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        if (head.data == value) {
+            deleteAtBeginning();
+            return;
+        }
+
+        CNode current = head;
+        while (current.next != head && current.next.data != value) {
+            current = current.next;
+        }
+
+        if (current.next == head) {
+            System.out.println("Nilai " + value + " tidak ditemukan!");
+            return;
+        }
+
+        if (current.next == tail) {
+            tail = current;
+        }
+
+        current.next = current.next.next;
+        size--;
+        System.out.println("Delete nilai: " + value);
+    }
+
+    // Search - O(n)
+    public int search(int value) {
+        if (isEmpty()) return -1;
+
+        CNode current = head;
+        int position = 0;
+
+        do {
+            if (current.data == value) {
+                return position;
+            }
+            current = current.next;
+            position++;
+        } while (current != head);
+
+        return -1;
+    }
+
+    // Display - O(n)
+    public void display() {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        System.out.print("List: ");
+        CNode current = head;
+        do {
+            System.out.print(current.data);
+            current = current.next;
+            if (current != head) {
+                System.out.print(" -> ");
+            }
+        } while (current != head);
+        System.out.println(" -> (back to " + head.data + ")");
+        System.out.println("Size: " + size);
+    }
+
+    // Traverse n langkah - demonstrasi circular
+    public void traverse(int steps) {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        System.out.print("Traverse " + steps + " langkah: ");
+        CNode current = head;
+        for (int i = 0; i < steps; i++) {
+            System.out.print(current.data + " ");
+            current = current.next;
+        }
+        System.out.println();
+    }
+
+    // Split list menjadi dua
+    public CircularSingleLinkedList[] split() {
+        CircularSingleLinkedList[] result = new CircularSingleLinkedList[2];
+        result[0] = new CircularSingleLinkedList();
+        result[1] = new CircularSingleLinkedList();
+
+        if (isEmpty() || size == 1) {
+            System.out.println("Tidak bisa split list dengan size <= 1");
+            return result;
+        }
+
+        CNode slow = head;
+        CNode fast = head;
+
+        // Find middle using slow and fast pointer
+        while (fast.next != head && fast.next.next != head) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        // Buat dua circular list
+        CNode current = head;
+        while (current != slow.next) {
+            result[0].insertAtEnd(current.data);
+            current = current.next;
+        }
+
+        while (current != head) {
+            result[1].insertAtEnd(current.data);
+            current = current.next;
+        }
+
+        System.out.println("List berhasil di-split");
+        return result;
+    }
+
+    // Josephus Problem - simulasi
+    public int josephus(int k) {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return -1;
+        }
+
+        CNode current = head;
+
+        while (size > 1) {
+            // Move k-1 steps
+            for (int i = 0; i < k - 1; i++) {
+                current = current.next;
+            }
+
+            System.out.println("Eliminasi: " + current.data);
+
+            // Delete current node
+            if (current == head) {
+                deleteAtBeginning();
+                current = head;
+            } else {
+                CNode prev = head;
+                while (prev.next != current) {
+                    prev = prev.next;
+                }
+                prev.next = current.next;
+                if (current == tail) {
+                    tail = prev;
+                }
+                current = current.next;
+                size--;
             }
         }
+
+        System.out.println("Pemenang: " + head.data);
+        return head.data;
     }
 }
-```
 
-**Analisis:**
-- Setiap vertex diproses sekali: O(V)
-- Untuk setiap vertex, cek semua edge: O(E) total
-- **Time Complexity: O(V + E)**
-- **Space Complexity: O(V)** - untuk visited array dan queue
+// File: CircularSingleLinkedListDemo.java
+public class CircularSingleLinkedListDemo {
+    public static void main(String[] args) {
+        System.out.println("=== CIRCULAR SINGLE LINKED LIST DENGAN OOP ===\n");
 
----
+        CircularSingleLinkedList list = new CircularSingleLinkedList();
 
-## Best, Average, dan Worst Case
+        // Test insert
+        list.insertAtBeginning(10);
+        list.insertAtBeginning(20);
+        list.insertAtEnd(5);
+        list.insertAtEnd(15);
+        list.display();
 
-### Definisi
+        // Test circular traversal
+        System.out.println();
+        list.traverse(10);
 
-| Case | Deskripsi |
-|------|-----------|
-| **Best Case** | Skenario paling menguntungkan |
-| **Average Case** | Skenario tipikal/rata-rata |
-| **Worst Case** | Skenario paling tidak menguntungkan |
+        // Test insert di posisi
+        System.out.println();
+        list.insertAtPosition(25, 2);
+        list.display();
 
-### Contoh: Linear Search
+        // Test search
+        System.out.println();
+        int pos = list.search(25);
+        System.out.println("Posisi nilai 25: " + (pos != -1 ? pos : "Tidak ditemukan"));
 
-```java
-public int linearSearch(int[] arr, int target) {
-    for (int i = 0; i < arr.length; i++) {
-        if (arr[i] == target) {
-            return i;
+        // Test delete
+        System.out.println();
+        list.deleteAtBeginning();
+        list.display();
+
+        System.out.println();
+        list.deleteAtEnd();
+        list.display();
+
+        System.out.println();
+        list.deleteByValue(25);
+        list.display();
+
+        // Demo Josephus Problem
+        System.out.println("\n=== JOSEPHUS PROBLEM ===");
+        CircularSingleLinkedList josephusList = new CircularSingleLinkedList();
+        for (int i = 1; i <= 7; i++) {
+            josephusList.insertAtEnd(i);
         }
-    }
-    return -1;
-}
-```
-
-| Case | Skenario | Kompleksitas |
-|------|----------|--------------|
-| Best | Target di index 0 | O(1) |
-| Average | Target di tengah | O(n/2) = O(n) |
-| Worst | Target tidak ada / di akhir | O(n) |
-
-### Contoh: Quick Sort
-
-```java
-public void quickSort(int[] arr, int low, int high) {
-    if (low < high) {
-        int pi = partition(arr, low, high);
-        quickSort(arr, low, pi - 1);
-        quickSort(arr, pi + 1, high);
+        System.out.println("Peserta awal:");
+        josephusList.display();
+        System.out.println("\nProses eliminasi dengan k=3:");
+        josephusList.josephus(3);
     }
 }
 ```
 
-| Case | Skenario | Kompleksitas |
-|------|----------|--------------|
-| Best | Pivot selalu di tengah | O(n log n) |
-| Average | Pivot acak | O(n log n) |
-| Worst | Array sudah sorted (pivot selalu di ujung) | O(n²) |
-
-### Contoh: Stack Operations
-
-| Operasi | Best | Average | Worst |
-|---------|------|---------|-------|
-| Push | O(1) | O(1) | O(n)* |
-| Pop | O(1) | O(1) | O(1) |
-| Peek | O(1) | O(1) | O(1) |
-| Search | O(1) | O(n/2) | O(n) |
-
-*Worst case O(n) terjadi saat array perlu resize
-
----
-
-## Tips Optimasi
-
-### 1. Pilih Struktur Data yang Tepat
-
-```java
-// ❌ Buruk: Sering insert di awal dengan array
-for (int i = 0; i < n; i++) {
-    insertAtBeginning(array, value);  // O(n) per operasi
-}
-// Total: O(n²)
-
-// ✅ Baik: Gunakan Linked List
-for (int i = 0; i < n; i++) {
-    list.insertAtBeginning(value);    // O(1) per operasi
-}
-// Total: O(n)
+**Output:**
 ```
+=== CIRCULAR SINGLE LINKED LIST DENGAN OOP ===
 
-### 2. Gunakan Pointer Tambahan
+Insert di awal: 10
+Insert di awal: 20
+Insert di akhir: 5
+Insert di akhir: 15
+List: 20 -> 10 -> 5 -> 15 -> (back to 20)
+Size: 4
 
-```java
-// ❌ Tanpa tail pointer - O(n)
-public void insertAtEnd(int data) {
-    Node current = head;
-    while (current.next != null) {
-        current = current.next;
-    }
-    current.next = new Node(data);
-}
+Traverse 10 langkah: 20 10 5 15 20 10 5 15 20 10
 
-// ✅ Dengan tail pointer - O(1)
-public void insertAtEnd(int data) {
-    Node newNode = new Node(data);
-    tail.next = newNode;
-    tail = newNode;
-}
-```
+Insert 25 di posisi 2
+List: 20 -> 10 -> 25 -> 5 -> 15 -> (back to 20)
+Size: 5
 
-### 3. Gunakan Circular Array untuk Queue
+Posisi nilai 25: 2
 
-```java
-// ❌ Linear Queue Dequeue - O(n)
-public int dequeue() {
-    int value = queue[0];
-    for (int i = 0; i < size - 1; i++) {
-        queue[i] = queue[i + 1];
-    }
-    size--;
-    return value;
-}
+Delete di awal: 20
+List: 10 -> 25 -> 5 -> 15 -> (back to 10)
+Size: 4
 
-// ✅ Circular Queue Dequeue - O(1)
-public int dequeue() {
-    int value = queue[front];
-    front = (front + 1) % maxSize;
-    size--;
-    return value;
-}
-```
+Delete di akhir: 15
+List: 10 -> 25 -> 5 -> (back to 10)
+Size: 3
 
-### 4. Hindari Operasi Berulang
+Delete nilai: 25
+List: 10 -> 5 -> (back to 10)
+Size: 2
 
-```java
-// ❌ Buruk: Menghitung size di setiap iterasi
-while (list.calculateSize() > 0) {  // O(n) per iterasi
-    // ...
-}
-// Total: O(n²)
+=== JOSEPHUS PROBLEM ===
+Peserta awal:
+List: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> (back to 1)
+Size: 7
 
-// ✅ Baik: Maintain size variable
-while (list.size > 0) {  // O(1) per iterasi
-    // ...
-}
-// Total: O(n)
-```
-
-### 5. Trade-off Space vs Time
-
-```java
-// ❌ Hemat space, lambat
-public int fibonacci(int n) {
-    if (n <= 1) return n;
-    return fibonacci(n-1) + fibonacci(n-2);  // O(2ⁿ)
-}
-
-// ✅ Gunakan extra space untuk kecepatan (memoization)
-public int fibonacci(int n, int[] memo) {
-    if (memo[n] != 0) return memo[n];
-    if (n <= 1) return n;
-    memo[n] = fibonacci(n-1, memo) + fibonacci(n-2, memo);
-    return memo[n];  // O(n) time, O(n) space
-}
+Proses eliminasi dengan k=3:
+Eliminasi: 3
+Eliminasi: 6
+Eliminasi: 2
+Eliminasi: 7
+Eliminasi: 5
+Eliminasi: 1
+Pemenang: 4
 ```
 
 ---
 
-## Latihan Analisis
+## Circular Double Linked List
 
-### Soal 1: Analisis Kompleksitas
+### Konsep Circular Double Linked List
+
+Circular Double Linked List menggabungkan fitur Double Linked List dan Circular Linked List. Setiap node memiliki pointer prev dan next, dan node terakhir terhubung ke node pertama (begitu juga sebaliknya).
+
+```
+    +--------------------------------------------------------+
+    |                                                        |
+    v                                                        |
+[HEAD] <-> [Prev|Data|Next] <-> [Prev|Data|Next] <-> [TAIL] -+
+    |                                                    ^
+    +----------------------------------------------------+
+```
+
+### Keuntungan
+- Traversal dua arah
+- Dapat mengakses node manapun dari node manapun
+- Operasi di head dan tail adalah O(1)
+
+---
+
+### Circular Double Linked List tanpa OOP
 
 ```java
-public void mystery(int n) {
-    for (int i = 1; i <= n; i *= 2) {
-        for (int j = 0; j < n; j++) {
-            System.out.println(i + ", " + j);
+public class CircularDoubleLinkedListNoOOP {
+    static int[] data = new int[100];
+    static int[] next = new int[100];
+    static int[] prev = new int[100];
+    static int head = -1;
+    static int tail = -1;
+    static int size = 0;
+    static int freeIndex = 0;
+
+    public static int getNewIndex() {
+        if (freeIndex >= 100) return -1;
+        return freeIndex++;
+    }
+
+    // Insert di awal
+    public static void insertAtBeginning(int value) {
+        int newIndex = getNewIndex();
+        if (newIndex == -1) {
+            System.out.println("List penuh!");
+            return;
         }
-    }
-}
-```
 
-**Jawaban:**
-- Loop luar: i = 1, 2, 4, 8, ... n → log n iterasi
-- Loop dalam: n iterasi
-- **Time Complexity: O(n log n)**
-- **Space Complexity: O(1)**
+        data[newIndex] = value;
 
----
-
-### Soal 2: Analisis Kompleksitas
-
-```java
-public void process(int[] arr) {
-    int n = arr.length;
-
-    for (int i = 0; i < n; i++) {
-        for (int j = i; j < n; j++) {
-            System.out.println(arr[i] + arr[j]);
+        if (head == -1) {
+            head = tail = newIndex;
+            next[newIndex] = newIndex;
+            prev[newIndex] = newIndex;
+        } else {
+            next[newIndex] = head;
+            prev[newIndex] = tail;
+            prev[head] = newIndex;
+            next[tail] = newIndex;
+            head = newIndex;
         }
+
+        size++;
+        System.out.println("Insert di awal: " + value);
+    }
+
+    // Insert di akhir
+    public static void insertAtEnd(int value) {
+        int newIndex = getNewIndex();
+        if (newIndex == -1) {
+            System.out.println("List penuh!");
+            return;
+        }
+
+        data[newIndex] = value;
+
+        if (head == -1) {
+            head = tail = newIndex;
+            next[newIndex] = newIndex;
+            prev[newIndex] = newIndex;
+        } else {
+            next[newIndex] = head;
+            prev[newIndex] = tail;
+            next[tail] = newIndex;
+            prev[head] = newIndex;
+            tail = newIndex;
+        }
+
+        size++;
+        System.out.println("Insert di akhir: " + value);
+    }
+
+    // Delete di awal
+    public static void deleteAtBeginning() {
+        if (head == -1) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        int deletedValue = data[head];
+
+        if (head == tail) {
+            head = tail = -1;
+        } else {
+            head = next[head];
+            prev[head] = tail;
+            next[tail] = head;
+        }
+
+        size--;
+        System.out.println("Delete di awal: " + deletedValue);
+    }
+
+    // Delete di akhir
+    public static void deleteAtEnd() {
+        if (head == -1) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        int deletedValue = data[tail];
+
+        if (head == tail) {
+            head = tail = -1;
+        } else {
+            tail = prev[tail];
+            next[tail] = head;
+            prev[head] = tail;
+        }
+
+        size--;
+        System.out.println("Delete di akhir: " + deletedValue);
+    }
+
+    // Display maju
+    public static void displayForward() {
+        if (head == -1) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        System.out.print("Forward:  ");
+        int current = head;
+        do {
+            System.out.print(data[current]);
+            current = next[current];
+            if (current != head) {
+                System.out.print(" <-> ");
+            }
+        } while (current != head);
+        System.out.println(" <-> (back to " + data[head] + ")");
+    }
+
+    // Display mundur
+    public static void displayBackward() {
+        if (head == -1) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        System.out.print("Backward: ");
+        int current = tail;
+        do {
+            System.out.print(data[current]);
+            current = prev[current];
+            if (current != tail) {
+                System.out.print(" <-> ");
+            }
+        } while (current != tail);
+        System.out.println(" <-> (back to " + data[tail] + ")");
+    }
+
+    public static void main(String[] args) {
+        System.out.println("=== CIRCULAR DOUBLE LINKED LIST TANPA OOP ===\n");
+
+        insertAtBeginning(10);
+        insertAtBeginning(20);
+        insertAtEnd(5);
+        insertAtEnd(15);
+
+        System.out.println();
+        displayForward();
+        displayBackward();
+        System.out.println("Size: " + size);
+
+        System.out.println();
+        deleteAtBeginning();
+        displayForward();
+
+        System.out.println();
+        deleteAtEnd();
+        displayForward();
+        displayBackward();
     }
 }
 ```
 
-**Jawaban:**
-- Iterasi: n + (n-1) + (n-2) + ... + 1 = n(n+1)/2
-- **Time Complexity: O(n²)**
-- **Space Complexity: O(1)**
+**Output:**
+```
+=== CIRCULAR DOUBLE LINKED LIST TANPA OOP ===
+
+Insert di awal: 10
+Insert di awal: 20
+Insert di akhir: 5
+Insert di akhir: 15
+
+Forward:  20 <-> 10 <-> 5 <-> 15 <-> (back to 20)
+Backward: 15 <-> 5 <-> 10 <-> 20 <-> (back to 15)
+Size: 4
+
+Delete di awal: 20
+Forward:  10 <-> 5 <-> 15 <-> (back to 10)
+
+Delete di akhir: 15
+Forward:  10 <-> 5 <-> (back to 10)
+Backward: 5 <-> 10 <-> (back to 5)
+```
 
 ---
 
-### Soal 3: Analisis Struktur Data
-
-**Pertanyaan:** Anda perlu menyimpan data yang:
-- Sering di-insert di awal dan akhir
-- Sering di-delete di awal dan akhir
-- Jarang diakses secara random
-
-**Struktur data terbaik?**
-
-**Jawaban:** **Double Linked List** atau **Deque**
-- Insert di awal: O(1)
-- Insert di akhir: O(1)
-- Delete di awal: O(1)
-- Delete di akhir: O(1)
-
----
-
-### Soal 4: Optimasi
-
-**Kode berikut tidak efisien:**
+### Circular Double Linked List dengan OOP
 
 ```java
-public boolean hasDuplicate(int[] arr) {
-    for (int i = 0; i < arr.length; i++) {
-        for (int j = i + 1; j < arr.length; j++) {
-            if (arr[i] == arr[j]) {
+// File: CDNode.java
+class CDNode {
+    int data;
+    CDNode prev;
+    CDNode next;
+
+    public CDNode(int data) {
+        this.data = data;
+        this.prev = null;
+        this.next = null;
+    }
+}
+
+// File: CircularDoubleLinkedList.java
+class CircularDoubleLinkedList {
+    private CDNode head;
+    private CDNode tail;
+    private int size;
+
+    public CircularDoubleLinkedList() {
+        this.head = null;
+        this.tail = null;
+        this.size = 0;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public boolean isEmpty() {
+        return head == null;
+    }
+
+    // Insert di awal - O(1)
+    public void insertAtBeginning(int data) {
+        CDNode newNode = new CDNode(data);
+
+        if (head == null) {
+            head = tail = newNode;
+            newNode.next = newNode;
+            newNode.prev = newNode;
+        } else {
+            newNode.next = head;
+            newNode.prev = tail;
+            head.prev = newNode;
+            tail.next = newNode;
+            head = newNode;
+        }
+
+        size++;
+        System.out.println("Insert di awal: " + data);
+    }
+
+    // Insert di akhir - O(1)
+    public void insertAtEnd(int data) {
+        CDNode newNode = new CDNode(data);
+
+        if (head == null) {
+            head = tail = newNode;
+            newNode.next = newNode;
+            newNode.prev = newNode;
+        } else {
+            newNode.next = head;
+            newNode.prev = tail;
+            tail.next = newNode;
+            head.prev = newNode;
+            tail = newNode;
+        }
+
+        size++;
+        System.out.println("Insert di akhir: " + data);
+    }
+
+    // Insert di posisi tertentu - O(n)
+    public void insertAtPosition(int data, int position) {
+        if (position < 0 || position > size) {
+            System.out.println("Posisi tidak valid!");
+            return;
+        }
+
+        if (position == 0) {
+            insertAtBeginning(data);
+            return;
+        }
+
+        if (position == size) {
+            insertAtEnd(data);
+            return;
+        }
+
+        CDNode newNode = new CDNode(data);
+        CDNode current = head;
+
+        for (int i = 0; i < position; i++) {
+            current = current.next;
+        }
+
+        newNode.next = current;
+        newNode.prev = current.prev;
+        current.prev.next = newNode;
+        current.prev = newNode;
+
+        size++;
+        System.out.println("Insert " + data + " di posisi " + position);
+    }
+
+    // Delete di awal - O(1)
+    public void deleteAtBeginning() {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        int deletedData = head.data;
+
+        if (head == tail) {
+            head = tail = null;
+        } else {
+            head = head.next;
+            head.prev = tail;
+            tail.next = head;
+        }
+
+        size--;
+        System.out.println("Delete di awal: " + deletedData);
+    }
+
+    // Delete di akhir - O(1)
+    public void deleteAtEnd() {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        int deletedData = tail.data;
+
+        if (head == tail) {
+            head = tail = null;
+        } else {
+            tail = tail.prev;
+            tail.next = head;
+            head.prev = tail;
+        }
+
+        size--;
+        System.out.println("Delete di akhir: " + deletedData);
+    }
+
+    // Delete berdasarkan nilai - O(n)
+    public void deleteByValue(int value) {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        if (head.data == value) {
+            deleteAtBeginning();
+            return;
+        }
+
+        if (tail.data == value) {
+            deleteAtEnd();
+            return;
+        }
+
+        CDNode current = head.next;
+        while (current != head && current.data != value) {
+            current = current.next;
+        }
+
+        if (current == head) {
+            System.out.println("Nilai " + value + " tidak ditemukan!");
+            return;
+        }
+
+        current.prev.next = current.next;
+        current.next.prev = current.prev;
+        size--;
+        System.out.println("Delete nilai: " + value);
+    }
+
+    // Search - O(n)
+    public int search(int value) {
+        if (isEmpty()) return -1;
+
+        CDNode current = head;
+        int position = 0;
+
+        do {
+            if (current.data == value) {
+                return position;
+            }
+            current = current.next;
+            position++;
+        } while (current != head);
+
+        return -1;
+    }
+
+    // Display maju - O(n)
+    public void displayForward() {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        System.out.print("Forward:  ");
+        CDNode current = head;
+        do {
+            System.out.print(current.data);
+            current = current.next;
+            if (current != head) {
+                System.out.print(" <-> ");
+            }
+        } while (current != head);
+        System.out.println(" <-> (back to " + head.data + ")");
+    }
+
+    // Display mundur - O(n)
+    public void displayBackward() {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        System.out.print("Backward: ");
+        CDNode current = tail;
+        do {
+            System.out.print(current.data);
+            current = current.prev;
+            if (current != tail) {
+                System.out.print(" <-> ");
+            }
+        } while (current != tail);
+        System.out.println(" <-> (back to " + tail.data + ")");
+    }
+
+    // Traverse maju n langkah
+    public void traverseForward(int steps) {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        System.out.print("Traverse forward " + steps + " langkah: ");
+        CDNode current = head;
+        for (int i = 0; i < steps; i++) {
+            System.out.print(current.data + " ");
+            current = current.next;
+        }
+        System.out.println();
+    }
+
+    // Traverse mundur n langkah
+    public void traverseBackward(int steps) {
+        if (isEmpty()) {
+            System.out.println("List kosong!");
+            return;
+        }
+
+        System.out.print("Traverse backward " + steps + " langkah: ");
+        CDNode current = tail;
+        for (int i = 0; i < steps; i++) {
+            System.out.print(current.data + " ");
+            current = current.prev;
+        }
+        System.out.println();
+    }
+
+    // Rotate kiri (head ke arah tail)
+    public void rotateLeft(int positions) {
+        if (isEmpty() || size == 1 || positions == 0) return;
+
+        positions = positions % size;
+        for (int i = 0; i < positions; i++) {
+            head = head.next;
+            tail = tail.next;
+        }
+        System.out.println("Rotate left " + positions + " posisi");
+    }
+
+    // Rotate kanan (tail ke arah head)
+    public void rotateRight(int positions) {
+        if (isEmpty() || size == 1 || positions == 0) return;
+
+        positions = positions % size;
+        for (int i = 0; i < positions; i++) {
+            head = head.prev;
+            tail = tail.prev;
+        }
+        System.out.println("Rotate right " + positions + " posisi");
+    }
+
+    // Reverse
+    public void reverse() {
+        if (isEmpty() || size == 1) return;
+
+        CDNode current = head;
+        CDNode temp;
+
+        do {
+            temp = current.next;
+            current.next = current.prev;
+            current.prev = temp;
+            current = temp;
+        } while (current != head);
+
+        temp = head;
+        head = tail;
+        tail = temp;
+
+        System.out.println("List berhasil di-reverse");
+    }
+}
+
+// File: CircularDoubleLinkedListDemo.java
+public class CircularDoubleLinkedListDemo {
+    public static void main(String[] args) {
+        System.out.println("=== CIRCULAR DOUBLE LINKED LIST DENGAN OOP ===\n");
+
+        CircularDoubleLinkedList list = new CircularDoubleLinkedList();
+
+        // Test insert
+        list.insertAtBeginning(10);
+        list.insertAtBeginning(20);
+        list.insertAtEnd(5);
+        list.insertAtEnd(15);
+
+        System.out.println();
+        list.displayForward();
+        list.displayBackward();
+        System.out.println("Size: " + list.getSize());
+
+        // Test insert di posisi
+        System.out.println();
+        list.insertAtPosition(25, 2);
+        list.displayForward();
+
+        // Test traverse
+        System.out.println();
+        list.traverseForward(10);
+        list.traverseBackward(10);
+
+        // Test search
+        System.out.println();
+        int pos = list.search(25);
+        System.out.println("Posisi nilai 25: " + (pos != -1 ? pos : "Tidak ditemukan"));
+
+        // Test rotate
+        System.out.println();
+        list.rotateLeft(2);
+        list.displayForward();
+
+        System.out.println();
+        list.rotateRight(2);
+        list.displayForward();
+
+        // Test delete
+        System.out.println();
+        list.deleteAtBeginning();
+        list.displayForward();
+
+        System.out.println();
+        list.deleteAtEnd();
+        list.displayForward();
+
+        System.out.println();
+        list.deleteByValue(25);
+        list.displayForward();
+        list.displayBackward();
+
+        // Test reverse
+        System.out.println();
+        list.insertAtEnd(100);
+        list.insertAtEnd(200);
+        list.displayForward();
+        list.reverse();
+        list.displayForward();
+        list.displayBackward();
+    }
+}
+```
+
+**Output:**
+```
+=== CIRCULAR DOUBLE LINKED LIST DENGAN OOP ===
+
+Insert di awal: 10
+Insert di awal: 20
+Insert di akhir: 5
+Insert di akhir: 15
+
+Forward:  20 <-> 10 <-> 5 <-> 15 <-> (back to 20)
+Backward: 15 <-> 5 <-> 10 <-> 20 <-> (back to 15)
+Size: 4
+
+Insert 25 di posisi 2
+Forward:  20 <-> 10 <-> 25 <-> 5 <-> 15 <-> (back to 20)
+
+Traverse forward 10 langkah: 20 10 25 5 15 20 10 25 5 15
+Traverse backward 10 langkah: 15 5 25 10 20 15 5 25 10 20
+
+Posisi nilai 25: 2
+
+Rotate left 2 posisi
+Forward:  25 <-> 5 <-> 15 <-> 20 <-> 10 <-> (back to 25)
+
+Rotate right 2 posisi
+Forward:  20 <-> 10 <-> 25 <-> 5 <-> 15 <-> (back to 20)
+
+Delete di awal: 20
+Forward:  10 <-> 25 <-> 5 <-> 15 <-> (back to 10)
+
+Delete di akhir: 15
+Forward:  10 <-> 25 <-> 5 <-> (back to 10)
+
+Delete nilai: 25
+Forward:  10 <-> 5 <-> (back to 10)
+Backward: 5 <-> 10 <-> (back to 5)
+
+Insert di akhir: 100
+Insert di akhir: 200
+Forward:  10 <-> 5 <-> 100 <-> 200 <-> (back to 10)
+List berhasil di-reverse
+Forward:  200 <-> 100 <-> 5 <-> 10 <-> (back to 200)
+Backward: 10 <-> 5 <-> 100 <-> 200 <-> (back to 10)
+```
+
+---
+
+## Kapan Menggunakan Linked List
+
+### Linked List vs Array
+
+| Kriteria | Pilih Linked List | Pilih Array |
+|----------|-------------------|-------------|
+| **Ukuran data** | Tidak diketahui atau sering berubah | Sudah diketahui dan tetap |
+| **Operasi utama** | Insert/Delete di awal/tengah | Akses random by index |
+| **Memory** | Tersebar, dinamis | Kontinu, statis |
+| **Cache performance** | Kurang optimal | Optimal (locality) |
+
+### Kapan Menggunakan Single Linked List
+
+**Gunakan Single Linked List ketika:**
+- Hanya butuh traversal satu arah (maju)
+- Sering melakukan insert/delete di awal list
+- Memory terbatas (hanya 1 pointer per node)
+- Implementasi Stack (LIFO)
+
+**Contoh penggunaan:**
+- Undo history (hanya perlu ke belakang)
+- Singly linked playlist
+- Hash table chaining
+
+### Kapan Menggunakan Double Linked List
+
+**Gunakan Double Linked List ketika:**
+- Butuh traversal dua arah (maju dan mundur)
+- Sering melakukan insert/delete di akhir list
+- Perlu navigasi ke node sebelumnya
+- Implementasi Deque
+
+**Contoh penggunaan:**
+- Browser history (back & forward)
+- Music player (next & previous)
+- Text editor (cursor movement)
+- LRU Cache implementation
+
+### Kapan Menggunakan Circular Linked List
+
+**Gunakan Circular Single Linked List ketika:**
+- Data bersifat siklis/berputar
+- Perlu iterasi berulang tanpa henti
+- Tidak ada konsep "akhir" data
+
+**Contoh penggunaan:**
+- Round-robin scheduling
+- Multiplayer game (giliran pemain)
+- Circular buffer
+
+**Gunakan Circular Double Linked List ketika:**
+- Kombinasi kebutuhan circular + navigasi dua arah
+- Carousel/slider dengan infinite loop
+- Playlist musik dengan repeat mode
+
+### Tabel Keputusan Pemilihan Linked List
+
+| Kebutuhan | Rekomendasi | Alasan |
+|-----------|-------------|--------|
+| Insert/delete di HEAD saja | Single LL | Paling efisien, O(1) |
+| Insert/delete di HEAD & TAIL | Double LL | O(1) untuk keduanya |
+| Traversal maju saja | Single LL | Memory lebih hemat |
+| Traversal maju & mundur | Double LL | Ada pointer prev |
+| Data siklis, traversal maju | Circular Single LL | Tidak ada NULL di akhir |
+| Data siklis, traversal dua arah | Circular Double LL | Fleksibilitas maksimal |
+| Akses random by index | **Jangan pakai LL** | Gunakan Array, O(1) |
+| Memory sangat terbatas | Single LL | 1 pointer per node |
+
+### Kapan TIDAK Menggunakan Linked List
+
+| Situasi | Alternatif | Alasan |
+|---------|------------|--------|
+| Sering akses by index | Array/ArrayList | LL = O(n), Array = O(1) |
+| Data kecil dan tetap | Array | Overhead pointer tidak worth it |
+| Cache-sensitive application | Array | Array lebih cache-friendly |
+| Perlu sorting sering | Array | Binary search tidak efisien di LL |
+| Memory sangat terbatas | Array | LL butuh extra memory untuk pointer |
+
+---
+
+## Kompleksitas Linked List
+
+### Tabel Kompleksitas Waktu
+
+| Operasi | Single LL | Double LL | Circular Single LL | Circular Double LL |
+|---------|-----------|-----------|-------------------|-------------------|
+| **Insert at Beginning** | O(1) | O(1) | O(1) | O(1) |
+| **Insert at End** | O(n)* | O(1) | O(1) | O(1) |
+| **Insert at Position** | O(n) | O(n) | O(n) | O(n) |
+| **Delete at Beginning** | O(1) | O(1) | O(1) | O(1) |
+| **Delete at End** | O(n) | O(1) | O(n) | O(1) |
+| **Delete by Value** | O(n) | O(n) | O(n) | O(n) |
+| **Search** | O(n) | O(n) | O(n) | O(n) |
+| **Access by Index** | O(n) | O(n) | O(n) | O(n) |
+| **Reverse** | O(n) | O(n) | O(n) | O(n) |
+
+*O(1) jika menggunakan tail pointer
+
+### Kompleksitas Ruang
+
+| Jenis Linked List | Space per Node | Total Space |
+|-------------------|----------------|-------------|
+| Single Linked List | data + 1 pointer | O(n) |
+| Double Linked List | data + 2 pointer | O(n) |
+| Circular Single LL | data + 1 pointer | O(n) |
+| Circular Double LL | data + 2 pointer | O(n) |
+
+### Penjelasan Kompleksitas
+
+**Insert at Beginning - O(1):**
+```java
+// Hanya operasi konstan
+Node newNode = new Node(data);  // O(1)
+newNode.next = head;            // O(1)
+head = newNode;                 // O(1)
+```
+
+**Insert at End - O(n) vs O(1):**
+```java
+// Tanpa tail pointer - O(n)
+Node current = head;
+while (current.next != null) {   // O(n) - traverse semua node
+    current = current.next;
+}
+current.next = newNode;
+
+// Dengan tail pointer - O(1)
+tail.next = newNode;
+tail = newNode;
+```
+
+**Search - O(n):**
+```java
+// Worst case: elemen ada di akhir atau tidak ada
+Node current = head;
+while (current != null) {  // O(n) - cek semua node
+    if (current.data == value) return position;
+    current = current.next;
+}
+```
+
+---
+
+## Perbandingan dengan Java Collections Framework
+
+### Implementasi Manual vs Java Built-in
+
+| Implementasi Manual | Java Built-in | Perbedaan Utama |
+|---------------------|---------------|-----------------|
+| `SingleLinkedList` | `java.util.LinkedList` | LinkedList Java adalah Double Linked List |
+| `DoubleLinkedList` | `java.util.LinkedList` | Hampir sama, LinkedList Java lebih lengkap |
+| `CircularSingleLinkedList` | Tidak ada built-in | Perlu implementasi manual |
+| `CircularDoubleLinkedList` | Tidak ada built-in | Perlu implementasi manual |
+
+### Kapan Menggunakan Implementasi Manual?
+
+| Situasi | Rekomendasi |
+|---------|-------------|
+| Aplikasi production | Gunakan `java.util.LinkedList` |
+| Pembelajaran & interview | Implementasi manual |
+| Perlu circular behavior | Implementasi manual |
+| Optimisasi khusus | Implementasi manual |
+| Kebutuhan custom behavior | Implementasi manual |
+
+### Contoh Penggunaan Java LinkedList
+
+```java
+import java.util.LinkedList;
+import java.util.Iterator;
+
+public class JavaLinkedListDemo {
+    public static void main(String[] args) {
+        // Membuat LinkedList
+        LinkedList<Integer> list = new LinkedList<>();
+
+        // Insert operations
+        list.addFirst(10);        // Insert di awal
+        list.addLast(30);         // Insert di akhir
+        list.add(1, 20);          // Insert di posisi tertentu
+        list.add(40);             // Append di akhir
+
+        System.out.println("List: " + list);  // [10, 20, 30, 40]
+
+        // Access operations
+        System.out.println("First: " + list.getFirst());   // 10
+        System.out.println("Last: " + list.getLast());     // 40
+        System.out.println("Index 2: " + list.get(2));     // 30
+
+        // Search operations
+        System.out.println("Contains 20: " + list.contains(20));  // true
+        System.out.println("Index of 30: " + list.indexOf(30));   // 2
+
+        // Delete operations
+        list.removeFirst();       // Hapus elemen pertama
+        list.removeLast();        // Hapus elemen terakhir
+        list.remove(Integer.valueOf(20));  // Hapus by value
+        System.out.println("After delete: " + list);  // [30]
+
+        // Iterasi
+        list.clear();
+        list.add(1); list.add(2); list.add(3);
+
+        // Menggunakan for-each
+        System.out.print("For-each: ");
+        for (int num : list) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+
+        // Menggunakan Iterator
+        System.out.print("Iterator: ");
+        Iterator<Integer> iter = list.iterator();
+        while (iter.hasNext()) {
+            System.out.print(iter.next() + " ");
+        }
+        System.out.println();
+
+        // Menggunakan Stream API
+        System.out.print("Stream: ");
+        list.stream().forEach(n -> System.out.print(n + " "));
+        System.out.println();
+    }
+}
+```
+
+**Output:**
+```
+List: [10, 20, 30, 40]
+First: 10
+Last: 40
+Index 2: 30
+Contains 20: true
+Index of 30: 2
+After delete: [30]
+For-each: 1 2 3
+Iterator: 1 2 3
+Stream: 1 2 3
+```
+
+### Method Penting di java.util.LinkedList
+
+| Method | Deskripsi | Kompleksitas |
+|--------|-----------|--------------|
+| `addFirst(E e)` | Insert di awal | O(1) |
+| `addLast(E e)` | Insert di akhir | O(1) |
+| `add(int index, E e)` | Insert di posisi tertentu | O(n) |
+| `removeFirst()` | Hapus elemen pertama | O(1) |
+| `removeLast()` | Hapus elemen terakhir | O(1) |
+| `remove(int index)` | Hapus di posisi tertentu | O(n) |
+| `getFirst()` | Ambil elemen pertama | O(1) |
+| `getLast()` | Ambil elemen terakhir | O(1) |
+| `get(int index)` | Ambil elemen di posisi tertentu | O(n) |
+| `contains(Object o)` | Cek apakah elemen ada | O(n) |
+| `indexOf(Object o)` | Cari index elemen | O(n) |
+| `size()` | Jumlah elemen | O(1) |
+| `clear()` | Hapus semua elemen | O(n) |
+
+### LinkedList sebagai Deque
+
+Java `LinkedList` juga mengimplementasikan interface `Deque`, sehingga dapat digunakan sebagai Stack atau Queue:
+
+```java
+import java.util.LinkedList;
+import java.util.Deque;
+
+public class LinkedListAsDeque {
+    public static void main(String[] args) {
+        // Sebagai Stack (LIFO)
+        Deque<Integer> stack = new LinkedList<>();
+        stack.push(1);
+        stack.push(2);
+        stack.push(3);
+        System.out.println("Stack pop: " + stack.pop());  // 3
+
+        // Sebagai Queue (FIFO)
+        Deque<Integer> queue = new LinkedList<>();
+        queue.offer(1);
+        queue.offer(2);
+        queue.offer(3);
+        System.out.println("Queue poll: " + queue.poll());  // 1
+    }
+}
+```
+
+---
+
+## Latihan Praktikum
+
+### Latihan 1: Merge Two Sorted Linked Lists
+
+```java
+public class MergeSortedLists {
+    // Merge dua sorted list menjadi satu sorted list
+    public static Node mergeSorted(Node l1, Node l2) {
+        Node dummy = new Node(0);
+        Node current = dummy;
+
+        while (l1 != null && l2 != null) {
+            if (l1.data <= l2.data) {
+                current.next = l1;
+                l1 = l1.next;
+            } else {
+                current.next = l2;
+                l2 = l2.next;
+            }
+            current = current.next;
+        }
+
+        // Append sisa
+        if (l1 != null) current.next = l1;
+        if (l2 != null) current.next = l2;
+
+        return dummy.next;
+    }
+
+    public static void main(String[] args) {
+        SingleLinkedList list1 = new SingleLinkedList();
+        list1.insertAtEnd(1);
+        list1.insertAtEnd(3);
+        list1.insertAtEnd(5);
+
+        SingleLinkedList list2 = new SingleLinkedList();
+        list2.insertAtEnd(2);
+        list2.insertAtEnd(4);
+        list2.insertAtEnd(6);
+
+        System.out.println("List 1:");
+        list1.display();
+        System.out.println("List 2:");
+        list2.display();
+
+        // Merge (implementasi perlu akses ke head)
+        System.out.println("\nSetelah merge: sorted list gabungan");
+    }
+}
+```
+
+### Latihan 2: Detect Cycle in Linked List
+
+```java
+public class DetectCycle {
+    // Floyd's Cycle Detection Algorithm
+    public static boolean hasCycle(Node head) {
+        if (head == null || head.next == null) return false;
+
+        Node slow = head;
+        Node fast = head;
+
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+
+            if (slow == fast) {
                 return true;
             }
         }
+        return false;
     }
-    return false;
-}
-// Time: O(n²)
-```
 
-**Bagaimana cara mengoptimasi?**
+    // Find cycle start
+    public static Node findCycleStart(Node head) {
+        if (head == null || head.next == null) return null;
 
-**Jawaban:** Gunakan HashSet
+        Node slow = head;
+        Node fast = head;
 
-```java
-public boolean hasDuplicate(int[] arr) {
-    HashSet<Integer> seen = new HashSet<>();
-    for (int num : arr) {
-        if (seen.contains(num)) {  // O(1) average
-            return true;
+        // Detect cycle
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+
+            if (slow == fast) {
+                // Found cycle, now find start
+                slow = head;
+                while (slow != fast) {
+                    slow = slow.next;
+                    fast = fast.next;
+                }
+                return slow;
+            }
         }
-        seen.add(num);  // O(1) average
+        return null;
     }
-    return false;
+
+    public static void main(String[] args) {
+        System.out.println("=== DETECT CYCLE ===");
+        // Test dengan circular linked list akan selalu return true
+        // Test dengan regular linked list akan return false
+    }
 }
-// Time: O(n), Space: O(n)
 ```
 
----
-
-### Soal 5: Analisis Rekursi
+### Latihan 3: Find Middle of Linked List
 
 ```java
-public int sum(int n) {
-    if (n == 0) return 0;
-    return n + sum(n - 1);
+public class FindMiddle {
+    // Using slow and fast pointer
+    public static Node findMiddle(Node head) {
+        if (head == null) return null;
+
+        Node slow = head;
+        Node fast = head;
+
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        return slow;
+    }
+
+    public static void main(String[] args) {
+        SingleLinkedList list = new SingleLinkedList();
+        for (int i = 1; i <= 7; i++) {
+            list.insertAtEnd(i);
+        }
+
+        System.out.println("List:");
+        list.display();
+        System.out.println("Elemen tengah: " + findMiddle(/* head */).data);
+    }
 }
 ```
 
-**Jawaban:**
-- Rekursi depth: n
-- Setiap level: O(1) operasi
-- **Time Complexity: O(n)**
-- **Space Complexity: O(n)** - karena call stack
+### Latihan 4: Remove Nth Node From End
+
+```java
+public class RemoveNthFromEnd {
+    public static void removeNthFromEnd(SingleLinkedList list, int n) {
+        Node dummy = new Node(0);
+        // dummy.next = list.getHead(); // perlu akses ke head
+
+        Node first = dummy;
+        Node second = dummy;
+
+        // Maju n+1 langkah
+        for (int i = 0; i <= n; i++) {
+            first = first.next;
+        }
+
+        // Maju bersamaan
+        while (first != null) {
+            first = first.next;
+            second = second.next;
+        }
+
+        // Hapus node
+        second.next = second.next.next;
+    }
+
+    public static void main(String[] args) {
+        SingleLinkedList list = new SingleLinkedList();
+        for (int i = 1; i <= 5; i++) {
+            list.insertAtEnd(i);
+        }
+
+        System.out.println("List awal:");
+        list.display();
+        System.out.println("Setelah hapus node ke-2 dari belakang:");
+        // removeNthFromEnd(list, 2);
+        list.display();
+    }
+}
+```
+
+### Latihan 5: Playlist Music Player (Circular Double Linked List)
+
+```java
+class Song {
+    String title;
+    String artist;
+    int duration; // dalam detik
+
+    public Song(String title, String artist, int duration) {
+        this.title = title;
+        this.artist = artist;
+        this.duration = duration;
+    }
+
+    @Override
+    public String toString() {
+        return title + " - " + artist + " (" + duration + "s)";
+    }
+}
+
+public class MusicPlaylist {
+    // Implementasi menggunakan Circular Double Linked List
+    // Fitur: next, previous, shuffle, repeat
+
+    public static void main(String[] args) {
+        System.out.println("=== MUSIC PLAYLIST ===\n");
+
+        CircularDoubleLinkedList playlist = new CircularDoubleLinkedList();
+
+        // Tambah lagu (gunakan encoding integer untuk simplifikasi)
+        playlist.insertAtEnd(1); // Song 1
+        playlist.insertAtEnd(2); // Song 2
+        playlist.insertAtEnd(3); // Song 3
+        playlist.insertAtEnd(4); // Song 4
+
+        System.out.println("Playlist:");
+        playlist.displayForward();
+
+        System.out.println("\nSimulasi play 8 lagu berturut-turut:");
+        playlist.traverseForward(8);
+
+        System.out.println("\nSimulasi previous 4 lagu:");
+        playlist.traverseBackward(4);
+    }
+}
+```
 
 ---
 
 ## Ringkasan
 
-### Cheat Sheet Kompleksitas
+### Perbandingan Jenis Linked List
 
-```
-┌────────────────────────────────────────────────────────────────────┐
-│                    KOMPLEKSITAS CHEAT SHEET                         │
-├────────────────────────────────────────────────────────────────────┤
-│ Struktur     │ Access │ Search │ Insert │ Delete │ Space          │
-├────────────────────────────────────────────────────────────────────┤
-│ Array        │ O(1)   │ O(n)   │ O(n)   │ O(n)   │ O(n)           │
-│ Linked List  │ O(n)   │ O(n)   │ O(1)*  │ O(1)*  │ O(n)           │
-│ Stack        │ O(n)   │ O(n)   │ O(1)   │ O(1)   │ O(n)           │
-│ Queue        │ O(n)   │ O(n)   │ O(1)   │ O(1)   │ O(n)           │
-├────────────────────────────────────────────────────────────────────┤
-│ *jika posisi sudah diketahui                                       │
-└────────────────────────────────────────────────────────────────────┘
-```
+| Fitur | Single LL | Double LL | Circular Single | Circular Double |
+|-------|-----------|-----------|-----------------|-----------------|
+| Traversal | Satu arah | Dua arah | Satu arah, infinite | Dua arah, infinite |
+| Memory/Node | Rendah | Tinggi | Rendah | Tinggi |
+| Insert/Delete di akhir | O(n)* | O(1) | O(1) | O(1) |
+| Kompleksitas implementasi | Mudah | Sedang | Sedang | Kompleks |
+| Use case | General | Browser history | Round-robin | Music player |
 
-### Key Takeaways
+*O(1) dengan tail pointer
 
-1. **Big O fokus pada worst case dan growth rate**
-2. **Pilih struktur data berdasarkan operasi yang paling sering**
-3. **Trade-off antara time dan space complexity**
-4. **Konstanta dan lower order terms diabaikan**
-5. **Amortized analysis penting untuk operasi yang jarang mahal**
+### Kapan Menggunakan Jenis Linked List yang Mana?
+
+**Single Linked List:**
+- Data yang hanya perlu di-traverse satu arah
+- Memori terbatas
+- Operasi insert/delete di awal banyak
+
+**Double Linked List:**
+- Perlu traverse dua arah
+- Browser history (back/forward)
+- Undo/redo operations
+
+**Circular Single Linked List:**
+- Round-robin scheduling
+- Multiplayer game turn
+- Buffer circular sederhana
+
+**Circular Double Linked List:**
+- Music/video playlist dengan repeat
+- Navigasi carousel
+- Cache management (LRU)
 
 ---
 
 ## Tugas Praktikum
 
-1. **Analisis kompleksitas waktu dan ruang** untuk semua operasi di Double Linked List implementasi Anda
+1. **Implementasikan method `getNthFromLast(int n)`** pada Single Linked List yang mengembalikan node ke-n dari belakang
 
-2. **Implementasikan dan bandingkan** performa Linear Queue vs Circular Queue untuk 10000 operasi enqueue/dequeue
+2. **Buat program untuk mendeteksi dan menghapus loop** dalam linked list yang ter-corrupt
 
-3. **Optimalkan** algoritma berikut dan jelaskan perbaikannya:
-   ```java
-   public int findMax(LinkedList list) {
-       int max = Integer.MIN_VALUE;
-       for (int i = 0; i < list.size(); i++) {  // size() adalah O(n)
-           if (list.get(i) > max) {             // get(i) adalah O(n)
-               max = list.get(i);
-           }
-       }
-       return max;
-   }
-   ```
+3. **Implementasikan Skip List** - variasi linked list dengan multiple levels untuk search O(log n)
 
-4. **Buktikan secara matematis** bahwa nested loop dengan i dari 0 sampai n dan j dari i sampai n menghasilkan O(n²)
+4. **Buat LRU Cache** menggunakan Circular Double Linked List dan HashMap
 
-5. **Desain struktur data hybrid** yang mendukung:
-   - Insert: O(1)
-   - Delete: O(1)
-   - Get Min: O(1)
-   - Get Max: O(1)
+5. **Implementasikan Polynomial Addition** menggunakan Linked List dimana setiap node menyimpan coefficient dan exponent
 
 Selamat belajar!

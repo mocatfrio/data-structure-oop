@@ -1,2265 +1,1278 @@
-# Module 06: Stack dan Queue
+# Module 06: Analisis Kompleksitas Struktur Data
 
 ## Daftar Isi
-1. [Stack](#stack)
-   - [Konsep Dasar Stack](#konsep-dasar-stack)
-   - [Stack tanpa OOP](#stack-tanpa-oop)
-   - [Stack dengan OOP (Array-based)](#stack-dengan-oop-array-based)
-   - [Stack dengan OOP (Linked List-based)](#stack-dengan-oop-linked-list-based)
-2. [Queue](#queue)
-   - [Konsep Dasar Queue](#konsep-dasar-queue)
-   - [Queue tanpa OOP](#queue-tanpa-oop)
-   - [Queue dengan OOP (Array-based)](#queue-dengan-oop-array-based)
-   - [Queue dengan OOP (Circular Queue)](#queue-dengan-oop-circular-queue)
-   - [Queue dengan OOP (Linked List-based)](#queue-dengan-oop-linked-list-based)
-3. [Deque (Double-Ended Queue)](#deque-double-ended-queue)
-4. [Priority Queue](#priority-queue)
-5. [Kompleksitas Stack dan Queue](#kompleksitas-stack-dan-queue)
-6. [Latihan Hands-On](#latihan-hands-on)
+1. [Pengenalan Kompleksitas](#pengenalan-kompleksitas)
+2. [Big O Notation](#big-o-notation)
+3. [Jenis-jenis Kompleksitas Waktu](#jenis-jenis-kompleksitas-waktu)
+4. [Kompleksitas Ruang (Space Complexity)](#kompleksitas-ruang-space-complexity)
+5. [Analisis Kompleksitas Struktur Data](#analisis-kompleksitas-struktur-data)
+   - [Array](#kompleksitas-array)
+   - [Linked List](#kompleksitas-linked-list)
+   - [Stack](#kompleksitas-stack)
+   - [Queue](#kompleksitas-queue)
+6. [Perbandingan Struktur Data](#perbandingan-struktur-data)
+7. [Contoh Analisis Algoritma](#contoh-analisis-algoritma)
+8. [Best, Average, dan Worst Case](#best-average-dan-worst-case)
+9. [Tips Optimasi](#tips-optimasi)
+10. [Latihan Analisis](#latihan-analisis)
 
 ---
 
-## Stack
+## Pengenalan Kompleksitas
 
-### Konsep Dasar Stack
+### Apa itu Kompleksitas Algoritma?
 
-Stack adalah struktur data linear yang mengikuti prinsip **LIFO (Last In First Out)**. Elemen terakhir yang dimasukkan adalah elemen pertama yang dikeluarkan.
+Kompleksitas algoritma adalah ukuran yang digunakan untuk menganalisis efisiensi algoritma dan struktur data. Analisis kompleksitas membantu kita memahami bagaimana performa algoritma berubah seiring bertambahnya ukuran input.
 
-```
-    +-------+
-    |   4   |  <- TOP (elemen terakhir masuk, pertama keluar)
-    +-------+
-    |   3   |
-    +-------+
-    |   2   |
-    +-------+
-    |   1   |  <- BOTTOM (elemen pertama masuk, terakhir keluar)
-    +-------+
-```
+### Mengapa Kompleksitas Penting?
 
-### Operasi Stack
+1. **Prediksi Performa** - Memperkirakan waktu eksekusi dan penggunaan memori
+2. **Perbandingan Algoritma** - Memilih algoritma terbaik untuk masalah tertentu
+3. **Skalabilitas** - Memahami bagaimana algoritma berperilaku dengan data besar
+4. **Optimasi** - Mengidentifikasi bottleneck dan area perbaikan
 
-| Operasi | Deskripsi |
-|---------|-----------|
-| **Push** | Menambahkan elemen ke top stack |
-| **Pop** | Menghapus dan mengembalikan elemen dari top stack |
-| **Peek/Top** | Melihat elemen paling atas tanpa menghapus |
-| **isEmpty** | Cek apakah stack kosong |
-| **isFull** | Cek apakah stack penuh (untuk array-based) |
-| **Size** | Mendapatkan jumlah elemen |
+### Dua Jenis Kompleksitas
 
-### Aplikasi Stack
-- **Function call stack** - Menyimpan return address dan local variables
-- **Undo/Redo mechanism** - Text editor, image editor
-- **Expression evaluation** - Infix, postfix, prefix conversion
-- **Backtracking** - Maze solving, game algorithms
-- **Browser history** - Tombol back
-- **Syntax parsing** - Compiler, bracket matching
+| Jenis | Deskripsi | Pertanyaan |
+|-------|-----------|------------|
+| **Time Complexity** | Jumlah operasi yang dilakukan | "Berapa lama waktu yang dibutuhkan?" |
+| **Space Complexity** | Jumlah memori yang digunakan | "Berapa banyak memori yang dibutuhkan?" |
 
 ---
 
-### Stack tanpa OOP
+## Big O Notation
+
+### Apa itu Big O Notation?
+
+Big O Notation adalah notasi matematika yang menggambarkan batas atas (upper bound) dari kompleksitas algoritma. Big O fokus pada pertumbuhan fungsi saat input mendekati tak hingga, mengabaikan konstanta dan terms yang lebih kecil.
+
+### Contoh:
+```
+f(n) = 3n² + 5n + 100
+
+Big O: O(n²)
+```
+- Konstanta 3 diabaikan
+- Term 5n diabaikan (lebih kecil dari n²)
+- Konstanta 100 diabaikan
+
+### Notasi Kompleksitas Umum
+
+| Notasi | Nama | Deskripsi | Contoh |
+|--------|------|-----------|--------|
+| O(1) | Constant | Tidak bergantung pada ukuran input | Akses array dengan index |
+| O(log n) | Logarithmic | Berkurang setengah setiap iterasi | Binary search |
+| O(n) | Linear | Berbanding lurus dengan input | Linear search |
+| O(n log n) | Linearithmic | n kali logaritma | Merge sort, Quick sort |
+| O(n²) | Quadratic | Kuadrat dari input | Bubble sort, Selection sort |
+| O(n³) | Cubic | Kubik dari input | Matrix multiplication naif |
+| O(2ⁿ) | Exponential | Dua pangkat n | Fibonacci rekursif |
+| O(n!) | Factorial | Faktorial dari n | Permutasi brute force |
+
+### Urutan Kompleksitas (Tercepat ke Terlambat)
+
+```
+O(1) < O(log n) < O(√n) < O(n) < O(n log n) < O(n²) < O(n³) < O(2ⁿ) < O(n!)
+```
+
+### Visualisasi Pertumbuhan
+
+```
+Untuk n = 1000:
+
+O(1)       = 1
+O(log n)   = ~10
+O(n)       = 1,000
+O(n log n) = ~10,000
+O(n²)      = 1,000,000
+O(n³)      = 1,000,000,000
+O(2ⁿ)      = Tidak terhitung (terlalu besar)
+```
+
+### Grafik Pertumbuhan
+
+```
+    ^
+    |                                          O(n!)
+    |                                       O(2ⁿ)
+    |                                    O(n³)
+Time|                              O(n²)
+    |                         O(n log n)
+    |                    O(n)
+    |               O(√n)
+    |          O(log n)
+    |     O(1)
+    +------------------------------------------------->
+                          n (ukuran input)
+```
+
+---
+
+## Jenis-jenis Kompleksitas Waktu
+
+### O(1) - Constant Time
+
+Waktu eksekusi tetap sama tidak peduli ukuran input.
 
 ```java
-public class StackNoOOP {
-    static int[] stack = new int[100];
-    static int top = -1;
-    static int MAX_SIZE = 100;
+// Contoh O(1)
+public int getFirst(int[] arr) {
+    return arr[0];  // Selalu satu operasi
+}
 
-    // Push elemen ke stack
-    public static void push(int value) {
-        if (top >= MAX_SIZE - 1) {
-            System.out.println("Stack Overflow! Stack penuh.");
-            return;
+public void push(int value) {
+    stack[++top] = value;  // Operasi konstan
+}
+
+public int peek() {
+    return stack[top];  // Akses langsung
+}
+```
+
+**Karakteristik:**
+- Tidak ada loop yang bergantung pada n
+- Operasi langsung tanpa iterasi
+
+---
+
+### O(log n) - Logarithmic Time
+
+Waktu eksekusi meningkat secara logaritmik. Biasanya terjadi ketika masalah dipecah menjadi setengah setiap iterasi.
+
+```java
+// Binary Search - O(log n)
+public int binarySearch(int[] arr, int target) {
+    int left = 0;
+    int right = arr.length - 1;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+
+        if (arr[mid] == target) {
+            return mid;
+        } else if (arr[mid] < target) {
+            left = mid + 1;  // Abaikan setengah kiri
+        } else {
+            right = mid - 1; // Abaikan setengah kanan
         }
-
-        top++;
-        stack[top] = value;
-        System.out.println("Push: " + value);
     }
+    return -1;
+}
+```
 
-    // Pop elemen dari stack
-    public static int pop() {
-        if (top < 0) {
-            System.out.println("Stack Underflow! Stack kosong.");
-            return -1;
+**Karakteristik:**
+- Masalah dipecah menjadi setengah setiap iterasi
+- Contoh: Binary search, operasi pada balanced BST
+
+**Analisis:**
+```
+n = 16
+Iterasi 1: n = 16
+Iterasi 2: n = 8
+Iterasi 3: n = 4
+Iterasi 4: n = 2
+Iterasi 5: n = 1
+
+Total iterasi = log₂(16) = 4
+```
+
+---
+
+### O(n) - Linear Time
+
+Waktu eksekusi berbanding lurus dengan ukuran input.
+
+```java
+// Linear Search - O(n)
+public int linearSearch(int[] arr, int target) {
+    for (int i = 0; i < arr.length; i++) {  // Loop n kali
+        if (arr[i] == target) {
+            return i;
         }
-
-        int value = stack[top];
-        top--;
-        System.out.println("Pop: " + value);
-        return value;
     }
+    return -1;
+}
 
-    // Peek elemen teratas
-    public static int peek() {
-        if (top < 0) {
-            System.out.println("Stack kosong!");
-            return -1;
+// Traverse Linked List - O(n)
+public void display() {
+    Node current = head;
+    while (current != null) {  // Loop n kali
+        System.out.print(current.data + " ");
+        current = current.next;
+    }
+}
+
+// Mencari nilai dalam stack - O(n)
+public int search(int value) {
+    for (int i = top; i >= 0; i--) {  // Loop n kali
+        if (stack[i] == value) {
+            return top - i + 1;
         }
-
-        return stack[top];
     }
+    return -1;
+}
+```
 
-    // Cek apakah stack kosong
-    public static boolean isEmpty() {
-        return top < 0;
+**Karakteristik:**
+- Satu loop yang iterasi n kali
+- Setiap elemen diproses sekali
+
+---
+
+### O(n log n) - Linearithmic Time
+
+Kombinasi linear dan logarithmic. Biasanya terjadi pada algoritma divide and conquer.
+
+```java
+// Merge Sort - O(n log n)
+public void mergeSort(int[] arr, int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+
+        mergeSort(arr, left, mid);       // T(n/2)
+        mergeSort(arr, mid + 1, right);  // T(n/2)
+        merge(arr, left, mid, right);    // O(n)
     }
+}
 
-    // Cek apakah stack penuh
-    public static boolean isFull() {
-        return top >= MAX_SIZE - 1;
-    }
+// Recurrence: T(n) = 2T(n/2) + O(n) = O(n log n)
+```
 
-    // Mendapatkan ukuran stack
-    public static int size() {
-        return top + 1;
-    }
+**Karakteristik:**
+- Divide: membagi masalah (log n level)
+- Conquer: menggabungkan hasil (n operasi per level)
+- Total: n × log n
 
-    // Tampilkan semua elemen
-    public static void display() {
-        if (isEmpty()) {
-            System.out.println("Stack kosong!");
-            return;
-        }
+---
 
-        System.out.print("Stack (bottom to top): ");
-        for (int i = 0; i <= top; i++) {
-            System.out.print(stack[i] + " ");
-        }
-        System.out.println();
-    }
+### O(n²) - Quadratic Time
 
-    // Clear stack
-    public static void clear() {
-        top = -1;
-        System.out.println("Stack dikosongkan");
-    }
+Waktu eksekusi meningkat secara kuadratik.
 
-    // Search elemen (return posisi dari top, -1 jika tidak ada)
-    public static int search(int value) {
-        for (int i = top; i >= 0; i--) {
-            if (stack[i] == value) {
-                return top - i + 1; // posisi dari top (1-indexed)
+```java
+// Bubble Sort - O(n²)
+public void bubbleSort(int[] arr) {
+    int n = arr.length;
+    for (int i = 0; i < n - 1; i++) {           // Loop n kali
+        for (int j = 0; j < n - i - 1; j++) {   // Loop n kali
+            if (arr[j] > arr[j + 1]) {
+                // Swap
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
             }
         }
-        return -1;
     }
+}
 
-    public static void main(String[] args) {
-        System.out.println("=== STACK TANPA OOP ===\n");
-
-        // Test push
-        push(10);
-        push(20);
-        push(30);
-        push(40);
-        display();
-
-        System.out.println("\nUkuran stack: " + size());
-        System.out.println("Elemen teratas: " + peek());
-
-        // Test search
-        System.out.println("\nPosisi 30 dari top: " + search(30));
-        System.out.println("Posisi 100 dari top: " + search(100));
-
-        // Test pop
-        System.out.println();
-        pop();
-        pop();
-        display();
-
-        System.out.println("\nStack kosong? " + isEmpty());
-        System.out.println("Stack penuh? " + isFull());
-
-        // Test clear
-        System.out.println();
-        clear();
-        display();
+// Nested Loop - O(n²)
+public void printPairs(int[] arr) {
+    for (int i = 0; i < arr.length; i++) {
+        for (int j = 0; j < arr.length; j++) {
+            System.out.println(arr[i] + ", " + arr[j]);
+        }
     }
 }
 ```
 
-**Output:**
-```
-=== STACK TANPA OOP ===
-
-Push: 10
-Push: 20
-Push: 30
-Push: 40
-Stack (bottom to top): 10 20 30 40
-
-Ukuran stack: 4
-Elemen teratas: 40
-
-Posisi 30 dari top: 2
-Posisi 100 dari top: -1
-
-Pop: 40
-Pop: 30
-Stack (bottom to top): 10 20
-
-Stack kosong? false
-Stack penuh? false
-
-Stack dikosongkan
-Stack kosong!
-```
+**Karakteristik:**
+- Nested loop (loop di dalam loop)
+- Setiap elemen dibandingkan dengan setiap elemen lain
 
 ---
 
-### Stack dengan OOP (Array-based)
+### O(2ⁿ) - Exponential Time
+
+Waktu eksekusi berlipat ganda setiap penambahan input.
 
 ```java
-// File: ArrayStack.java
-class ArrayStack {
-    private int[] stack;
-    private int top;
-    private int maxSize;
-
-    // Constructor
-    public ArrayStack(int size) {
-        this.maxSize = size;
-        this.stack = new int[maxSize];
-        this.top = -1;
+// Fibonacci Rekursif - O(2ⁿ)
+public int fibonacci(int n) {
+    if (n <= 1) {
+        return n;
     }
-
-    // Push elemen - O(1)
-    public void push(int value) {
-        if (isFull()) {
-            System.out.println("Stack Overflow! Stack penuh.");
-            return;
-        }
-
-        stack[++top] = value;
-        System.out.println("Push: " + value);
-    }
-
-    // Pop elemen - O(1)
-    public int pop() {
-        if (isEmpty()) {
-            System.out.println("Stack Underflow! Stack kosong.");
-            return -1;
-        }
-
-        int value = stack[top--];
-        System.out.println("Pop: " + value);
-        return value;
-    }
-
-    // Peek elemen teratas - O(1)
-    public int peek() {
-        if (isEmpty()) {
-            System.out.println("Stack kosong!");
-            return -1;
-        }
-
-        return stack[top];
-    }
-
-    // Cek apakah kosong - O(1)
-    public boolean isEmpty() {
-        return top == -1;
-    }
-
-    // Cek apakah penuh - O(1)
-    public boolean isFull() {
-        return top == maxSize - 1;
-    }
-
-    // Get ukuran - O(1)
-    public int size() {
-        return top + 1;
-    }
-
-    // Display stack - O(n)
-    public void display() {
-        if (isEmpty()) {
-            System.out.println("Stack kosong!");
-            return;
-        }
-
-        System.out.print("Stack (bottom to top): ");
-        for (int i = 0; i <= top; i++) {
-            System.out.print(stack[i] + " ");
-        }
-        System.out.println();
-    }
-
-    // Display stack visual - O(n)
-    public void displayVisual() {
-        if (isEmpty()) {
-            System.out.println("Stack kosong!");
-            return;
-        }
-
-        System.out.println("Stack (visual):");
-        System.out.println("+-------+");
-        for (int i = top; i >= 0; i--) {
-            String label = (i == top) ? " <- TOP" : "";
-            System.out.printf("| %3d   |%s%n", stack[i], label);
-            System.out.println("+-------+");
-        }
-    }
-
-    // Clear stack - O(1)
-    public void clear() {
-        top = -1;
-        System.out.println("Stack dikosongkan");
-    }
-
-    // Search elemen - O(n)
-    public int search(int value) {
-        for (int i = top; i >= 0; i--) {
-            if (stack[i] == value) {
-                return top - i + 1;
-            }
-        }
-        return -1;
-    }
-
-    // Get capacity
-    public int capacity() {
-        return maxSize;
-    }
+    return fibonacci(n - 1) + fibonacci(n - 2);
 }
 
-// File: ArrayStackDemo.java
-public class ArrayStackDemo {
-    public static void main(String[] args) {
-        System.out.println("=== STACK DENGAN OOP (ARRAY-BASED) ===\n");
-
-        ArrayStack stack = new ArrayStack(5);
-
-        // Test push
-        stack.push(10);
-        stack.push(20);
-        stack.push(30);
-        stack.push(40);
-        stack.display();
-        stack.displayVisual();
-
-        System.out.println("\nUkuran: " + stack.size());
-        System.out.println("Kapasitas: " + stack.capacity());
-        System.out.println("Elemen teratas: " + stack.peek());
-
-        // Test pop
-        System.out.println();
-        stack.pop();
-        stack.pop();
-        stack.display();
-
-        // Test overflow
-        System.out.println("\nMengisi stack hingga penuh:");
-        stack.push(50);
-        stack.push(60);
-        stack.push(70);
-        stack.push(80); // Overflow
-        stack.display();
-
-        System.out.println("\nStack penuh? " + stack.isFull());
-    }
-}
+// Setiap pemanggilan menghasilkan dua pemanggilan baru
+// Tree rekursi:
+//                    fib(5)
+//                   /      \
+//              fib(4)      fib(3)
+//             /    \       /    \
+//         fib(3) fib(2) fib(2) fib(1)
+//         ...
 ```
 
-**Output:**
-```
-=== STACK DENGAN OOP (ARRAY-BASED) ===
-
-Push: 10
-Push: 20
-Push: 30
-Push: 40
-Stack (bottom to top): 10 20 30 40
-Stack (visual):
-+-------+
-|  40   | <- TOP
-+-------+
-|  30   |
-+-------+
-|  20   |
-+-------+
-|  10   |
-+-------+
-
-Ukuran: 4
-Kapasitas: 5
-Elemen teratas: 40
-
-Pop: 40
-Pop: 30
-Stack (bottom to top): 10 20
-
-Mengisi stack hingga penuh:
-Push: 50
-Push: 60
-Push: 70
-Stack Overflow! Stack penuh.
-Stack (bottom to top): 10 20 50 60 70
-
-Stack penuh? true
-```
+**Karakteristik:**
+- Setiap langkah menghasilkan dua atau lebih submasalah
+- Sangat tidak efisien untuk input besar
 
 ---
 
-### Stack dengan OOP (Linked List-based)
+## Kompleksitas Ruang (Space Complexity)
+
+### Apa itu Space Complexity?
+
+Space complexity mengukur jumlah memori yang digunakan oleh algoritma, termasuk:
+
+1. **Input space** - Memori untuk menyimpan input
+2. **Auxiliary space** - Memori tambahan yang digunakan algoritma
+3. **Total space** = Input space + Auxiliary space
+
+### Contoh Space Complexity
 
 ```java
-// File: StackNode.java
-class StackNode {
-    int data;
-    StackNode next;
-
-    public StackNode(int data) {
-        this.data = data;
-        this.next = null;
+// O(1) Space - Konstanta
+public int sum(int[] arr) {
+    int total = 0;  // Satu variabel
+    for (int i = 0; i < arr.length; i++) {
+        total += arr[i];
     }
+    return total;
+}
+// Hanya menggunakan variabel total dan i, tidak bergantung pada n
+
+// O(n) Space - Linear
+public int[] copy(int[] arr) {
+    int[] newArr = new int[arr.length];  // Array baru ukuran n
+    for (int i = 0; i < arr.length; i++) {
+        newArr[i] = arr[i];
+    }
+    return newArr;
 }
 
-// File: LinkedStack.java
-class LinkedStack {
-    private StackNode top;
-    private int size;
-
-    // Constructor
-    public LinkedStack() {
-        this.top = null;
-        this.size = 0;
-    }
-
-    // Push elemen - O(1)
-    public void push(int value) {
-        StackNode newNode = new StackNode(value);
-        newNode.next = top;
-        top = newNode;
-        size++;
-        System.out.println("Push: " + value);
-    }
-
-    // Pop elemen - O(1)
-    public int pop() {
-        if (isEmpty()) {
-            System.out.println("Stack Underflow! Stack kosong.");
-            return -1;
-        }
-
-        int value = top.data;
-        top = top.next;
-        size--;
-        System.out.println("Pop: " + value);
-        return value;
-    }
-
-    // Peek elemen teratas - O(1)
-    public int peek() {
-        if (isEmpty()) {
-            System.out.println("Stack kosong!");
-            return -1;
-        }
-
-        return top.data;
-    }
-
-    // Cek apakah kosong - O(1)
-    public boolean isEmpty() {
-        return top == null;
-    }
-
-    // Get ukuran - O(1)
-    public int size() {
-        return size;
-    }
-
-    // Display stack - O(n)
-    public void display() {
-        if (isEmpty()) {
-            System.out.println("Stack kosong!");
-            return;
-        }
-
-        System.out.print("Stack (top to bottom): ");
-        StackNode current = top;
-        while (current != null) {
-            System.out.print(current.data + " ");
-            current = current.next;
-        }
-        System.out.println();
-    }
-
-    // Display visual - O(n)
-    public void displayVisual() {
-        if (isEmpty()) {
-            System.out.println("Stack kosong!");
-            return;
-        }
-
-        System.out.println("Stack (visual):");
-        StackNode current = top;
-        boolean isTop = true;
-        while (current != null) {
-            System.out.println("+-------+");
-            String label = isTop ? " <- TOP" : "";
-            System.out.printf("| %3d   |%s%n", current.data, label);
-            current = current.next;
-            isTop = false;
-        }
-        System.out.println("+-------+");
-    }
-
-    // Clear stack - O(1)
-    public void clear() {
-        top = null;
-        size = 0;
-        System.out.println("Stack dikosongkan");
-    }
-
-    // Search elemen - O(n)
-    public int search(int value) {
-        StackNode current = top;
-        int position = 1;
-        while (current != null) {
-            if (current.data == value) {
-                return position;
-            }
-            current = current.next;
-            position++;
-        }
-        return -1;
-    }
-
-    // Reverse stack - O(n)
-    public void reverse() {
-        if (isEmpty() || size == 1) return;
-
-        LinkedStack tempStack = new LinkedStack();
-
-        // Pop semua ke temp stack
-        while (!isEmpty()) {
-            tempStack.push(pop());
-        }
-
-        // Temp stack sekarang jadi stack utama
-        this.top = tempStack.top;
-        this.size = tempStack.size;
-        System.out.println("Stack berhasil di-reverse");
-    }
+// O(n) Space - Rekursi
+public int factorial(int n) {
+    if (n <= 1) return 1;
+    return n * factorial(n - 1);  // Call stack depth = n
 }
-
-// File: LinkedStackDemo.java
-public class LinkedStackDemo {
-    public static void main(String[] args) {
-        System.out.println("=== STACK DENGAN OOP (LINKED LIST-BASED) ===\n");
-
-        LinkedStack stack = new LinkedStack();
-
-        // Test push
-        stack.push(10);
-        stack.push(20);
-        stack.push(30);
-        stack.push(40);
-        stack.display();
-        stack.displayVisual();
-
-        System.out.println("\nUkuran stack: " + stack.size());
-        System.out.println("Elemen teratas: " + stack.peek());
-
-        // Test search
-        System.out.println("\nPosisi 20 dari top: " + stack.search(20));
-
-        // Test pop
-        System.out.println();
-        stack.pop();
-        stack.pop();
-        stack.display();
-
-        // Test tidak ada batas (dynamic)
-        System.out.println("\nMenambah banyak elemen (tidak ada batas):");
-        for (int i = 1; i <= 5; i++) {
-            stack.push(i * 100);
-        }
-        stack.display();
-
-        System.out.println("\nStack kosong? " + stack.isEmpty());
-    }
-}
+// Setiap rekursi menambah frame di call stack
 ```
 
-**Output:**
-```
-=== STACK DENGAN OOP (LINKED LIST-BASED) ===
-
-Push: 10
-Push: 20
-Push: 30
-Push: 40
-Stack (top to bottom): 40 30 20 10
-Stack (visual):
-+-------+
-|  40   | <- TOP
-+-------+
-|  30   |
-+-------+
-|  20   |
-+-------+
-|  10   |
-+-------+
-
-Ukuran stack: 4
-Elemen teratas: 40
-
-Posisi 20 dari top: 3
-
-Pop: 40
-Pop: 30
-Stack (top to bottom): 20 10
-
-Menambah banyak elemen (tidak ada batas):
-Push: 100
-Push: 200
-Push: 300
-Push: 400
-Push: 500
-Stack (top to bottom): 500 400 300 200 100 20 10
-
-Stack kosong? false
-```
-
----
-
-## Queue
-
-### Konsep Dasar Queue
-
-Queue adalah struktur data linear yang mengikuti prinsip **FIFO (First In First Out)**. Elemen pertama yang dimasukkan adalah elemen pertama yang dikeluarkan.
-
-```
-Enqueue ->  +---+---+---+---+---+  -> Dequeue
-            | 1 | 2 | 3 | 4 | 5 |
-            +---+---+---+---+---+
-              ^               ^
-            FRONT           REAR
-```
-
-### Operasi Queue
-
-| Operasi | Deskripsi |
-|---------|-----------|
-| **Enqueue** | Menambahkan elemen di belakang (rear) |
-| **Dequeue** | Menghapus elemen dari depan (front) |
-| **Peek/Front** | Melihat elemen paling depan tanpa menghapus |
-| **isEmpty** | Cek apakah queue kosong |
-| **isFull** | Cek apakah queue penuh |
-| **Size** | Mendapatkan jumlah elemen |
-
-### Aplikasi Queue
-- **Task scheduling** - OS process scheduling
-- **Print spooling** - Printer queue
-- **BFS (Breadth First Search)** - Graph traversal
-- **Buffer** - IO Buffers, playlist
-- **Message queues** - Asynchronous processing
-- **Customer service** - Ticket systems
-
----
-
-### Queue tanpa OOP
-
-```java
-public class QueueNoOOP {
-    static int[] queue = new int[100];
-    static int front = -1;
-    static int rear = -1;
-    static int MAX_SIZE = 100;
-
-    // Enqueue elemen ke queue
-    public static void enqueue(int value) {
-        if (rear >= MAX_SIZE - 1) {
-            System.out.println("Queue Overflow! Queue penuh.");
-            return;
-        }
-
-        if (front == -1) {
-            front = 0;
-        }
-
-        rear++;
-        queue[rear] = value;
-        System.out.println("Enqueue: " + value);
-    }
-
-    // Dequeue elemen dari queue
-    public static int dequeue() {
-        if (front == -1 || front > rear) {
-            System.out.println("Queue Underflow! Queue kosong.");
-            return -1;
-        }
-
-        int value = queue[front];
-        front++;
-
-        // Reset queue jika kosong
-        if (front > rear) {
-            front = rear = -1;
-        }
-
-        System.out.println("Dequeue: " + value);
-        return value;
-    }
-
-    // Peek elemen depan
-    public static int peek() {
-        if (front == -1 || front > rear) {
-            System.out.println("Queue kosong!");
-            return -1;
-        }
-
-        return queue[front];
-    }
-
-    // Peek elemen belakang
-    public static int peekRear() {
-        if (rear == -1) {
-            System.out.println("Queue kosong!");
-            return -1;
-        }
-
-        return queue[rear];
-    }
-
-    // Cek apakah queue kosong
-    public static boolean isEmpty() {
-        return front == -1 || front > rear;
-    }
-
-    // Cek apakah queue penuh
-    public static boolean isFull() {
-        return rear >= MAX_SIZE - 1;
-    }
-
-    // Mendapatkan ukuran queue
-    public static int size() {
-        if (isEmpty()) {
-            return 0;
-        }
-        return rear - front + 1;
-    }
-
-    // Tampilkan semua elemen
-    public static void display() {
-        if (isEmpty()) {
-            System.out.println("Queue kosong!");
-            return;
-        }
-
-        System.out.print("Queue (front to rear): ");
-        for (int i = front; i <= rear; i++) {
-            System.out.print(queue[i] + " ");
-        }
-        System.out.println();
-    }
-
-    // Clear queue
-    public static void clear() {
-        front = rear = -1;
-        System.out.println("Queue dikosongkan");
-    }
-
-    public static void main(String[] args) {
-        System.out.println("=== QUEUE TANPA OOP ===\n");
-
-        // Test enqueue
-        enqueue(10);
-        enqueue(20);
-        enqueue(30);
-        enqueue(40);
-        display();
-
-        System.out.println("\nUkuran queue: " + size());
-        System.out.println("Elemen depan: " + peek());
-        System.out.println("Elemen belakang: " + peekRear());
-
-        // Test dequeue
-        System.out.println();
-        dequeue();
-        dequeue();
-        display();
-
-        System.out.println("\nQueue kosong? " + isEmpty());
-
-        // Test enqueue lagi
-        System.out.println();
-        enqueue(50);
-        enqueue(60);
-        display();
-    }
-}
-```
-
-**Output:**
-```
-=== QUEUE TANPA OOP ===
-
-Enqueue: 10
-Enqueue: 20
-Enqueue: 30
-Enqueue: 40
-Queue (front to rear): 10 20 30 40
-
-Ukuran queue: 4
-Elemen depan: 10
-Elemen belakang: 40
-
-Dequeue: 10
-Dequeue: 20
-Queue (front to rear): 30 40
-
-Queue kosong? false
-
-Enqueue: 50
-Enqueue: 60
-Queue (front to rear): 30 40 50 60
-```
-
----
-
-### Queue dengan OOP (Array-based)
-
-```java
-// File: ArrayQueue.java
-class ArrayQueue {
-    private int[] queue;
-    private int front;
-    private int rear;
-    private int size;
-    private int maxSize;
-
-    // Constructor
-    public ArrayQueue(int maxSize) {
-        this.maxSize = maxSize;
-        this.queue = new int[maxSize];
-        this.front = -1;
-        this.rear = -1;
-        this.size = 0;
-    }
-
-    // Enqueue elemen - O(1)
-    public void enqueue(int value) {
-        if (isFull()) {
-            System.out.println("Queue Overflow! Queue penuh.");
-            return;
-        }
-
-        if (front == -1) {
-            front = 0;
-        }
-
-        rear++;
-        queue[rear] = value;
-        size++;
-        System.out.println("Enqueue: " + value);
-    }
-
-    // Dequeue elemen - O(n) karena harus shift
-    public int dequeue() {
-        if (isEmpty()) {
-            System.out.println("Queue Underflow! Queue kosong.");
-            return -1;
-        }
-
-        int value = queue[front];
-
-        // Shift semua elemen ke kiri
-        for (int i = 0; i < rear; i++) {
-            queue[i] = queue[i + 1];
-        }
-
-        rear--;
-        size--;
-
-        if (size == 0) {
-            front = rear = -1;
-        }
-
-        System.out.println("Dequeue: " + value);
-        return value;
-    }
-
-    // Peek elemen depan - O(1)
-    public int peek() {
-        if (isEmpty()) {
-            System.out.println("Queue kosong!");
-            return -1;
-        }
-
-        return queue[front];
-    }
-
-    // Peek elemen belakang - O(1)
-    public int peekRear() {
-        if (isEmpty()) {
-            System.out.println("Queue kosong!");
-            return -1;
-        }
-
-        return queue[rear];
-    }
-
-    // Cek apakah kosong - O(1)
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
-    // Cek apakah penuh - O(1)
-    public boolean isFull() {
-        return size == maxSize;
-    }
-
-    // Get ukuran - O(1)
-    public int size() {
-        return size;
-    }
-
-    // Display queue - O(n)
-    public void display() {
-        if (isEmpty()) {
-            System.out.println("Queue kosong!");
-            return;
-        }
-
-        System.out.print("Queue (front to rear): ");
-        for (int i = front; i <= rear; i++) {
-            System.out.print(queue[i] + " ");
-        }
-        System.out.println();
-    }
-
-    // Display visual
-    public void displayVisual() {
-        if (isEmpty()) {
-            System.out.println("Queue kosong!");
-            return;
-        }
-
-        System.out.println("Queue (visual):");
-        System.out.print("FRONT -> ");
-        for (int i = front; i <= rear; i++) {
-            System.out.print("[" + queue[i] + "]");
-            if (i < rear) System.out.print("-");
-        }
-        System.out.println(" <- REAR");
-    }
-
-    // Clear queue - O(1)
-    public void clear() {
-        front = rear = -1;
-        size = 0;
-        System.out.println("Queue dikosongkan");
-    }
-}
-
-// File: ArrayQueueDemo.java
-public class ArrayQueueDemo {
-    public static void main(String[] args) {
-        System.out.println("=== QUEUE DENGAN OOP (ARRAY-BASED) ===\n");
-
-        ArrayQueue queue = new ArrayQueue(5);
-
-        // Test enqueue
-        queue.enqueue(10);
-        queue.enqueue(20);
-        queue.enqueue(30);
-        queue.enqueue(40);
-        queue.display();
-        queue.displayVisual();
-
-        System.out.println("\nUkuran queue: " + queue.size());
-        System.out.println("Elemen depan: " + queue.peek());
-        System.out.println("Elemen belakang: " + queue.peekRear());
-
-        // Test dequeue
-        System.out.println();
-        queue.dequeue();
-        queue.dequeue();
-        queue.display();
-
-        // Test enqueue lagi
-        System.out.println();
-        queue.enqueue(50);
-        queue.enqueue(60);
-        queue.enqueue(70);
-        queue.display();
-
-        System.out.println("\nQueue penuh? " + queue.isFull());
-    }
-}
-```
-
----
-
-### Queue dengan OOP (Circular Queue)
-
-Circular Queue mengatasi masalah pemborosan ruang pada linear queue dengan membuat array "melingkar".
-
-```java
-// File: CircularQueue.java
-class CircularQueue {
-    private int[] queue;
-    private int front;
-    private int rear;
-    private int size;
-    private int maxSize;
-
-    // Constructor
-    public CircularQueue(int maxSize) {
-        this.maxSize = maxSize;
-        this.queue = new int[maxSize];
-        this.front = -1;
-        this.rear = -1;
-        this.size = 0;
-    }
-
-    // Enqueue elemen - O(1)
-    public void enqueue(int value) {
-        if (isFull()) {
-            System.out.println("Queue Overflow! Queue penuh.");
-            return;
-        }
-
-        if (front == -1) {
-            front = 0;
-        }
-
-        rear = (rear + 1) % maxSize;
-        queue[rear] = value;
-        size++;
-        System.out.println("Enqueue: " + value);
-    }
-
-    // Dequeue elemen - O(1)
-    public int dequeue() {
-        if (isEmpty()) {
-            System.out.println("Queue Underflow! Queue kosong.");
-            return -1;
-        }
-
-        int value = queue[front];
-
-        if (front == rear) {
-            // Queue menjadi kosong
-            front = rear = -1;
-        } else {
-            front = (front + 1) % maxSize;
-        }
-
-        size--;
-        System.out.println("Dequeue: " + value);
-        return value;
-    }
-
-    // Peek elemen depan - O(1)
-    public int peek() {
-        if (isEmpty()) {
-            System.out.println("Queue kosong!");
-            return -1;
-        }
-
-        return queue[front];
-    }
-
-    // Peek elemen belakang - O(1)
-    public int peekRear() {
-        if (isEmpty()) {
-            System.out.println("Queue kosong!");
-            return -1;
-        }
-
-        return queue[rear];
-    }
-
-    // Cek apakah kosong - O(1)
-    public boolean isEmpty() {
-        return front == -1;
-    }
-
-    // Cek apakah penuh - O(1)
-    public boolean isFull() {
-        return (rear + 1) % maxSize == front;
-    }
-
-    // Get ukuran - O(1)
-    public int size() {
-        return size;
-    }
-
-    // Display queue - O(n)
-    public void display() {
-        if (isEmpty()) {
-            System.out.println("Queue kosong!");
-            return;
-        }
-
-        System.out.print("Queue (front to rear): ");
-        int i = front;
-        while (true) {
-            System.out.print(queue[i] + " ");
-            if (i == rear) break;
-            i = (i + 1) % maxSize;
-        }
-        System.out.println();
-    }
-
-    // Display dengan posisi index
-    public void displayWithIndex() {
-        if (isEmpty()) {
-            System.out.println("Queue kosong!");
-            return;
-        }
-
-        System.out.println("Queue internal state:");
-        System.out.println("Front index: " + front + ", Rear index: " + rear);
-        System.out.print("Array: ");
-        for (int i = 0; i < maxSize; i++) {
-            if (isIndexInQueue(i)) {
-                System.out.print("[" + queue[i] + "] ");
-            } else {
-                System.out.print("[ ] ");
-            }
-        }
-        System.out.println();
-    }
-
-    // Helper: cek apakah index ada dalam queue
-    private boolean isIndexInQueue(int index) {
-        if (isEmpty()) return false;
-        if (front <= rear) {
-            return index >= front && index <= rear;
-        } else {
-            return index >= front || index <= rear;
-        }
-    }
-
-    // Clear queue - O(1)
-    public void clear() {
-        front = rear = -1;
-        size = 0;
-        System.out.println("Queue dikosongkan");
-    }
-}
-
-// File: CircularQueueDemo.java
-public class CircularQueueDemo {
-    public static void main(String[] args) {
-        System.out.println("=== CIRCULAR QUEUE ===\n");
-
-        CircularQueue queue = new CircularQueue(5);
-
-        // Test enqueue
-        queue.enqueue(10);
-        queue.enqueue(20);
-        queue.enqueue(30);
-        queue.enqueue(40);
-        queue.display();
-        queue.displayWithIndex();
-
-        // Test dequeue
-        System.out.println();
-        queue.dequeue();
-        queue.dequeue();
-        queue.display();
-        queue.displayWithIndex();
-
-        // Test circular behavior
-        System.out.println("\n=== TEST CIRCULAR BEHAVIOR ===");
-        queue.enqueue(50);
-        queue.enqueue(60);
-        queue.enqueue(70); // Akan wrap around
-        queue.display();
-        queue.displayWithIndex();
-
-        // Test lagi
-        System.out.println();
-        queue.dequeue();
-        queue.enqueue(80);
-        queue.display();
-        queue.displayWithIndex();
-
-        System.out.println("\nQueue penuh? " + queue.isFull());
-    }
-}
-```
-
-**Output:**
-```
-=== CIRCULAR QUEUE ===
-
-Enqueue: 10
-Enqueue: 20
-Enqueue: 30
-Enqueue: 40
-Queue (front to rear): 10 20 30 40
-Queue internal state:
-Front index: 0, Rear index: 3
-Array: [10] [20] [30] [40] [ ]
-
-Dequeue: 10
-Dequeue: 20
-Queue (front to rear): 30 40
-Queue internal state:
-Front index: 2, Rear index: 3
-Array: [ ] [ ] [30] [40] [ ]
-
-=== TEST CIRCULAR BEHAVIOR ===
-Enqueue: 50
-Enqueue: 60
-Enqueue: 70
-Queue (front to rear): 30 40 50 60 70
-Queue internal state:
-Front index: 2, Rear index: 1
-Array: [60] [70] [30] [40] [50]
-
-Dequeue: 30
-Enqueue: 80
-Queue (front to rear): 40 50 60 70 80
-Queue internal state:
-Front index: 3, Rear index: 2
-Array: [60] [70] [80] [40] [50]
-
-Queue penuh? true
-```
-
----
-
-### Queue dengan OOP (Linked List-based)
-
-```java
-// File: QueueNode.java
-class QueueNode {
-    int data;
-    QueueNode next;
-
-    public QueueNode(int data) {
-        this.data = data;
-        this.next = null;
-    }
-}
-
-// File: LinkedQueue.java
-class LinkedQueue {
-    private QueueNode front;
-    private QueueNode rear;
-    private int size;
-
-    // Constructor
-    public LinkedQueue() {
-        this.front = null;
-        this.rear = null;
-        this.size = 0;
-    }
-
-    // Enqueue elemen - O(1)
-    public void enqueue(int value) {
-        QueueNode newNode = new QueueNode(value);
-
-        if (rear == null) {
-            front = rear = newNode;
-        } else {
-            rear.next = newNode;
-            rear = newNode;
-        }
-
-        size++;
-        System.out.println("Enqueue: " + value);
-    }
-
-    // Dequeue elemen - O(1)
-    public int dequeue() {
-        if (isEmpty()) {
-            System.out.println("Queue Underflow! Queue kosong.");
-            return -1;
-        }
-
-        int value = front.data;
-        front = front.next;
-
-        if (front == null) {
-            rear = null;
-        }
-
-        size--;
-        System.out.println("Dequeue: " + value);
-        return value;
-    }
-
-    // Peek elemen depan - O(1)
-    public int peek() {
-        if (isEmpty()) {
-            System.out.println("Queue kosong!");
-            return -1;
-        }
-
-        return front.data;
-    }
-
-    // Peek elemen belakang - O(1)
-    public int peekRear() {
-        if (isEmpty()) {
-            System.out.println("Queue kosong!");
-            return -1;
-        }
-
-        return rear.data;
-    }
-
-    // Cek apakah kosong - O(1)
-    public boolean isEmpty() {
-        return front == null;
-    }
-
-    // Get ukuran - O(1)
-    public int size() {
-        return size;
-    }
-
-    // Display queue - O(n)
-    public void display() {
-        if (isEmpty()) {
-            System.out.println("Queue kosong!");
-            return;
-        }
-
-        System.out.print("Queue (front to rear): ");
-        QueueNode current = front;
-        while (current != null) {
-            System.out.print(current.data + " ");
-            current = current.next;
-        }
-        System.out.println();
-    }
-
-    // Display visual
-    public void displayVisual() {
-        if (isEmpty()) {
-            System.out.println("Queue kosong!");
-            return;
-        }
-
-        System.out.println("Queue (visual):");
-        System.out.print("FRONT -> ");
-        QueueNode current = front;
-        while (current != null) {
-            System.out.print("[" + current.data + "]");
-            if (current.next != null) System.out.print(" -> ");
-            current = current.next;
-        }
-        System.out.println(" <- REAR");
-    }
-
-    // Clear queue - O(1)
-    public void clear() {
-        front = rear = null;
-        size = 0;
-        System.out.println("Queue dikosongkan");
-    }
-
-    // Reverse queue - O(n)
-    public void reverse() {
-        if (isEmpty() || size == 1) return;
-
-        LinkedStack tempStack = new LinkedStack();
-
-        // Dequeue semua ke stack
-        while (!isEmpty()) {
-            tempStack.push(dequeue());
-        }
-
-        // Pop dari stack ke queue
-        while (!tempStack.isEmpty()) {
-            enqueue(tempStack.pop());
-        }
-
-        System.out.println("Queue berhasil di-reverse");
-    }
-}
-
-// File: LinkedQueueDemo.java
-public class LinkedQueueDemo {
-    public static void main(String[] args) {
-        System.out.println("=== QUEUE DENGAN OOP (LINKED LIST-BASED) ===\n");
-
-        LinkedQueue queue = new LinkedQueue();
-
-        // Test enqueue
-        queue.enqueue(10);
-        queue.enqueue(20);
-        queue.enqueue(30);
-        queue.enqueue(40);
-        queue.display();
-        queue.displayVisual();
-
-        System.out.println("\nUkuran queue: " + queue.size());
-        System.out.println("Elemen depan: " + queue.peek());
-        System.out.println("Elemen belakang: " + queue.peekRear());
-
-        // Test dequeue
-        System.out.println();
-        queue.dequeue();
-        queue.dequeue();
-        queue.display();
-
-        // Test enqueue lagi (unlimited)
-        System.out.println("\nMenambah banyak elemen (tidak ada batas):");
-        for (int i = 1; i <= 5; i++) {
-            queue.enqueue(i * 100);
-        }
-        queue.display();
-
-        System.out.println("\nQueue kosong? " + queue.isEmpty());
-    }
-}
-```
-
-**Output:**
-```
-=== QUEUE DENGAN OOP (LINKED LIST-BASED) ===
-
-Enqueue: 10
-Enqueue: 20
-Enqueue: 30
-Enqueue: 40
-Queue (front to rear): 10 20 30 40
-Queue (visual):
-FRONT -> [10] -> [20] -> [30] -> [40] <- REAR
-
-Ukuran queue: 4
-Elemen depan: 10
-Elemen belakang: 40
-
-Dequeue: 10
-Dequeue: 20
-Queue (front to rear): 30 40
-
-Menambah banyak elemen (tidak ada batas):
-Enqueue: 100
-Enqueue: 200
-Enqueue: 300
-Enqueue: 400
-Enqueue: 500
-Queue (front to rear): 30 40 100 200 300 400 500
-
-Queue kosong? false
-```
-
----
-
-## Deque (Double-Ended Queue)
-
-Deque adalah queue yang mendukung operasi insert dan delete di kedua ujung (front dan rear).
-
-```java
-// File: Deque.java
-class Deque {
-    private int[] deque;
-    private int front;
-    private int rear;
-    private int size;
-    private int maxSize;
-
-    public Deque(int maxSize) {
-        this.maxSize = maxSize;
-        this.deque = new int[maxSize];
-        this.front = -1;
-        this.rear = -1;
-        this.size = 0;
-    }
-
-    // Insert di depan - O(1)
-    public void insertFront(int value) {
-        if (isFull()) {
-            System.out.println("Deque penuh!");
-            return;
-        }
-
-        if (front == -1) {
-            front = rear = 0;
-        } else if (front == 0) {
-            front = maxSize - 1;
-        } else {
-            front--;
-        }
-
-        deque[front] = value;
-        size++;
-        System.out.println("Insert front: " + value);
-    }
-
-    // Insert di belakang - O(1)
-    public void insertRear(int value) {
-        if (isFull()) {
-            System.out.println("Deque penuh!");
-            return;
-        }
-
-        if (front == -1) {
-            front = rear = 0;
-        } else {
-            rear = (rear + 1) % maxSize;
-        }
-
-        deque[rear] = value;
-        size++;
-        System.out.println("Insert rear: " + value);
-    }
-
-    // Delete dari depan - O(1)
-    public int deleteFront() {
-        if (isEmpty()) {
-            System.out.println("Deque kosong!");
-            return -1;
-        }
-
-        int value = deque[front];
-
-        if (front == rear) {
-            front = rear = -1;
-        } else {
-            front = (front + 1) % maxSize;
-        }
-
-        size--;
-        System.out.println("Delete front: " + value);
-        return value;
-    }
-
-    // Delete dari belakang - O(1)
-    public int deleteRear() {
-        if (isEmpty()) {
-            System.out.println("Deque kosong!");
-            return -1;
-        }
-
-        int value = deque[rear];
-
-        if (front == rear) {
-            front = rear = -1;
-        } else if (rear == 0) {
-            rear = maxSize - 1;
-        } else {
-            rear--;
-        }
-
-        size--;
-        System.out.println("Delete rear: " + value);
-        return value;
-    }
-
-    // Get front - O(1)
-    public int getFront() {
-        if (isEmpty()) {
-            System.out.println("Deque kosong!");
-            return -1;
-        }
-        return deque[front];
-    }
-
-    // Get rear - O(1)
-    public int getRear() {
-        if (isEmpty()) {
-            System.out.println("Deque kosong!");
-            return -1;
-        }
-        return deque[rear];
-    }
-
-    public boolean isEmpty() {
-        return front == -1;
-    }
-
-    public boolean isFull() {
-        return (front == 0 && rear == maxSize - 1) || (front == rear + 1);
-    }
-
-    public int size() {
-        return size;
-    }
-
-    public void display() {
-        if (isEmpty()) {
-            System.out.println("Deque kosong!");
-            return;
-        }
-
-        System.out.print("Deque (front to rear): ");
-        int i = front;
-        while (true) {
-            System.out.print(deque[i] + " ");
-            if (i == rear) break;
-            i = (i + 1) % maxSize;
-        }
-        System.out.println();
-    }
-}
-
-// File: DequeDemo.java
-public class DequeDemo {
-    public static void main(String[] args) {
-        System.out.println("=== DEQUE (DOUBLE-ENDED QUEUE) ===\n");
-
-        Deque deque = new Deque(5);
-
-        // Test insert
-        deque.insertRear(10);
-        deque.insertRear(20);
-        deque.insertFront(5);
-        deque.insertFront(1);
-        deque.display();
-
-        System.out.println("\nFront: " + deque.getFront());
-        System.out.println("Rear: " + deque.getRear());
-
-        // Test delete
-        System.out.println();
-        deque.deleteFront();
-        deque.deleteRear();
-        deque.display();
-
-        // Mixed operations
-        System.out.println();
-        deque.insertRear(30);
-        deque.insertFront(0);
-        deque.display();
-    }
-}
-```
-
-**Output:**
-```
-=== DEQUE (DOUBLE-ENDED QUEUE) ===
-
-Insert rear: 10
-Insert rear: 20
-Insert front: 5
-Insert front: 1
-Deque (front to rear): 1 5 10 20
-
-Front: 1
-Rear: 20
-
-Delete front: 1
-Delete rear: 20
-Deque (front to rear): 5 10
-
-Insert rear: 30
-Insert front: 0
-Deque (front to rear): 0 5 10 30
-```
-
----
-
-## Priority Queue
-
-Priority Queue adalah queue dimana setiap elemen memiliki prioritas, dan elemen dengan prioritas tertinggi dikeluarkan terlebih dahulu.
-
-```java
-// File: PriorityQueue.java
-class PriorityQueue {
-    private int[] data;
-    private int[] priority;
-    private int size;
-    private int maxSize;
-
-    public PriorityQueue(int maxSize) {
-        this.maxSize = maxSize;
-        this.data = new int[maxSize];
-        this.priority = new int[maxSize];
-        this.size = 0;
-    }
-
-    // Enqueue dengan prioritas - O(n)
-    public void enqueue(int value, int prio) {
-        if (isFull()) {
-            System.out.println("Priority Queue penuh!");
-            return;
-        }
-
-        // Cari posisi yang tepat berdasarkan prioritas
-        int i;
-        for (i = size - 1; i >= 0; i--) {
-            if (priority[i] > prio) {
-                // Geser ke kanan
-                data[i + 1] = data[i];
-                priority[i + 1] = priority[i];
-            } else {
-                break;
-            }
-        }
-
-        // Insert di posisi yang tepat
-        data[i + 1] = value;
-        priority[i + 1] = prio;
-        size++;
-        System.out.println("Enqueue: " + value + " (priority: " + prio + ")");
-    }
-
-    // Dequeue - O(1)
-    public int dequeue() {
-        if (isEmpty()) {
-            System.out.println("Priority Queue kosong!");
-            return -1;
-        }
-
-        int value = data[size - 1];
-        int prio = priority[size - 1];
-        size--;
-        System.out.println("Dequeue: " + value + " (priority: " + prio + ")");
-        return value;
-    }
-
-    // Peek - O(1)
-    public int peek() {
-        if (isEmpty()) {
-            System.out.println("Priority Queue kosong!");
-            return -1;
-        }
-
-        return data[size - 1];
-    }
-
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
-    public boolean isFull() {
-        return size == maxSize;
-    }
-
-    public int size() {
-        return size;
-    }
-
-    public void display() {
-        if (isEmpty()) {
-            System.out.println("Priority Queue kosong!");
-            return;
-        }
-
-        System.out.println("Priority Queue (lowest to highest priority):");
-        for (int i = 0; i < size; i++) {
-            System.out.println("  " + data[i] + " (priority: " + priority[i] + ")");
-        }
-        System.out.println("Next to dequeue: " + data[size - 1]);
-    }
-}
-
-// File: PriorityQueueDemo.java
-public class PriorityQueueDemo {
-    public static void main(String[] args) {
-        System.out.println("=== PRIORITY QUEUE ===\n");
-
-        PriorityQueue pq = new PriorityQueue(10);
-
-        // Enqueue dengan berbagai prioritas
-        pq.enqueue(100, 3);  // Low priority
-        pq.enqueue(200, 1);  // High priority
-        pq.enqueue(300, 2);  // Medium priority
-        pq.enqueue(400, 1);  // High priority
-        pq.enqueue(500, 5);  // Lowest priority
-
-        System.out.println();
-        pq.display();
-
-        // Dequeue berdasarkan prioritas
-        System.out.println("\nDequeue berdasarkan prioritas:");
-        while (!pq.isEmpty()) {
-            pq.dequeue();
-        }
-    }
-}
-```
-
-**Output:**
-```
-=== PRIORITY QUEUE ===
-
-Enqueue: 100 (priority: 3)
-Enqueue: 200 (priority: 1)
-Enqueue: 300 (priority: 2)
-Enqueue: 400 (priority: 1)
-Enqueue: 500 (priority: 5)
-
-Priority Queue (lowest to highest priority):
-  500 (priority: 5)
-  100 (priority: 3)
-  300 (priority: 2)
-  200 (priority: 1)
-  400 (priority: 1)
-Next to dequeue: 400
-
-Dequeue berdasarkan prioritas:
-Dequeue: 400 (priority: 1)
-Dequeue: 200 (priority: 1)
-Dequeue: 300 (priority: 2)
-Dequeue: 100 (priority: 3)
-Dequeue: 500 (priority: 5)
-```
-
----
-
-## Kompleksitas Stack dan Queue
-
-### Kompleksitas Waktu Stack
-
-| Operasi | Array-based | Linked List-based |
-|---------|-------------|-------------------|
-| **Push** | O(1) amortized* | O(1) |
-| **Pop** | O(1) | O(1) |
-| **Peek/Top** | O(1) | O(1) |
-| **isEmpty** | O(1) | O(1) |
-| **isFull** | O(1) | N/A |
-| **Search** | O(n) | O(n) |
-| **Size** | O(1) | O(1) |
-
-*O(n) jika perlu resize array
-
-### Kompleksitas Waktu Queue
-
-| Operasi | Linear Array | Circular Array | Linked List |
-|---------|--------------|----------------|-------------|
-| **Enqueue** | O(1) | O(1) | O(1) |
-| **Dequeue** | O(n)* | O(1) | O(1) |
-| **Peek Front** | O(1) | O(1) | O(1) |
-| **Peek Rear** | O(1) | O(1) | O(1) |
-| **isEmpty** | O(1) | O(1) | O(1) |
-| **isFull** | O(1) | O(1) | N/A |
-| **Size** | O(1) | O(1) | O(1) |
-
-*O(n) karena perlu shift semua elemen
-
-### Kompleksitas Waktu Struktur Lain
-
-| Operasi | Deque | Priority Queue (unsorted array) |
-|---------|-------|-------------------------------|
-| **Insert Front** | O(1) | - |
-| **Insert Rear** | O(1) | - |
-| **Enqueue** | - | O(1) atau O(n)* |
-| **Delete Front** | O(1) | - |
-| **Delete Rear** | O(1) | - |
-| **Dequeue** | - | O(n)** |
-| **Peek** | O(1) | O(n) |
-
-*O(n) jika menggunakan sorted array
-**O(1) jika menggunakan sorted array
-
-### Kompleksitas Ruang
+### Space Complexity Struktur Data
 
 | Struktur Data | Space Complexity |
 |---------------|------------------|
-| Stack (Array) | O(n) |
-| Stack (Linked List) | O(n) |
-| Queue (Array) | O(n) |
-| Queue (Linked List) | O(n) |
-| Circular Queue | O(n) |
-| Deque | O(n) |
-| Priority Queue | O(n) |
+| Array | O(n) |
+| Linked List | O(n) |
+| Stack (array) | O(n) |
+| Stack (linked list) | O(n) |
+| Queue (array) | O(n) |
+| Queue (linked list) | O(n) |
 
-### Perbandingan Implementasi
+---
 
-**Stack:**
+## Analisis Kompleksitas Struktur Data
+
+### Class Diagram Ringkasan Struktur Data
+
+Berikut adalah class diagram ringkasan untuk semua struktur data yang dianalisis kompleksitasnya:
+
+```mermaid
+classDiagram
+    class Array {
+        -int[] data
+        -int size
+        -int capacity
+        +get(index: int) int
+        +set(index: int, value: int) void
+        +insert(index: int, value: int) void
+        +delete(index: int) int
+        +search(value: int) int
+        +size() int
+    }
+    note for Array "Access: O(1)\nSearch: O(n)\nInsert: O(n)\nDelete: O(n)"
+
+    class SingleLinkedList {
+        -Node head
+        -int size
+        +insertAtBeginning(data: int) void
+        +insertAtEnd(data: int) void
+        +deleteAtBeginning() int
+        +deleteAtEnd() int
+        +search(value: int) int
+        +get(index: int) int
+    }
+    note for SingleLinkedList "Access: O(n)\nSearch: O(n)\nInsert Head: O(1)\nDelete Head: O(1)"
+
+    class DoubleLinkedList {
+        -DoubleNode head
+        -DoubleNode tail
+        -int size
+        +insertAtBeginning(data: int) void
+        +insertAtEnd(data: int) void
+        +deleteAtBeginning() int
+        +deleteAtEnd() int
+    }
+    note for DoubleLinkedList "Insert/Delete Head: O(1)\nInsert/Delete Tail: O(1)"
+
+    class Stack {
+        -int[] array
+        -int top
+        +push(value: int) void
+        +pop() int
+        +peek() int
+        +isEmpty() boolean
+    }
+    note for Stack "Push: O(1)\nPop: O(1)\nPeek: O(1)"
+
+    class Queue {
+        -int[] array
+        -int front
+        -int rear
+        +enqueue(value: int) void
+        +dequeue() int
+        +peek() int
+        +isEmpty() boolean
+    }
+    note for Queue "Enqueue: O(1)\nDequeue: O(1)\nPeek: O(1)"
+
+    class HashTable {
+        -Entry[] table
+        -int size
+        +put(key: K, value: V) void
+        +get(key: K) V
+        +remove(key: K) void
+        +containsKey(key: K) boolean
+    }
+    note for HashTable "Insert: O(1) avg\nSearch: O(1) avg\nDelete: O(1) avg"
+```
+
+---
+
+### Kompleksitas Array
+
+| Operasi | Time Complexity | Space Complexity |
+|---------|----------------|------------------|
+| Access by index | O(1) | O(1) |
+| Search (unsorted) | O(n) | O(1) |
+| Search (sorted) | O(log n) | O(1) |
+| Insert at end | O(1) amortized | O(1) |
+| Insert at beginning | O(n) | O(1) |
+| Insert at middle | O(n) | O(1) |
+| Delete at end | O(1) | O(1) |
+| Delete at beginning | O(n) | O(1) |
+| Delete at middle | O(n) | O(1) |
+
+**Penjelasan:**
+
 ```java
-// Array-based Push - O(1)
-public void push(int value) {
-    stack[++top] = value;  // Single operation
+// Access by index - O(1)
+int value = arr[5];  // Langsung mengakses alamat memori
+
+// Insert at beginning - O(n)
+public void insertAtBeginning(int[] arr, int value) {
+    // Shift semua elemen ke kanan
+    for (int i = arr.length - 1; i > 0; i--) {  // O(n)
+        arr[i] = arr[i - 1];
+    }
+    arr[0] = value;
 }
 
-// Linked List-based Push - O(1)
+// Delete at middle - O(n)
+public void deleteAt(int[] arr, int index) {
+    // Shift semua elemen setelah index ke kiri
+    for (int i = index; i < arr.length - 1; i++) {  // O(n)
+        arr[i] = arr[i + 1];
+    }
+}
+```
+
+---
+
+### Kompleksitas Linked List
+
+#### Single Linked List
+
+| Operasi | Time Complexity | Penjelasan |
+|---------|----------------|------------|
+| Access by index | O(n) | Harus traverse dari head |
+| Search | O(n) | Harus cek setiap node |
+| Insert at beginning | O(1) | Update head pointer |
+| Insert at end (tanpa tail) | O(n) | Traverse ke akhir |
+| Insert at end (dengan tail) | O(1) | Akses tail langsung |
+| Insert at middle | O(n) | Traverse ke posisi |
+| Delete at beginning | O(1) | Update head pointer |
+| Delete at end | O(n) | Cari node sebelum tail |
+| Delete at middle | O(n) | Traverse ke posisi |
+
+```java
+// Insert at beginning - O(1)
+public void insertAtBeginning(int data) {
+    Node newNode = new Node(data);  // O(1)
+    newNode.next = head;            // O(1)
+    head = newNode;                 // O(1)
+}
+// Total: O(1)
+
+// Insert at end tanpa tail pointer - O(n)
+public void insertAtEnd(int data) {
+    Node newNode = new Node(data);
+
+    if (head == null) {
+        head = newNode;
+        return;
+    }
+
+    Node current = head;
+    while (current.next != null) {  // O(n) - traverse
+        current = current.next;
+    }
+    current.next = newNode;
+}
+// Total: O(n)
+
+// Search - O(n)
+public boolean search(int value) {
+    Node current = head;
+    while (current != null) {       // O(n) - worst case semua node
+        if (current.data == value) {
+            return true;
+        }
+        current = current.next;
+    }
+    return false;
+}
+```
+
+#### Double Linked List
+
+| Operasi | Time Complexity | Penjelasan |
+|---------|----------------|------------|
+| Insert at beginning | O(1) | Update head dan prev pointer |
+| Insert at end | O(1) | Update tail dan next pointer |
+| Delete at beginning | O(1) | Update head |
+| Delete at end | O(1) | Update tail (berbeda dari single LL) |
+| Delete by value | O(n) | Cari node dulu |
+
+```java
+// Delete at end (Double LL) - O(1)
+public void deleteAtEnd() {
+    if (tail == null) return;
+
+    if (head == tail) {
+        head = tail = null;
+    } else {
+        tail = tail.prev;    // O(1) - langsung akses prev
+        tail.next = null;    // O(1)
+    }
+}
+// Total: O(1) - berbeda dari Single LL yang O(n)
+```
+
+#### Perbandingan Jenis Linked List
+
+| Operasi | Single LL | Double LL | Circular Single | Circular Double |
+|---------|-----------|-----------|-----------------|-----------------|
+| Insert at head | O(1) | O(1) | O(1) | O(1) |
+| Insert at tail | O(n)* | O(1) | O(1) | O(1) |
+| Delete at head | O(1) | O(1) | O(1) | O(1) |
+| Delete at tail | O(n) | O(1) | O(n) | O(1) |
+| Search | O(n) | O(n) | O(n) | O(n) |
+| Reverse | O(n) | O(n) | O(n) | O(n) |
+
+*O(1) jika ada tail pointer
+
+---
+
+### Kompleksitas Stack
+
+| Operasi | Array-based | Linked List-based |
+|---------|-------------|-------------------|
+| Push | O(1) amortized | O(1) |
+| Pop | O(1) | O(1) |
+| Peek/Top | O(1) | O(1) |
+| isEmpty | O(1) | O(1) |
+| isFull | O(1) | N/A |
+| Search | O(n) | O(n) |
+| Size | O(1) | O(1) |
+
+**Space Complexity:** O(n) untuk keduanya
+
+```java
+// Push (Array) - O(1) amortized
+public void push(int value) {
+    if (top == stack.length - 1) {
+        // Resize array - O(n), tapi jarang terjadi
+        resize();
+    }
+    stack[++top] = value;  // O(1)
+}
+// Amortized O(1) karena resize tidak sering
+
+// Push (Linked List) - O(1)
 public void push(int value) {
     StackNode newNode = new StackNode(value);  // O(1)
     newNode.next = top;                         // O(1)
     top = newNode;                              // O(1)
 }
-```
+// Total: O(1) - selalu konstan, tidak ada resize
 
-**Queue:**
-```java
-// Linear Array Dequeue - O(n)
-public int dequeue() {
-    int value = queue[front];
-    for (int i = 0; i < rear; i++) {  // O(n) - shift semua
-        queue[i] = queue[i + 1];
+// Search - O(n)
+public int search(int value) {
+    Node current = top;
+    int position = 1;
+    while (current != null) {  // O(n) worst case
+        if (current.data == value) {
+            return position;
+        }
+        current = current.next;
+        position++;
     }
-    rear--;
-    return value;
-}
-
-// Circular Array Dequeue - O(1)
-public int dequeue() {
-    int value = queue[front];
-    front = (front + 1) % maxSize;  // O(1) - no shifting
-    return value;
-}
-
-// Linked List Dequeue - O(1)
-public int dequeue() {
-    int value = front.data;
-    front = front.next;  // O(1) - just move pointer
-    return value;
+    return -1;
 }
 ```
 
 ---
 
-## Latihan Hands-On
+### Kompleksitas Queue
 
-### Latihan 1: Balanced Parentheses Checker
+| Operasi | Linear Array | Circular Array | Linked List |
+|---------|--------------|----------------|-------------|
+| Enqueue | O(1) | O(1) | O(1) |
+| Dequeue | O(n)* | O(1) | O(1) |
+| Peek Front | O(1) | O(1) | O(1) |
+| Peek Rear | O(1) | O(1) | O(1) |
+| isEmpty | O(1) | O(1) | O(1) |
+| isFull | O(1) | O(1) | N/A |
+
+*O(n) karena harus shift elemen
+
+**Space Complexity:** O(n) untuk semua implementasi
 
 ```java
-public class BalancedParentheses {
-    public static boolean isBalanced(String expression) {
-        ArrayStack stack = new ArrayStack(100);
+// Dequeue (Linear Array) - O(n)
+public int dequeue() {
+    int value = queue[front];
 
-        for (int i = 0; i < expression.length(); i++) {
-            char c = expression.charAt(i);
+    // Shift semua elemen ke kiri
+    for (int i = 0; i < rear; i++) {  // O(n)
+        queue[i] = queue[i + 1];
+    }
+    rear--;
 
-            if (c == '(' || c == '[' || c == '{') {
-                stack.push(c);
-            } else if (c == ')' || c == ']' || c == '}') {
-                if (stack.isEmpty()) {
-                    return false;
-                }
+    return value;
+}
+// Total: O(n) - operasi shift mahal
 
-                char top = (char) stack.pop();
+// Dequeue (Circular Array) - O(1)
+public int dequeue() {
+    int value = queue[front];
+    front = (front + 1) % maxSize;  // O(1) - hanya update index
+    size--;
+    return value;
+}
+// Total: O(1) - tidak ada shift
 
-                if ((c == ')' && top != '(') ||
-                    (c == ']' && top != '[') ||
-                    (c == '}' && top != '{')) {
-                    return false;
-                }
-            }
-        }
+// Dequeue (Linked List) - O(1)
+public int dequeue() {
+    int value = front.data;
+    front = front.next;  // O(1) - hanya pindah pointer
+    if (front == null) {
+        rear = null;
+    }
+    size--;
+    return value;
+}
+// Total: O(1)
+```
 
-        return stack.isEmpty();
+---
+
+## Perbandingan Struktur Data
+
+### Tabel Perbandingan Komprehensif
+
+| Operasi | Array | Single LL | Double LL | Stack | Queue | Circular Queue |
+|---------|-------|-----------|-----------|-------|-------|----------------|
+| Access | O(1) | O(n) | O(n) | O(n)* | O(n)* | O(n)* |
+| Search | O(n) | O(n) | O(n) | O(n) | O(n) | O(n) |
+| Insert (front) | O(n) | O(1) | O(1) | - | - | - |
+| Insert (end) | O(1)** | O(n)*** | O(1) | O(1) | O(1) | O(1) |
+| Delete (front) | O(n) | O(1) | O(1) | - | O(1) | O(1) |
+| Delete (end) | O(1) | O(n) | O(1) | O(1) | - | - |
+| Space | O(n) | O(n) | O(n) | O(n) | O(n) | O(n) |
+
+*Tidak sesuai use case
+**Amortized O(1), bisa O(n) saat resize
+***O(1) dengan tail pointer
+
+### Kapan Menggunakan Apa?
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    PANDUAN PEMILIHAN STRUKTUR DATA                   │
+├─────────────────────────────────────────────────────────────────────┤
+│ Kebutuhan                          │ Pilihan Terbaik                 │
+├─────────────────────────────────────────────────────────────────────┤
+│ Akses random cepat                 │ Array                           │
+│ Insert/delete di awal              │ Linked List                     │
+│ Insert/delete di kedua ujung       │ Double Linked List / Deque      │
+│ LIFO (Last In First Out)           │ Stack                           │
+│ FIFO (First In First Out)          │ Queue                           │
+│ Traversal berulang (circular)      │ Circular Linked List            │
+│ Traversal dua arah                 │ Double Linked List              │
+│ Memory terbatas, ukuran fixed      │ Array                           │
+│ Ukuran dinamis                     │ Linked List                     │
+│ Cache performance penting          │ Array                           │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Panduan Pemilihan Berdasarkan Operasi Utama
+
+#### Jika Operasi Utama adalah AKSES DATA:
+
+| Skenario | Pilih | Kompleksitas |
+|----------|-------|--------------|
+| Akses by index | Array | O(1) |
+| Akses elemen terakhir | Array atau Double LL dengan tail | O(1) |
+| Akses elemen pertama | Semua struktur | O(1) |
+| Akses elemen tengah | Array | O(1) |
+
+#### Jika Operasi Utama adalah INSERT:
+
+| Skenario | Pilih | Kompleksitas |
+|----------|-------|--------------|
+| Insert di awal | Linked List | O(1) |
+| Insert di akhir | Array (amortized) atau Double LL | O(1) |
+| Insert di tengah | Linked List (jika posisi diketahui) | O(1) insert, O(n) cari posisi |
+| Insert terurut | Array (binary search) | O(log n) cari + O(n) shift |
+
+#### Jika Operasi Utama adalah DELETE:
+
+| Skenario | Pilih | Kompleksitas |
+|----------|-------|--------------|
+| Delete di awal | Linked List | O(1) |
+| Delete di akhir | Double Linked List | O(1) |
+| Delete by value | Hash Table | O(1) average |
+| Delete di tengah | Linked List | O(1) delete, O(n) cari |
+
+#### Jika Operasi Utama adalah SEARCH:
+
+| Skenario | Pilih | Kompleksitas |
+|----------|-------|--------------|
+| Search by key | Hash Table | O(1) average |
+| Search by value (sorted) | Sorted Array + Binary Search | O(log n) |
+| Search by value (unsorted) | Array atau Linked List | O(n) |
+| Search min/max | Heap atau Sorted Array | O(1) |
+
+### Flowchart Pemilihan Struktur Data
+
+```
+                        START
+                          │
+                          ▼
+            ┌─────────────────────────┐
+            │ Apakah ukuran data      │
+            │ diketahui dan tetap?    │
+            └───────────┬─────────────┘
+                        │
+              ┌─────────┴─────────┐
+              │                   │
+             YES                  NO
+              │                   │
+              ▼                   ▼
+        ┌───────────┐      ┌────────────┐
+        │   ARRAY   │      │ Linked List│
+        └─────┬─────┘      │ atau       │
+              │            │ Dynamic    │
+              │            │ Array      │
+              │            └──────┬─────┘
+              │                   │
+              ▼                   ▼
+     ┌────────────────┐  ┌────────────────┐
+     │ Perlu akses    │  │ Insert/Delete  │
+     │ random?        │  │ di mana?       │
+     └───────┬────────┘  └───────┬────────┘
+             │                   │
+        ┌────┴────┐         ┌────┴────────┐
+       YES       NO         │             │
+        │         │      Awal/Akhir    Tengah
+        ▼         ▼         │             │
+    ┌───────┐ ┌───────┐     ▼             ▼
+    │ Array │ │ Stack/│ ┌───────┐    ┌───────┐
+    │       │ │ Queue │ │ LinkedList │Array  │
+    └───────┘ └───────┘ └───────┘    └───────┘
+```
+
+### Trade-off yang Perlu Dipertimbangkan
+
+| Aspek | Array | Linked List | Hash Table | Stack/Queue |
+|-------|-------|-------------|------------|-------------|
+| **Kecepatan akses** | Sangat cepat | Lambat | Cepat (by key) | Hanya ujung |
+| **Penggunaan memory** | Efisien | Overhead pointer | Overhead hash | Efisien |
+| **Fleksibilitas ukuran** | Terbatas | Sangat fleksibel | Fleksibel | Tergantung impl |
+| **Cache performance** | Sangat baik | Buruk | Sedang | Tergantung impl |
+| **Kompleksitas impl** | Mudah | Sedang | Kompleks | Mudah |
+
+---
+
+## Contoh Analisis Algoritma
+
+### Contoh 1: Reverse Linked List
+
+```java
+public void reverse() {
+    Node prev = null;      // O(1)
+    Node current = head;   // O(1)
+    Node next = null;      // O(1)
+
+    while (current != null) {      // Loop n kali
+        next = current.next;       // O(1)
+        current.next = prev;       // O(1)
+        prev = current;            // O(1)
+        current = next;            // O(1)
     }
 
-    public static void main(String[] args) {
-        System.out.println("=== BALANCED PARENTHESES CHECKER ===\n");
+    head = prev;  // O(1)
+}
+```
 
-        String[] testCases = {
-            "{[()]}",
-            "{[(])}",
-            "((()))",
-            "({[})",
-            "",
-            "((("
-        };
+**Analisis:**
+- Inisialisasi: O(1) + O(1) + O(1) = O(1)
+- Loop: n × O(1) = O(n)
+- Assignment akhir: O(1)
+- **Total Time Complexity: O(n)**
+- **Space Complexity: O(1)** - hanya 3 variabel pointer
 
-        for (String test : testCases) {
-            System.out.println("\"" + test + "\" is balanced? " + isBalanced(test));
+---
+
+### Contoh 2: Palindrome Check dengan Stack
+
+```java
+public boolean isPalindrome(String str) {
+    ArrayStack stack = new ArrayStack(str.length());  // O(n) space
+
+    // Push semua karakter - O(n)
+    for (int i = 0; i < str.length(); i++) {
+        stack.push(str.charAt(i));  // O(1) per operasi
+    }
+
+    // Pop dan compare - O(n)
+    for (int i = 0; i < str.length(); i++) {
+        if (str.charAt(i) != stack.pop()) {  // O(1) per operasi
+            return false;
+        }
+    }
+
+    return true;
+}
+```
+
+**Analisis:**
+- Membuat stack: O(n) space
+- Loop push: n × O(1) = O(n)
+- Loop compare: n × O(1) = O(n)
+- **Total Time Complexity: O(n) + O(n) = O(2n) = O(n)**
+- **Space Complexity: O(n)** - stack menyimpan n karakter
+
+---
+
+### Contoh 3: Find Middle of Linked List
+
+```java
+// Metode 1: Two Pass - O(n) time, O(1) space
+public Node findMiddle1(Node head) {
+    // Pass 1: Hitung panjang
+    int length = 0;
+    Node current = head;
+    while (current != null) {  // O(n)
+        length++;
+        current = current.next;
+    }
+
+    // Pass 2: Traverse ke tengah
+    current = head;
+    for (int i = 0; i < length / 2; i++) {  // O(n/2)
+        current = current.next;
+    }
+
+    return current;
+}
+// Time: O(n) + O(n/2) = O(n)
+// Space: O(1)
+
+// Metode 2: Slow-Fast Pointer - O(n) time, O(1) space
+public Node findMiddle2(Node head) {
+    Node slow = head;
+    Node fast = head;
+
+    while (fast != null && fast.next != null) {  // O(n/2)
+        slow = slow.next;       // Maju 1 langkah
+        fast = fast.next.next;  // Maju 2 langkah
+    }
+
+    return slow;
+}
+// Time: O(n/2) = O(n)
+// Space: O(1)
+```
+
+**Perbandingan:**
+- Keduanya O(n) time dan O(1) space
+- Metode 2 lebih efisien (hanya satu pass)
+
+---
+
+### Contoh 4: Queue-based BFS
+
+```java
+public void bfs(int[][] graph, int start) {
+    int n = graph.length;
+    boolean[] visited = new boolean[n];  // O(n) space
+    LinkedQueue queue = new LinkedQueue();
+
+    visited[start] = true;
+    queue.enqueue(start);  // O(1)
+
+    while (!queue.isEmpty()) {              // O(V) iterasi
+        int current = queue.dequeue();      // O(1)
+        System.out.print(current + " ");
+
+        for (int i = 0; i < n; i++) {       // O(V) per iterasi
+            if (graph[current][i] == 1 && !visited[i]) {
+                visited[i] = true;
+                queue.enqueue(i);           // O(1)
+            }
         }
     }
 }
 ```
 
-### Latihan 2: Infix to Postfix Conversion
+**Analisis:**
+- Setiap vertex diproses sekali: O(V)
+- Untuk setiap vertex, cek semua edge: O(E) total
+- **Time Complexity: O(V + E)**
+- **Space Complexity: O(V)** - untuk visited array dan queue
+
+---
+
+## Best, Average, dan Worst Case
+
+### Definisi
+
+| Case | Deskripsi |
+|------|-----------|
+| **Best Case** | Skenario paling menguntungkan |
+| **Average Case** | Skenario tipikal/rata-rata |
+| **Worst Case** | Skenario paling tidak menguntungkan |
+
+### Contoh: Linear Search
 
 ```java
-public class InfixToPostfix {
-    public static int precedence(char op) {
-        switch (op) {
-            case '+':
-            case '-':
-                return 1;
-            case '*':
-            case '/':
-                return 2;
-            case '^':
-                return 3;
-            default:
-                return -1;
+public int linearSearch(int[] arr, int target) {
+    for (int i = 0; i < arr.length; i++) {
+        if (arr[i] == target) {
+            return i;
         }
     }
+    return -1;
+}
+```
 
-    public static String infixToPostfix(String expression) {
-        StringBuilder result = new StringBuilder();
-        ArrayStack stack = new ArrayStack(100);
+| Case | Skenario | Kompleksitas |
+|------|----------|--------------|
+| Best | Target di index 0 | O(1) |
+| Average | Target di tengah | O(n/2) = O(n) |
+| Worst | Target tidak ada / di akhir | O(n) |
 
-        for (int i = 0; i < expression.length(); i++) {
-            char c = expression.charAt(i);
+### Contoh: Quick Sort
 
-            // Operand
-            if (Character.isLetterOrDigit(c)) {
-                result.append(c);
-            }
-            // Left parenthesis
-            else if (c == '(') {
-                stack.push(c);
-            }
-            // Right parenthesis
-            else if (c == ')') {
-                while (!stack.isEmpty() && stack.peek() != '(') {
-                    result.append((char) stack.pop());
-                }
-                stack.pop(); // Remove '('
-            }
-            // Operator
-            else {
-                while (!stack.isEmpty() && precedence(c) <= precedence((char) stack.peek())) {
-                    result.append((char) stack.pop());
-                }
-                stack.push(c);
-            }
-        }
-
-        // Pop remaining operators
-        while (!stack.isEmpty()) {
-            result.append((char) stack.pop());
-        }
-
-        return result.toString();
+```java
+public void quickSort(int[] arr, int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
     }
+}
+```
 
-    public static void main(String[] args) {
-        System.out.println("=== INFIX TO POSTFIX CONVERSION ===\n");
+| Case | Skenario | Kompleksitas |
+|------|----------|--------------|
+| Best | Pivot selalu di tengah | O(n log n) |
+| Average | Pivot acak | O(n log n) |
+| Worst | Array sudah sorted (pivot selalu di ujung) | O(n²) |
 
-        String[] testCases = {
-            "a+b*c",
-            "(a+b)*c",
-            "a+b*c-d/e",
-            "((a+b)*c-d)/e"
-        };
+### Contoh: Stack Operations
 
-        for (String test : testCases) {
-            System.out.println("Infix:   " + test);
-            System.out.println("Postfix: " + infixToPostfix(test));
-            System.out.println();
+| Operasi | Best | Average | Worst |
+|---------|------|---------|-------|
+| Push | O(1) | O(1) | O(n)* |
+| Pop | O(1) | O(1) | O(1) |
+| Peek | O(1) | O(1) | O(1) |
+| Search | O(1) | O(n/2) | O(n) |
+
+*Worst case O(n) terjadi saat array perlu resize
+
+---
+
+## Tips Optimasi
+
+### 1. Pilih Struktur Data yang Tepat
+
+```java
+// ❌ Buruk: Sering insert di awal dengan array
+for (int i = 0; i < n; i++) {
+    insertAtBeginning(array, value);  // O(n) per operasi
+}
+// Total: O(n²)
+
+// ✅ Baik: Gunakan Linked List
+for (int i = 0; i < n; i++) {
+    list.insertAtBeginning(value);    // O(1) per operasi
+}
+// Total: O(n)
+```
+
+### 2. Gunakan Pointer Tambahan
+
+```java
+// ❌ Tanpa tail pointer - O(n)
+public void insertAtEnd(int data) {
+    Node current = head;
+    while (current.next != null) {
+        current = current.next;
+    }
+    current.next = new Node(data);
+}
+
+// ✅ Dengan tail pointer - O(1)
+public void insertAtEnd(int data) {
+    Node newNode = new Node(data);
+    tail.next = newNode;
+    tail = newNode;
+}
+```
+
+### 3. Gunakan Circular Array untuk Queue
+
+```java
+// ❌ Linear Queue Dequeue - O(n)
+public int dequeue() {
+    int value = queue[0];
+    for (int i = 0; i < size - 1; i++) {
+        queue[i] = queue[i + 1];
+    }
+    size--;
+    return value;
+}
+
+// ✅ Circular Queue Dequeue - O(1)
+public int dequeue() {
+    int value = queue[front];
+    front = (front + 1) % maxSize;
+    size--;
+    return value;
+}
+```
+
+### 4. Hindari Operasi Berulang
+
+```java
+// ❌ Buruk: Menghitung size di setiap iterasi
+while (list.calculateSize() > 0) {  // O(n) per iterasi
+    // ...
+}
+// Total: O(n²)
+
+// ✅ Baik: Maintain size variable
+while (list.size > 0) {  // O(1) per iterasi
+    // ...
+}
+// Total: O(n)
+```
+
+### 5. Trade-off Space vs Time
+
+```java
+// ❌ Hemat space, lambat
+public int fibonacci(int n) {
+    if (n <= 1) return n;
+    return fibonacci(n-1) + fibonacci(n-2);  // O(2ⁿ)
+}
+
+// ✅ Gunakan extra space untuk kecepatan (memoization)
+public int fibonacci(int n, int[] memo) {
+    if (memo[n] != 0) return memo[n];
+    if (n <= 1) return n;
+    memo[n] = fibonacci(n-1, memo) + fibonacci(n-2, memo);
+    return memo[n];  // O(n) time, O(n) space
+}
+```
+
+---
+
+## Latihan Analisis
+
+### Soal 1: Analisis Kompleksitas
+
+```java
+public void mystery(int n) {
+    for (int i = 1; i <= n; i *= 2) {
+        for (int j = 0; j < n; j++) {
+            System.out.println(i + ", " + j);
         }
     }
 }
 ```
 
-### Latihan 3: Postfix Expression Evaluator
+**Jawaban:**
+- Loop luar: i = 1, 2, 4, 8, ... n → log n iterasi
+- Loop dalam: n iterasi
+- **Time Complexity: O(n log n)**
+- **Space Complexity: O(1)**
+
+---
+
+### Soal 2: Analisis Kompleksitas
 
 ```java
-public class PostfixEvaluator {
-    public static int evaluate(String postfix) {
-        ArrayStack stack = new ArrayStack(100);
+public void process(int[] arr) {
+    int n = arr.length;
 
-        for (int i = 0; i < postfix.length(); i++) {
-            char c = postfix.charAt(i);
+    for (int i = 0; i < n; i++) {
+        for (int j = i; j < n; j++) {
+            System.out.println(arr[i] + arr[j]);
+        }
+    }
+}
+```
 
-            if (Character.isDigit(c)) {
-                stack.push(c - '0');
-            } else {
-                int operand2 = stack.pop();
-                int operand1 = stack.pop();
+**Jawaban:**
+- Iterasi: n + (n-1) + (n-2) + ... + 1 = n(n+1)/2
+- **Time Complexity: O(n²)**
+- **Space Complexity: O(1)**
 
-                int result = 0;
-                switch (c) {
-                    case '+': result = operand1 + operand2; break;
-                    case '-': result = operand1 - operand2; break;
-                    case '*': result = operand1 * operand2; break;
-                    case '/': result = operand1 / operand2; break;
-                }
-                stack.push(result);
+---
+
+### Soal 3: Analisis Struktur Data
+
+**Pertanyaan:** Anda perlu menyimpan data yang:
+- Sering di-insert di awal dan akhir
+- Sering di-delete di awal dan akhir
+- Jarang diakses secara random
+
+**Struktur data terbaik?**
+
+**Jawaban:** **Double Linked List** atau **Deque**
+- Insert di awal: O(1)
+- Insert di akhir: O(1)
+- Delete di awal: O(1)
+- Delete di akhir: O(1)
+
+---
+
+### Soal 4: Optimasi
+
+**Kode berikut tidak efisien:**
+
+```java
+public boolean hasDuplicate(int[] arr) {
+    for (int i = 0; i < arr.length; i++) {
+        for (int j = i + 1; j < arr.length; j++) {
+            if (arr[i] == arr[j]) {
+                return true;
             }
         }
-
-        return stack.pop();
     }
-
-    public static void main(String[] args) {
-        System.out.println("=== POSTFIX EXPRESSION EVALUATOR ===\n");
-
-        String[] testCases = {
-            "23+",        // 2 + 3 = 5
-            "23*5+",      // 2 * 3 + 5 = 11
-            "234*+",      // 2 + 3 * 4 = 14
-            "82/3-"       // 8 / 2 - 3 = 1
-        };
-
-        for (String test : testCases) {
-            System.out.println("Postfix: " + test);
-            System.out.println("Result:  " + evaluate(test));
-            System.out.println();
-        }
-    }
+    return false;
 }
+// Time: O(n²)
 ```
 
-### Latihan 4: Reverse String using Stack
+**Bagaimana cara mengoptimasi?**
+
+**Jawaban:** Gunakan HashSet
 
 ```java
-public class ReverseString {
-    public static String reverse(String str) {
-        ArrayStack stack = new ArrayStack(str.length());
-
-        // Push semua karakter ke stack
-        for (int i = 0; i < str.length(); i++) {
-            stack.push(str.charAt(i));
+public boolean hasDuplicate(int[] arr) {
+    HashSet<Integer> seen = new HashSet<>();
+    for (int num : arr) {
+        if (seen.contains(num)) {  // O(1) average
+            return true;
         }
-
-        // Pop semua karakter untuk membentuk string terbalik
-        StringBuilder reversed = new StringBuilder();
-        while (!stack.isEmpty()) {
-            reversed.append((char) stack.pop());
-        }
-
-        return reversed.toString();
+        seen.add(num);  // O(1) average
     }
-
-    public static void main(String[] args) {
-        System.out.println("=== REVERSE STRING USING STACK ===\n");
-
-        String original = "Hello World!";
-        String reversed = reverse(original);
-
-        System.out.println("Original: " + original);
-        System.out.println("Reversed: " + reversed);
-    }
+    return false;
 }
+// Time: O(n), Space: O(n)
 ```
 
-### Latihan 5: Queue-based Level Order Traversal (Simulasi)
+---
+
+### Soal 5: Analisis Rekursi
 
 ```java
-public class LevelOrderSimulation {
-    public static void main(String[] args) {
-        System.out.println("=== LEVEL ORDER TRAVERSAL SIMULATION ===\n");
-
-        /*
-         * Simulasi tree:
-         *        1
-         *       / \
-         *      2   3
-         *     / \   \
-         *    4   5   6
-         *
-         * Level order: 1 2 3 4 5 6
-         */
-
-        // Representasi tree dengan adjacency list sederhana
-        int[][] children = {
-            {},       // 0 (tidak digunakan)
-            {2, 3},   // 1 -> children: 2, 3
-            {4, 5},   // 2 -> children: 4, 5
-            {6},      // 3 -> children: 6
-            {},       // 4 -> no children
-            {},       // 5 -> no children
-            {}        // 6 -> no children
-        };
-
-        LinkedQueue queue = new LinkedQueue();
-        queue.enqueue(1); // Start from root
-
-        System.out.print("Level Order Traversal: ");
-        while (!queue.isEmpty()) {
-            int node = queue.dequeue();
-            System.out.print(node + " ");
-
-            // Enqueue children
-            for (int child : children[node]) {
-                queue.enqueue(child);
-            }
-        }
-        System.out.println();
-    }
+public int sum(int n) {
+    if (n == 0) return 0;
+    return n + sum(n - 1);
 }
 ```
 
-### Latihan 6: Hot Potato Game (Josephus Problem dengan Queue)
-
-```java
-public class HotPotatoGame {
-    public static String hotPotato(String[] players, int num) {
-        LinkedQueue queue = new LinkedQueue();
-
-        // Masukkan semua pemain ke queue
-        for (int i = 0; i < players.length; i++) {
-            queue.enqueue(i); // Gunakan index
-        }
-
-        while (queue.size() > 1) {
-            // Pass the potato num times
-            for (int i = 0; i < num; i++) {
-                int player = queue.dequeue();
-                queue.enqueue(player);
-            }
-
-            // Eliminate current player
-            int eliminated = queue.dequeue();
-            System.out.println("Eliminated: " + players[eliminated]);
-        }
-
-        return players[queue.peek()];
-    }
-
-    public static void main(String[] args) {
-        System.out.println("=== HOT POTATO GAME ===\n");
-
-        String[] players = {"Alice", "Bob", "Charlie", "David", "Eve"};
-        int passCount = 7;
-
-        System.out.println("Players: Alice, Bob, Charlie, David, Eve");
-        System.out.println("Pass count: " + passCount);
-        System.out.println();
-
-        String winner = hotPotato(players, passCount);
-        System.out.println("\nWinner: " + winner);
-    }
-}
-```
+**Jawaban:**
+- Rekursi depth: n
+- Setiap level: O(1) operasi
+- **Time Complexity: O(n)**
+- **Space Complexity: O(n)** - karena call stack
 
 ---
 
 ## Ringkasan
 
-### Perbandingan Stack vs Queue
+### Cheat Sheet Kompleksitas
 
-| Aspek | Stack | Queue |
-|-------|-------|-------|
-| Prinsip | LIFO | FIFO |
-| Insert | Push (top) | Enqueue (rear) |
-| Delete | Pop (top) | Dequeue (front) |
-| Access | Top only | Front only |
-| Use case | Undo, recursion | Scheduling, BFS |
+```
+┌────────────────────────────────────────────────────────────────────┐
+│                    KOMPLEKSITAS CHEAT SHEET                         │
+├────────────────────────────────────────────────────────────────────┤
+│ Struktur     │ Access │ Search │ Insert │ Delete │ Space          │
+├────────────────────────────────────────────────────────────────────┤
+│ Array        │ O(1)   │ O(n)   │ O(n)   │ O(n)   │ O(n)           │
+│ Linked List  │ O(n)   │ O(n)   │ O(1)*  │ O(1)*  │ O(n)           │
+│ Stack        │ O(n)   │ O(n)   │ O(1)   │ O(1)   │ O(n)           │
+│ Queue        │ O(n)   │ O(n)   │ O(1)   │ O(1)   │ O(n)           │
+├────────────────────────────────────────────────────────────────────┤
+│ *jika posisi sudah diketahui                                       │
+└────────────────────────────────────────────────────────────────────┘
+```
 
-### Kapan Menggunakan Stack?
-- Undo/Redo operations
-- Function call management
-- Expression parsing (brackets, postfix)
-- Backtracking algorithms (maze, DFS)
-- Browser back button
+### Key Takeaways
 
-### Kapan Menggunakan Queue?
-- Task scheduling
-- Print job management
-- Breadth-first search
-- Message passing
-- Request handling (web servers)
-
-### Kapan Menggunakan Deque?
-- Sliding window algorithms
-- Undo/Redo dengan forward
-- Browser history (back dan forward)
-- Work-stealing algorithms
-
-### Kapan Menggunakan Priority Queue?
-- Dijkstra's shortest path
-- Huffman coding
-- Task scheduling dengan prioritas
-- Event-driven simulation
-- A* pathfinding
+1. **Big O fokus pada worst case dan growth rate**
+2. **Pilih struktur data berdasarkan operasi yang paling sering**
+3. **Trade-off antara time dan space complexity**
+4. **Konstanta dan lower order terms diabaikan**
+5. **Amortized analysis penting untuk operasi yang jarang mahal**
 
 ---
 
 ## Tugas Praktikum
 
-1. **Implementasikan Two Stack Queue** - Queue menggunakan dua stack
+1. **Analisis kompleksitas waktu dan ruang** untuk semua operasi di Double Linked List implementasi Anda
 
-2. **Buat Min Stack** - Stack yang support operasi getMin() dalam O(1)
+2. **Implementasikan dan bandingkan** performa Linear Queue vs Circular Queue untuk 10000 operasi enqueue/dequeue
 
-3. **Implementasikan Stack dengan Queue** - Stack menggunakan queue
+3. **Optimalkan** algoritma berikut dan jelaskan perbaikannya:
+   ```java
+   public int findMax(LinkedList list) {
+       int max = Integer.MIN_VALUE;
+       for (int i = 0; i < list.size(); i++) {  // size() adalah O(n)
+           if (list.get(i) > max) {             // get(i) adalah O(n)
+               max = list.get(i);
+           }
+       }
+       return max;
+   }
+   ```
 
-4. **Buat program Palindrome Checker** menggunakan Stack dan Queue
+4. **Buktikan secara matematis** bahwa nested loop dengan i dari 0 sampai n dan j dari i sampai n menghasilkan O(n²)
 
-5. **Implementasikan Sliding Window Maximum** menggunakan Deque
+5. **Desain struktur data hybrid** yang mendukung:
+   - Insert: O(1)
+   - Delete: O(1)
+   - Get Min: O(1)
+   - Get Max: O(1)
 
 Selamat belajar!
