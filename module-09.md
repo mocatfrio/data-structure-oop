@@ -1,62 +1,103 @@
 # Module 09: Hashing dan Map
 
 ## Daftar Isi
-1. [Pengenalan Hashing](#pengenalan-hashing)
-2. [Hash Function](#hash-function)
-3. [Hash Table](#hash-table)
-   - [Hash Table tanpa OOP](#hash-table-tanpa-oop)
-   - [Hash Table dengan OOP](#hash-table-dengan-oop)
-4. [Collision Handling](#collision-handling)
-   - [Chaining (Separate Chaining)](#chaining-separate-chaining)
-   - [Open Addressing](#open-addressing)
-5. [Map (Key-Value Pair)](#map-key-value-pair)
-   - [Map tanpa OOP](#map-tanpa-oop)
-   - [Map dengan OOP](#map-dengan-oop)
-6. [HashMap dengan Generics](#hashmap-dengan-generics)
-7. [Kapan Menggunakan Hashing dan Map](#kapan-menggunakan-hashing-dan-map)
-8. [Kompleksitas Hashing](#kompleksitas-hashing)
-9. [Latihan Praktikum](#latihan-praktikum)
+- [1. Pengenalan Hashing](#1-pengenalan-hashing)
+  - [1.1 Apa itu Hashing?](#11-apa-itu-hashing)
+  - [1.2 Mengapa Hashing Penting?](#12-mengapa-hashing-penting)
+  - [1.3 Komponen Utama Hashing](#13-komponen-utama-hashing)
+  - [1.4 Terminologi Penting](#14-terminologi-penting)
+  - [1.5 Keuntungan Hashing](#15-keuntungan-hashing)
+  - [1.6 Kekurangan Hashing](#16-kekurangan-hashing)
+  - [1.7 Class Diagram Hashing dan Map](#17-class-diagram-hashing-dan-map)
+- [2. Hash Function](#2-hash-function)
+  - [2.1 Karakteristik Hash Function yang Baik](#21-karakteristik-hash-function-yang-baik)
+  - [2.2 Jenis-jenis Hash Function](#22-jenis-jenis-hash-function)
+- [3. Hash Table](#3-hash-table)
+  - [3.1 Konsep Hash Table](#31-konsep-hash-table)
+  - [3.2 Hash Table tanpa OOP](#32-hash-table-tanpa-oop)
+  - [3.3 Hash Table dengan OOP](#33-hash-table-dengan-oop)
+- [4. Collision Handling](#4-collision-handling)
+  - [4.1 Apa itu Collision?](#41-apa-itu-collision)
+  - [4.2 Dua Strategi Utama](#42-dua-strategi-utama)
+  - [4.3 Chaining (Separate Chaining)](#43-chaining-separate-chaining)
+  - [4.4 Open Addressing](#44-open-addressing)
+- [5. Map (Key-Value Pair)](#5-map-key-value-pair)
+  - [5.1 Apa itu Map?](#51-apa-itu-map)
+  - [5.2 Map tanpa OOP](#52-map-tanpa-oop)
+  - [5.3 Map dengan OOP](#53-map-dengan-oop)
+- [6. HashMap dengan Generics](#6-hashmap-dengan-generics)
+  - [6.1 Implementasi HashMap Lengkap dengan Generics](#61-implementasi-hashmap-lengkap-dengan-generics)
+- [7. Kapan Menggunakan Hashing dan Map](#7-kapan-menggunakan-hashing-dan-map)
+  - [7.1 Hash Table vs Struktur Data Lain](#71-hash-table-vs-struktur-data-lain)
+  - [7.2 Kapan Menggunakan Hash Table / HashMap](#72-kapan-menggunakan-hash-table--hashmap)
+  - [7.3 Kapan Menggunakan HashSet](#73-kapan-menggunakan-hashset)
+  - [7.4 Kapan Menggunakan LinkedHashMap](#74-kapan-menggunakan-linkedhashmap)
+  - [7.5 Kapan Menggunakan TreeMap](#75-kapan-menggunakan-treemap)
+  - [7.6 Chaining vs Open Addressing](#76-chaining-vs-open-addressing)
+  - [7.7 Tabel Keputusan Pemilihan](#77-tabel-keputusan-pemilihan)
+  - [7.8 Kapan TIDAK Menggunakan Hash Table](#78-kapan-tidak-menggunakan-hash-table)
+  - [7.9 Tips Memilih Hash Function](#79-tips-memilih-hash-function)
+  - [7.10 Best Practices](#710-best-practices)
+- [8. Kompleksitas Hashing](#8-kompleksitas-hashing)
+  - [8.1 Tabel Kompleksitas Waktu](#81-tabel-kompleksitas-waktu)
+  - [8.2 Mengapa Average O(1)?](#82-mengapa-average-o1)
+  - [8.3 Kapan Worst Case O(n) Terjadi?](#83-kapan-worst-case-on-terjadi)
+  - [8.4 Perbandingan dengan Struktur Data Lain](#84-perbandingan-dengan-struktur-data-lain)
+  - [8.5 Tips Optimasi](#85-tips-optimasi)
+- [9. Perbandingan dengan Java Collections Framework](#9-perbandingan-dengan-java-collections-framework)
+  - [9.1 Implementasi Manual vs Java Built-in](#91-implementasi-manual-vs-java-built-in)
+  - [9.2 Kapan Menggunakan Implementasi Mana?](#92-kapan-menggunakan-implementasi-mana)
+  - [9.3 Contoh Penggunaan Java HashMap](#93-contoh-penggunaan-java-hashmap)
+  - [9.4 Contoh Penggunaan Java HashSet](#94-contoh-penggunaan-java-hashset)
+  - [9.5 Contoh Penggunaan LinkedHashMap dan TreeMap](#95-contoh-penggunaan-linkedhashmap-dan-treemap)
+  - [9.6 Method Penting di Java Map Collections](#96-method-penting-di-java-map-collections)
+  - [9.7 Compute Methods (Java 8+)](#97-compute-methods-java-8)
+- [10. Latihan Praktikum](#10-latihan-praktikum)
+  - [10.1 Latihan 1: Two Sum Problem](#101-latihan-1-two-sum-problem)
+  - [10.2 Latihan 2: First Non-Repeating Character](#102-latihan-2-first-non-repeating-character)
+  - [10.3 Latihan 3: Group Anagrams](#103-latihan-3-group-anagrams)
+  - [10.4 Latihan 4: LRU Cache](#104-latihan-4-lru-cache)
+  - [10.5 Latihan 5: Frequency Counter - Top K Elements](#105-latihan-5-frequency-counter---top-k-elements)
+- [11. Tugas Praktikum](#11-tugas-praktikum)
 
----
+## 1. Pengenalan Hashing
 
-## Pengenalan Hashing
-
-### Apa itu Hashing?
+### 1.1 Apa itu Hashing?
 
 Hashing adalah teknik untuk memetakan data berukuran besar ke nilai berukuran tetap (hash value/hash code) menggunakan fungsi matematika yang disebut **Hash Function**. Hash value ini kemudian digunakan sebagai indeks untuk menyimpan dan mengambil data dengan cepat.
 
-### Mengapa Hashing Penting?
+### 1.2 Mengapa Hashing Penting?
 
 Bayangkan Anda memiliki 1 juta data dan ingin mencari satu data tertentu:
 - **Array/List**: Pencarian linear O(n) = 1 juta operasi (worst case)
 - **Binary Search**: O(log n) = ~20 operasi (data harus terurut)
 - **Hashing**: O(1) = 1 operasi (rata-rata)!
 
-### Komponen Utama Hashing
+### 1.3 Komponen Utama Hashing
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        HASHING PROCESS                       │
+│                        HASHING PROCESS                      │
 ├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│    Key (Input)          Hash Function         Index          │
+│                                                             │
+│    Key (Input)          Hash Function         Index         │
 │   ┌─────────┐          ┌───────────┐       ┌─────────┐      │
 │   │ "John"  │  ─────>  │  h(key)   │ ───>  │    3    │      │
 │   └─────────┘          └───────────┘       └─────────┘      │
-│                                                              │
-│                        Hash Table                            │
-│                   ┌────┬─────────────┐                       │
-│              [0]  │    │             │                       │
-│              [1]  │    │             │                       │
-│              [2]  │    │             │                       │
-│              [3]  │ ──>│   "John"    │  <── Data disimpan    │
-│              [4]  │    │             │                       │
-│              [5]  │    │             │                       │
-│                   └────┴─────────────┘                       │
+│                                                             │
+│                        Hash Table                           │
+│                   ┌────┬─────────────┐                      │
+│              [0]  │    │             │                      │
+│              [1]  │    │             │                      │
+│              [2]  │    │             │                      │
+│              [3]  │ ──>│   "John"    │  <── Data disimpan   │
+│              [4]  │    │             │                      │
+│              [5]  │    │             │                      │
+│                   └────┴─────────────┘                      │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Terminologi Penting
+### 1.4 Terminologi Penting
 
 | Istilah | Penjelasan |
 |---------|------------|
@@ -68,18 +109,18 @@ Bayangkan Anda memiliki 1 juta data dan ingin mencari satu data tertentu:
 | **Collision** | Ketika dua key berbeda menghasilkan hash value yang sama |
 | **Load Factor** | Rasio jumlah elemen terhadap ukuran tabel (n/m) |
 
-### Keuntungan Hashing
+### 1.5 Keuntungan Hashing
 - Operasi insert, delete, search rata-rata O(1)
 - Efisien untuk data berukuran besar
 - Cocok untuk implementasi cache, database indexing
 
-### Kekurangan Hashing
+### 1.6 Kekurangan Hashing
 - Membutuhkan memori tambahan
 - Collision bisa menurunkan performa
 - Tidak mendukung operasi range query (data tidak terurut)
 - Pemilihan hash function yang buruk bisa menyebabkan banyak collision
 
-### Class Diagram Hashing dan Map
+### 1.7 Class Diagram Hashing dan Map
 
 Berikut adalah class diagram untuk struktur data Hashing dan Map yang akan dibahas dalam modul ini:
 
@@ -167,20 +208,18 @@ classDiagram
     MyHashMap --> MapEntry : contains
 ```
 
----
+## 2. Hash Function
 
-## Hash Function
-
-### Karakteristik Hash Function yang Baik
+### 2.1 Karakteristik Hash Function yang Baik
 
 1. **Deterministic**: Input yang sama selalu menghasilkan output yang sama
 2. **Uniform Distribution**: Menyebar data secara merata ke seluruh tabel
 3. **Efficient**: Cepat dihitung
 4. **Minimize Collision**: Meminimalkan dua key berbeda menghasilkan hash yang sama
 
-### Jenis-jenis Hash Function
+### 2.2 Jenis-jenis Hash Function
 
-#### 1. Division Method
+#### 2.2.1 Division Method
 Menggunakan operasi modulo untuk mendapatkan index.
 
 ```java
@@ -191,7 +230,7 @@ int hash(int key, int tableSize) {
 
 **Tips**: Pilih tableSize yang merupakan bilangan prima untuk distribusi lebih baik.
 
-#### 2. Multiplication Method
+#### 2.2.2 Multiplication Method
 Mengalikan key dengan konstanta A (0 < A < 1), mengambil bagian desimal, lalu kalikan dengan ukuran tabel.
 
 ```java
@@ -203,7 +242,7 @@ int hash(int key, int tableSize) {
 }
 ```
 
-#### 3. String Hash Function
+#### 2.2.3 String Hash Function
 Untuk key berupa string, gunakan teknik polynomial rolling hash.
 
 ```java
@@ -219,7 +258,7 @@ int hashString(String key, int tableSize) {
 }
 ```
 
-#### 4. Java's hashCode()
+#### 2.2.4 Java's hashCode()
 Java menyediakan method bawaan `hashCode()` untuk setiap object.
 
 ```java
@@ -228,11 +267,9 @@ int hashCode = name.hashCode();  // Returns integer hash code
 int index = Math.abs(hashCode % tableSize);
 ```
 
----
+## 3. Hash Table
 
-## Hash Table
-
-### Konsep Hash Table
+### 3.1 Konsep Hash Table
 
 Hash Table adalah struktur data yang menggunakan array dan hash function untuk menyimpan pasangan key-value. Data diakses berdasarkan key, bukan index numerik.
 
@@ -241,9 +278,7 @@ Key "apple"  --hash--> index 2 --> Hash Table[2] = "apple"
 Key "banana" --hash--> index 5 --> Hash Table[5] = "banana"
 ```
 
----
-
-### Hash Table tanpa OOP
+### 3.2 Hash Table tanpa OOP
 
 ```java
 public class HashTableNoOOP {
@@ -415,9 +450,7 @@ Index | Value | Status
 Size: 4/10
 ```
 
----
-
-### Hash Table dengan OOP
+### 3.3 Hash Table dengan OOP
 
 ```java
 // File: HashEntry.java
@@ -723,11 +756,9 @@ Size: 6/14
 Load Factor: 0.43
 ```
 
----
+## 4. Collision Handling
 
-## Collision Handling
-
-### Apa itu Collision?
+### 4.1 Apa itu Collision?
 
 Collision terjadi ketika dua key berbeda menghasilkan hash value yang sama.
 
@@ -737,11 +768,11 @@ hash("apple")  = 3    ─┐
 hash("orange") = 3    ─┘
 ```
 
-### Dua Strategi Utama
+### 4.2 Dua Strategi Utama
 
 ```
 ┌────────────────────────────────────────────────────────────────────┐
-│                     COLLISION HANDLING                              │
+│                     COLLISION HANDLING                             │
 ├──────────────────────────────┬─────────────────────────────────────┤
 │      CHAINING                │          OPEN ADDRESSING            │
 │   (Separate Chaining)        │                                     │
@@ -758,9 +789,7 @@ hash("orange") = 3    ─┘
 └──────────────────────────────┴─────────────────────────────────────┘
 ```
 
----
-
-### Chaining (Separate Chaining)
+### 4.3 Chaining (Separate Chaining)
 
 Setiap bucket dalam hash table adalah linked list. Ketika collision terjadi, elemen baru ditambahkan ke linked list di bucket tersebut.
 
@@ -990,13 +1019,11 @@ Index 5: 2 elements
 Index 6: 1 elements
 ```
 
----
-
-### Open Addressing
+### 4.4 Open Addressing
 
 Pada Open Addressing, semua elemen disimpan langsung dalam array. Ketika collision terjadi, algoritma mencari slot kosong berikutnya menggunakan teknik probing.
 
-#### 1. Linear Probing
+#### 4.4.1 Linear Probing
 Jika slot `h(k)` penuh, coba `h(k)+1`, `h(k)+2`, dst.
 
 ```java
@@ -1005,7 +1032,7 @@ index = (hash(key) + i) % capacity;  // i = 0, 1, 2, 3, ...
 
 **Masalah**: Primary Clustering - elemen cenderung mengelompok.
 
-#### 2. Quadratic Probing
+#### 4.4.2 Quadratic Probing
 Menggunakan fungsi kuadrat untuk probing.
 
 ```java
@@ -1014,7 +1041,7 @@ index = (hash(key) + i*i) % capacity;  // i = 0, 1, 2, 3, ...
 
 **Lebih baik dari linear probing, mengurangi clustering.
 
-#### 3. Double Hashing
+#### 4.4.3 Double Hashing
 Menggunakan dua hash function.
 
 ```java
@@ -1233,17 +1260,15 @@ Index | Key | Value | Status
 ...
 ```
 
----
+## 5. Map (Key-Value Pair)
 
-## Map (Key-Value Pair)
-
-### Apa itu Map?
+### 5.1 Apa itu Map?
 
 Map adalah struktur data yang menyimpan pasangan key-value, dimana setiap key bersifat unik. Map menggunakan hashing untuk operasi yang efisien.
 
 ```
 ┌───────────────────────────────────────┐
-│              MAP                       │
+│              MAP                      │
 ├─────────────┬─────────────────────────┤
 │    KEY      │         VALUE           │
 ├─────────────┼─────────────────────────┤
@@ -1254,9 +1279,7 @@ Map adalah struktur data yang menyimpan pasangan key-value, dimana setiap key be
 └─────────────┴─────────────────────────┘
 ```
 
----
-
-### Map tanpa OOP
+### 5.2 Map tanpa OOP
 
 ```java
 public class MapNoOOP {
@@ -1455,9 +1478,7 @@ Remove: kota
 Size: 4
 ```
 
----
-
-### Map dengan OOP
+### 5.3 Map dengan OOP
 
 ```java
 import java.util.ArrayList;
@@ -1803,11 +1824,9 @@ Put: 3 = Tiga
 Size: 3
 ```
 
----
+## 6. HashMap dengan Generics
 
-## HashMap dengan Generics
-
-### Implementasi HashMap Lengkap dengan Generics
+### 6.1 Implementasi HashMap Lengkap dengan Generics
 
 ```java
 import java.util.ArrayList;
@@ -2142,11 +2161,9 @@ banana -> 2
 cherry -> 1
 ```
 
----
+## 7. Kapan Menggunakan Hashing dan Map
 
-## Kapan Menggunakan Hashing dan Map
-
-### Hash Table vs Struktur Data Lain
+### 7.1 Hash Table vs Struktur Data Lain
 
 | Kriteria | Hash Table | Array | Linked List | BST |
 |----------|------------|-------|-------------|-----|
@@ -2157,7 +2174,7 @@ cherry -> 1
 | **Range query** | Tidak | Ya (sorted) | Tidak | Ya |
 | **Memory overhead** | Sedang | Rendah | Tinggi | Tinggi |
 
-### Kapan Menggunakan Hash Table / HashMap
+### 7.2 Kapan Menggunakan Hash Table / HashMap
 
 **Gunakan Hash Table ketika:**
 - Perlu lookup/search cepat by key → O(1)
@@ -2177,7 +2194,7 @@ cherry -> 1
 | **Detect duplicates** | Check apakah item sudah ada |
 | **Two Sum problem** | Store complement untuk O(n) solution |
 
-### Kapan Menggunakan HashSet
+### 7.3 Kapan Menggunakan HashSet
 
 **Gunakan HashSet ketika:**
 - Hanya perlu menyimpan keys (tanpa values)
@@ -2197,14 +2214,14 @@ for (int num : array) {
 }
 ```
 
-### Kapan Menggunakan LinkedHashMap
+### 7.4 Kapan Menggunakan LinkedHashMap
 
 **Gunakan LinkedHashMap ketika:**
 - Perlu mempertahankan urutan insertion
 - Implementasi LRU Cache
 - Perlu iterasi sesuai urutan masuk
 
-### Kapan Menggunakan TreeMap
+### 7.5 Kapan Menggunakan TreeMap
 
 **Gunakan TreeMap ketika:**
 - Perlu data terurut by key
@@ -2212,7 +2229,7 @@ for (int num : array) {
 - Perlu find min/max key
 - Trade-off: O(log n) vs O(1)
 
-### Chaining vs Open Addressing
+### 7.6 Chaining vs Open Addressing
 
 | Kriteria | Chaining | Open Addressing |
 |----------|----------|-----------------|
@@ -2229,7 +2246,7 @@ for (int num : array) {
 - Banyak deletion → **Chaining**
 - Memory terbatas → **Open Addressing**
 
-### Tabel Keputusan Pemilihan
+### 7.7 Tabel Keputusan Pemilihan
 
 | Kebutuhan | Rekomendasi | Alasan |
 |-----------|-------------|--------|
@@ -2242,7 +2259,7 @@ for (int num : array) {
 | Cache dengan eviction | LinkedHashMap (LRU) | removeEldestEntry() |
 | Bidirectional mapping | Dua HashMap | key→value dan value→key |
 
-### Kapan TIDAK Menggunakan Hash Table
+### 7.8 Kapan TIDAK Menggunakan Hash Table
 
 | Situasi | Alternatif | Alasan |
 |---------|------------|--------|
@@ -2253,7 +2270,7 @@ for (int num : array) {
 | Memory sangat terbatas | Array | Hash punya overhead |
 | Banyak collision expected | TreeMap | Worst case O(log n) vs O(n) |
 
-### Tips Memilih Hash Function
+### 7.9 Tips Memilih Hash Function
 
 | Tipe Key | Hash Function |
 |----------|---------------|
@@ -2262,7 +2279,7 @@ for (int num : array) {
 | Object | Override `hashCode()` dan `equals()` |
 | Multiple fields | Combine hash dari setiap field |
 
-### Best Practices
+### 7.10 Best Practices
 
 1. **Pilih initial capacity yang tepat** - Hindari resize berulang
 2. **Jaga load factor < 0.75** - Default Java HashMap
@@ -2270,11 +2287,9 @@ for (int num : array) {
 4. **Gunakan immutable object sebagai key** - Hindari hash berubah
 5. **Pilih prime number sebagai table size** - Distribusi lebih baik
 
----
+## 8. Kompleksitas Hashing
 
-## Kompleksitas Hashing
-
-### Tabel Kompleksitas Waktu
+### 8.1 Tabel Kompleksitas Waktu
 
 | Operasi | Average Case | Worst Case (Banyak Collision) |
 |---------|--------------|-------------------------------|
@@ -2283,20 +2298,20 @@ for (int num : array) {
 | **Delete (remove)** | O(1) | O(n) |
 | **Contains** | O(1) | O(n) |
 
-### Mengapa Average O(1)?
+### 8.2 Mengapa Average O(1)?
 
 Dengan hash function yang baik dan load factor yang terjaga:
 - Data terdistribusi merata
 - Jumlah collision minimal
 - Akses langsung ke bucket menggunakan index
 
-### Kapan Worst Case O(n) Terjadi?
+### 8.3 Kapan Worst Case O(n) Terjadi?
 
 1. **Hash function buruk**: Semua key menghasilkan hash yang sama
 2. **Load factor tinggi**: Terlalu banyak elemen relatif terhadap ukuran tabel
 3. **Banyak collision**: Rantai chain menjadi panjang
 
-### Perbandingan dengan Struktur Data Lain
+### 8.4 Perbandingan dengan Struktur Data Lain
 
 | Operasi | Array (unsorted) | Array (sorted) | Hash Table | BST (balanced) |
 |---------|-----------------|----------------|------------|----------------|
@@ -2307,7 +2322,7 @@ Dengan hash function yang baik dan load factor yang terjaga:
 *Average case
 **Di akhir array
 
-### Tips Optimasi
+### 8.5 Tips Optimasi
 
 1. **Pilih ukuran tabel yang prima** untuk distribusi hash lebih baik
 2. **Jaga load factor < 0.75** untuk performa optimal
@@ -2315,11 +2330,10 @@ Dengan hash function yang baik dan load factor yang terjaga:
 4. **Gunakan hash function yang baik** untuk meminimalkan collision
 5. **Pertimbangkan chaining vs open addressing** sesuai kebutuhan
 
----
 
-## Perbandingan dengan Java Collections Framework
+## 9. Perbandingan dengan Java Collections Framework
 
-### Implementasi Manual vs Java Built-in
+### 9.1 Implementasi Manual vs Java Built-in
 
 | Implementasi Manual | Java Built-in | Perbedaan Utama |
 |---------------------|---------------|-----------------|
@@ -2332,7 +2346,7 @@ Dengan hash function yang baik dan load factor yang terjaga:
 | - | `java.util.Hashtable` | Legacy, synchronized |
 | - | `java.util.ConcurrentHashMap` | Thread-safe, modern |
 
-### Kapan Menggunakan Implementasi Mana?
+### 9.2 Kapan Menggunakan Implementasi Mana?
 
 | Kebutuhan | Rekomendasi | Alasan |
 |-----------|-------------|--------|
@@ -2344,7 +2358,7 @@ Dengan hash function yang baik dan load factor yang terjaga:
 | Thread-safe | `ConcurrentHashMap` | Modern concurrent implementation |
 | Legacy code | `Hashtable` | Avoid for new code |
 
-### Contoh Penggunaan Java HashMap
+### 9.3 Contoh Penggunaan Java HashMap
 
 ```java
 import java.util.HashMap;
@@ -2438,7 +2452,7 @@ With forEach:
   Bob = 90
 ```
 
-### Contoh Penggunaan Java HashSet
+### 9.4 Contoh Penggunaan Java HashSet
 
 ```java
 import java.util.HashSet;
@@ -2498,7 +2512,7 @@ Intersection: [Cherry]
 Difference: [Apple]
 ```
 
-### Contoh Penggunaan LinkedHashMap dan TreeMap
+### 9.5 Contoh Penggunaan LinkedHashMap dan TreeMap
 
 ```java
 import java.util.*;
@@ -2567,7 +2581,7 @@ Lower 30: 20
 Higher 30: 40
 ```
 
-### Method Penting di Java Map Collections
+### 9.6 Method Penting di Java Map Collections
 
 | Method | HashMap | LinkedHashMap | TreeMap |
 |--------|---------|---------------|---------|
@@ -2581,7 +2595,7 @@ Higher 30: 40
 | `lastKey()` | N/A | N/A | O(log n) |
 | Thread-safe | No | No | No |
 
-### Compute Methods (Java 8+)
+### 9.7 Compute Methods (Java 8+)
 
 ```java
 import java.util.HashMap;
@@ -2614,11 +2628,9 @@ public class ComputeMethodsDemo {
 }
 ```
 
----
+## 10. Latihan Praktikum
 
-## Latihan Praktikum
-
-### Latihan 1: Two Sum Problem
+### 10.1 Latihan 1: Two Sum Problem
 
 Diberikan array integer dan target sum, temukan dua elemen yang jumlahnya sama dengan target.
 
@@ -2664,9 +2676,7 @@ Result: indices [0, 1]
 Values: 2 + 7 = 9
 ```
 
----
-
-### Latihan 2: First Non-Repeating Character
+### 10.2 Latihan 2: First Non-Repeating Character
 
 Temukan karakter pertama yang tidak berulang dalam string.
 
@@ -2731,9 +2741,7 @@ String: "aabb"
 No non-repeating character found
 ```
 
----
-
-### Latihan 3: Group Anagrams
+### 10.3 Latihan 3: Group Anagrams
 
 Kelompokkan kata-kata yang merupakan anagram.
 
@@ -2785,9 +2793,7 @@ Grouped Anagrams:
   [bat]
 ```
 
----
-
-### Latihan 4: LRU Cache
+### 10.4 Latihan 4: LRU Cache
 
 Implementasikan Least Recently Used (LRU) Cache menggunakan HashMap dan Double Linked List.
 
@@ -2937,9 +2943,7 @@ PUT 5:500 (evict 1)
 Cache (MRU -> LRU): [5:500] [3:300] [4:400]
 ```
 
----
-
-### Latihan 5: Frequency Counter - Top K Elements
+### 10.5 Latihan 5: Frequency Counter - Top K Elements
 
 Temukan K elemen yang paling sering muncul.
 
@@ -3013,44 +3017,7 @@ Frequency breakdown:
   4 appears 4 times
 ```
 
----
-
-## Ringkasan
-
-### Perbandingan Metode Collision Handling
-
-| Aspek | Chaining | Open Addressing |
-|-------|----------|-----------------|
-| **Memory** | Pointer tambahan per node | Hanya array |
-| **Performance saat tinggi LF** | Lebih stabil | Degradasi signifikan |
-| **Cache Performance** | Buruk (scattered memory) | Baik (contiguous) |
-| **Deletion** | Mudah | Perlu tombstone |
-| **Implementation** | Lebih mudah | Lebih kompleks |
-
-### Kapan Menggunakan HashMap?
-
-**Gunakan HashMap ketika:**
-- Butuh akses cepat O(1) untuk insert/search/delete
-- Key bersifat unik
-- Tidak perlu data terurut
-- Sering melakukan lookup by key
-
-**Jangan gunakan HashMap ketika:**
-- Butuh data terurut (gunakan TreeMap)
-- Butuh range query
-- Memory sangat terbatas
-- Key tidak bisa di-hash dengan baik
-
-### Best Practices
-
-1. **Override hashCode() dan equals()** untuk custom object sebagai key
-2. **Pilih initial capacity** yang sesuai untuk menghindari resize berulang
-3. **Gunakan immutable object** sebagai key
-4. **Perhatikan null handling** - HashMap Java membolehkan null key
-
----
-
-## Tugas Praktikum
+## 11. Tugas Praktikum
 
 1. **Implementasikan Spell Checker** menggunakan HashMap untuk menyimpan dictionary dan memberikan saran kata yang mirip
 
