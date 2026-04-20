@@ -1484,7 +1484,6 @@ Size: 4
 import java.util.ArrayList;
 import java.util.List;
 
-// File: MapEntry.java
 class MapEntry<K, V> {
     K key;
     V value;
@@ -1497,7 +1496,6 @@ class MapEntry<K, V> {
     }
 }
 
-// File: MyHashMap.java
 class MyHashMap<K, V> {
     private MapEntry<K, V>[] table;
     private int capacity;
@@ -1694,7 +1692,6 @@ class MyHashMap<K, V> {
     }
 }
 
-// File: HashMapDemo.java
 public class HashMapDemo {
     public static void main(String[] args) {
         System.out.println("=== MY HASH MAP DENGAN OOP ===\n");
@@ -1833,7 +1830,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 
-// File: Entry.java
 class Entry<K, V> {
     final K key;
     V value;
@@ -1857,7 +1853,6 @@ class Entry<K, V> {
     }
 }
 
-// File: GenericHashMap.java
 class GenericHashMap<K, V> implements Iterable<Entry<K, V>> {
     private Entry<K, V>[] buckets;
     private int capacity;
