@@ -1,4 +1,4 @@
-# Module 06: Analisis Kompleksitas Struktur Data
+# Modul 6. Analisis Kompleksitas Struktur Data
 
 ## Daftar Isi
 1. [Pengenalan Kompleksitas](#pengenalan-kompleksitas)
@@ -16,7 +16,6 @@
 9. [Tips Optimasi](#tips-optimasi)
 10. [Latihan Analisis](#latihan-analisis)
 
----
 
 ## Pengenalan Kompleksitas
 
@@ -38,7 +37,6 @@ Kompleksitas algoritma adalah ukuran yang digunakan untuk menganalisis efisiensi
 | **Time Complexity** | Jumlah operasi yang dilakukan | "Berapa lama waktu yang dibutuhkan?" |
 | **Space Complexity** | Jumlah memori yang digunakan | "Berapa banyak memori yang dibutuhkan?" |
 
----
 
 ## Big O Notation
 
@@ -106,7 +104,6 @@ Time|                              O(n²)
                           n (ukuran input)
 ```
 
----
 
 ## Jenis-jenis Kompleksitas Waktu
 
@@ -133,7 +130,6 @@ public int peek() {
 - Tidak ada loop yang bergantung pada n
 - Operasi langsung tanpa iterasi
 
----
 
 ### O(log n) - Logarithmic Time
 
@@ -176,7 +172,6 @@ Iterasi 5: n = 1
 Total iterasi = log₂(16) = 4
 ```
 
----
 
 ### O(n) - Linear Time
 
@@ -217,7 +212,6 @@ public int search(int value) {
 - Satu loop yang iterasi n kali
 - Setiap elemen diproses sekali
 
----
 
 ### O(n log n) - Linearithmic Time
 
@@ -243,7 +237,6 @@ public void mergeSort(int[] arr, int left, int right) {
 - Conquer: menggabungkan hasil (n operasi per level)
 - Total: n × log n
 
----
 
 ### O(n²) - Quadratic Time
 
@@ -279,7 +272,6 @@ public void printPairs(int[] arr) {
 - Nested loop (loop di dalam loop)
 - Setiap elemen dibandingkan dengan setiap elemen lain
 
----
 
 ### O(2ⁿ) - Exponential Time
 
@@ -308,7 +300,6 @@ public int fibonacci(int n) {
 - Setiap langkah menghasilkan dua atau lebih submasalah
 - Sangat tidak efisien untuk input besar
 
----
 
 ## Kompleksitas Ruang (Space Complexity)
 
@@ -361,7 +352,6 @@ public int factorial(int n) {
 | Queue (array) | O(n) |
 | Queue (linked list) | O(n) |
 
----
 
 ## Analisis Kompleksitas Struktur Data
 
@@ -439,7 +429,6 @@ classDiagram
     note for HashTable "Insert: O(1) avg\nSearch: O(1) avg\nDelete: O(1) avg"
 ```
 
----
 
 ### Kompleksitas Array
 
@@ -479,7 +468,6 @@ public void deleteAt(int[] arr, int index) {
 }
 ```
 
----
 
 ### Kompleksitas Linked List
 
@@ -574,7 +562,6 @@ public void deleteAtEnd() {
 
 *O(1) jika ada tail pointer
 
----
 
 ### Kompleksitas Stack
 
@@ -624,7 +611,6 @@ public int search(int value) {
 }
 ```
 
----
 
 ### Kompleksitas Queue
 
@@ -678,7 +664,6 @@ public int dequeue() {
 // Total: O(1)
 ```
 
----
 
 ## Perbandingan Struktur Data
 
@@ -806,7 +791,6 @@ public int dequeue() {
 | **Cache performance** | Sangat baik | Buruk | Sedang | Tergantung impl |
 | **Kompleksitas impl** | Mudah | Sedang | Kompleks | Mudah |
 
----
 
 ## Contoh Analisis Algoritma
 
@@ -836,7 +820,6 @@ public void reverse() {
 - **Total Time Complexity: O(n)**
 - **Space Complexity: O(1)** - hanya 3 variabel pointer
 
----
 
 ### Contoh 2: Palindrome Check dengan Stack
 
@@ -867,7 +850,6 @@ public boolean isPalindrome(String str) {
 - **Total Time Complexity: O(n) + O(n) = O(2n) = O(n)**
 - **Space Complexity: O(n)** - stack menyimpan n karakter
 
----
 
 ### Contoh 3: Find Middle of Linked List
 
@@ -913,7 +895,6 @@ public Node findMiddle2(Node head) {
 - Keduanya O(n) time dan O(1) space
 - Metode 2 lebih efisien (hanya satu pass)
 
----
 
 ### Contoh 4: Queue-based BFS
 
@@ -946,7 +927,6 @@ public void bfs(int[][] graph, int start) {
 - **Time Complexity: O(V + E)**
 - **Space Complexity: O(V)** - untuk visited array dan queue
 
----
 
 ## Best, Average, dan Worst Case
 
@@ -1006,7 +986,6 @@ public void quickSort(int[] arr, int low, int high) {
 
 *Worst case O(n) terjadi saat array perlu resize
 
----
 
 ## Tips Optimasi
 
@@ -1102,7 +1081,6 @@ public int fibonacci(int n, int[] memo) {
 }
 ```
 
----
 
 ## Latihan Analisis
 
@@ -1124,7 +1102,6 @@ public void mystery(int n) {
 - **Time Complexity: O(n log n)**
 - **Space Complexity: O(1)**
 
----
 
 ### Soal 2: Analisis Kompleksitas
 
@@ -1145,7 +1122,6 @@ public void process(int[] arr) {
 - **Time Complexity: O(n²)**
 - **Space Complexity: O(1)**
 
----
 
 ### Soal 3: Analisis Struktur Data
 
@@ -1162,7 +1138,6 @@ public void process(int[] arr) {
 - Delete di awal: O(1)
 - Delete di akhir: O(1)
 
----
 
 ### Soal 4: Optimasi
 
@@ -1200,7 +1175,6 @@ public boolean hasDuplicate(int[] arr) {
 // Time: O(n), Space: O(n)
 ```
 
----
 
 ### Soal 5: Analisis Rekursi
 
@@ -1217,7 +1191,6 @@ public int sum(int n) {
 - **Time Complexity: O(n)**
 - **Space Complexity: O(n)** - karena call stack
 
----
 
 ## Ringkasan
 
@@ -1246,7 +1219,6 @@ public int sum(int n) {
 4. **Konstanta dan lower order terms diabaikan**
 5. **Amortized analysis penting untuk operasi yang jarang mahal**
 
----
 
 ## Tugas Praktikum
 

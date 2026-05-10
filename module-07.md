@@ -1,4 +1,4 @@
-# Module 07. Linked List dan Variasinya
+# Modul 7. Linked List dan Variasinya
 
 ## Daftar Isi
 
@@ -20,7 +20,6 @@
 - [Perbandingan dan Kompleksitas](#5-perbandingan-dan-kompleksitas)
 - [Latihan Praktikum](#6-latihan-praktikum)
 
----
 
 ## 1. Pengenalan Linked List
 
@@ -1351,6 +1350,50 @@ Kombinasi Double Linked List dan Circular, dimana head.prev menunjuk ke tail, da
     +---> [Prev|Data|Next] <-> [Prev|Data|Next] <-> [Prev|Data|Next] <---+
     |                                                                     |
     +---------------------------------------------------------------------+
+```
+
+#### Implementasi Singkat (Circular Double Linked List)
+
+```java
+class CircularDoublyLinkedList {
+    class Node {
+        int data;
+        Node prev, next;
+
+        Node(int data) {
+            this.data = data;
+            this.prev = this.next = null;
+        }
+    }
+
+    private Node head;
+
+    public void insertAtEnd(int data) {
+        Node newNode = new Node(data);
+        if (head == null) {
+            head = newNode;
+            head.next = head;
+            head.prev = head;
+        } else {
+            Node tail = head.prev;
+            newNode.next = head;
+            newNode.prev = tail;
+            head.prev = newNode;
+            tail.next = newNode;
+        }
+    }
+
+    public void displayForward() {
+        if (head == null) return;
+        Node current = head;
+        System.out.print("Forward: (tail) <-> ");
+        do {
+            System.out.print(current.data + " <-> ");
+            current = current.next;
+        } while (current != head);
+        System.out.println("(head)");
+    }
+}
 ```
 
 ## 5. Perbandingan dan Kompleksitas

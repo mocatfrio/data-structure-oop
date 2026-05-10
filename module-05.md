@@ -1,4 +1,4 @@
-# Module 05: Class Diagram
+# Modul 5. Class Diagram
 
 > "Dalam rekayasa perangkat lunak, class diagram dalam Unified Modeling Language (UML) adalah jenis diagram struktur statis yang menggambarkan struktur sistem dengan menunjukkan kelas-kelas sistem, atribut, operasi (atau method), dan hubungan antar objek."
 >
@@ -98,7 +98,6 @@ Contoh Penerapan:
 * `HitungTotal` ❌ (Ini adalah frasa kata kerja, sehingga lebih cocok untuk nama *method*/fungsi).
 * `DataMhs` ❌ (Penggunaan singkatan yang bisa menimbulkan ambiguitas).
 
----
 
 ## 2. Atribut dan Method dalam Kelas
 
@@ -295,7 +294,6 @@ Contoh Penerapan:
 
 Pada Mermaid, tambahkan `$` di akhir tipe data (lihat bagian [Classifiers](#d-classifiers))
 
----
 
 ## 3. Relasi antar Kelas
 
@@ -444,7 +442,6 @@ classDiagram
 | Kompleksitas  | Lebih sederhana                            | Lebih kompleks                              |
 | Penggunaan    | Jika hubungan cukup dilihat dari satu sisi | Jika hubungan penting dilihat dari dua sisi |
 
----
 
 ## 4. Kardinalitas pada Relasi
 
@@ -526,7 +523,6 @@ classDiagram
 
 ![1773707000660](image/module-4/1773707000660.png)
 
----
 
 ## 5. Anotasi pada Kelas
 

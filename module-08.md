@@ -1,14 +1,12 @@
-# Module 08: Stack dan Queue
+# Modul 8. Stack dan Queue
 
 ## Daftar Isi
 1. [Stack](#stack)
    - [Konsep Dasar Stack](#konsep-dasar-stack)
-   - [Stack tanpa OOP](#stack-tanpa-oop)
    - [Stack dengan OOP (Array-based)](#stack-dengan-oop-array-based)
    - [Stack dengan OOP (Linked List-based)](#stack-dengan-oop-linked-list-based)
 2. [Queue](#queue)
    - [Konsep Dasar Queue](#konsep-dasar-queue)
-   - [Queue tanpa OOP](#queue-tanpa-oop)
    - [Queue dengan OOP (Array-based)](#queue-dengan-oop-array-based)
    - [Queue dengan OOP (Circular Queue)](#queue-dengan-oop-circular-queue)
    - [Queue dengan OOP (Linked List-based)](#queue-dengan-oop-linked-list-based)
@@ -18,7 +16,6 @@
 6. [Kompleksitas Stack dan Queue](#kompleksitas-stack-dan-queue)
 7. [Latihan Praktikum](#latihan-praktikum)
 
----
 
 ## Stack
 
@@ -95,158 +92,7 @@ classDiagram
     StackLinkedList --> StackNode : contains
 ```
 
----
 
-### Stack tanpa OOP
-
-```java
-public class StackNoOOP {
-    static int[] stack = new int[100];
-    static int top = -1;
-    static int MAX_SIZE = 100;
-
-    // Push elemen ke stack
-    public static void push(int value) {
-        if (top >= MAX_SIZE - 1) {
-            System.out.println("Stack Overflow! Stack penuh.");
-            return;
-        }
-
-        top++;
-        stack[top] = value;
-        System.out.println("Push: " + value);
-    }
-
-    // Pop elemen dari stack
-    public static int pop() {
-        if (top < 0) {
-            System.out.println("Stack Underflow! Stack kosong.");
-            return -1;
-        }
-
-        int value = stack[top];
-        top--;
-        System.out.println("Pop: " + value);
-        return value;
-    }
-
-    // Peek elemen teratas
-    public static int peek() {
-        if (top < 0) {
-            System.out.println("Stack kosong!");
-            return -1;
-        }
-
-        return stack[top];
-    }
-
-    // Cek apakah stack kosong
-    public static boolean isEmpty() {
-        return top < 0;
-    }
-
-    // Cek apakah stack penuh
-    public static boolean isFull() {
-        return top >= MAX_SIZE - 1;
-    }
-
-    // Mendapatkan ukuran stack
-    public static int size() {
-        return top + 1;
-    }
-
-    // Tampilkan semua elemen
-    public static void display() {
-        if (isEmpty()) {
-            System.out.println("Stack kosong!");
-            return;
-        }
-
-        System.out.print("Stack (bottom to top): ");
-        for (int i = 0; i <= top; i++) {
-            System.out.print(stack[i] + " ");
-        }
-        System.out.println();
-    }
-
-    // Clear stack
-    public static void clear() {
-        top = -1;
-        System.out.println("Stack dikosongkan");
-    }
-
-    // Search elemen (return posisi dari top, -1 jika tidak ada)
-    public static int search(int value) {
-        for (int i = top; i >= 0; i--) {
-            if (stack[i] == value) {
-                return top - i + 1; // posisi dari top (1-indexed)
-            }
-        }
-        return -1;
-    }
-
-    public static void main(String[] args) {
-        System.out.println("=== STACK TANPA OOP ===\n");
-
-        // Test push
-        push(10);
-        push(20);
-        push(30);
-        push(40);
-        display();
-
-        System.out.println("\nUkuran stack: " + size());
-        System.out.println("Elemen teratas: " + peek());
-
-        // Test search
-        System.out.println("\nPosisi 30 dari top: " + search(30));
-        System.out.println("Posisi 100 dari top: " + search(100));
-
-        // Test pop
-        System.out.println();
-        pop();
-        pop();
-        display();
-
-        System.out.println("\nStack kosong? " + isEmpty());
-        System.out.println("Stack penuh? " + isFull());
-
-        // Test clear
-        System.out.println();
-        clear();
-        display();
-    }
-}
-```
-
-**Output:**
-```
-=== STACK TANPA OOP ===
-
-Push: 10
-Push: 20
-Push: 30
-Push: 40
-Stack (bottom to top): 10 20 30 40
-
-Ukuran stack: 4
-Elemen teratas: 40
-
-Posisi 30 dari top: 2
-Posisi 100 dari top: -1
-
-Pop: 40
-Pop: 30
-Stack (bottom to top): 10 20
-
-Stack kosong? false
-Stack penuh? false
-
-Stack dikosongkan
-Stack kosong!
-```
-
----
 
 ### Stack dengan OOP (Array-based)
 
@@ -440,7 +286,6 @@ Stack (bottom to top): 10 20 50 60 70
 Stack penuh? true
 ```
 
----
 
 ### Stack dengan OOP (Linked List-based)
 
@@ -664,7 +509,6 @@ Stack (top to bottom): 500 400 300 200 100 20 10
 Stack kosong? false
 ```
 
----
 
 ## Queue
 
@@ -782,167 +626,6 @@ classDiagram
     QueueLinkedList --> QueueNode : contains
 ```
 
----
-
-### Queue tanpa OOP
-
-```java
-public class QueueNoOOP {
-    static int[] queue = new int[100];
-    static int front = -1;
-    static int rear = -1;
-    static int MAX_SIZE = 100;
-
-    // Enqueue elemen ke queue
-    public static void enqueue(int value) {
-        if (rear >= MAX_SIZE - 1) {
-            System.out.println("Queue Overflow! Queue penuh.");
-            return;
-        }
-
-        if (front == -1) {
-            front = 0;
-        }
-
-        rear++;
-        queue[rear] = value;
-        System.out.println("Enqueue: " + value);
-    }
-
-    // Dequeue elemen dari queue
-    public static int dequeue() {
-        if (front == -1 || front > rear) {
-            System.out.println("Queue Underflow! Queue kosong.");
-            return -1;
-        }
-
-        int value = queue[front];
-        front++;
-
-        // Reset queue jika kosong
-        if (front > rear) {
-            front = rear = -1;
-        }
-
-        System.out.println("Dequeue: " + value);
-        return value;
-    }
-
-    // Peek elemen depan
-    public static int peek() {
-        if (front == -1 || front > rear) {
-            System.out.println("Queue kosong!");
-            return -1;
-        }
-
-        return queue[front];
-    }
-
-    // Peek elemen belakang
-    public static int peekRear() {
-        if (rear == -1) {
-            System.out.println("Queue kosong!");
-            return -1;
-        }
-
-        return queue[rear];
-    }
-
-    // Cek apakah queue kosong
-    public static boolean isEmpty() {
-        return front == -1 || front > rear;
-    }
-
-    // Cek apakah queue penuh
-    public static boolean isFull() {
-        return rear >= MAX_SIZE - 1;
-    }
-
-    // Mendapatkan ukuran queue
-    public static int size() {
-        if (isEmpty()) {
-            return 0;
-        }
-        return rear - front + 1;
-    }
-
-    // Tampilkan semua elemen
-    public static void display() {
-        if (isEmpty()) {
-            System.out.println("Queue kosong!");
-            return;
-        }
-
-        System.out.print("Queue (front to rear): ");
-        for (int i = front; i <= rear; i++) {
-            System.out.print(queue[i] + " ");
-        }
-        System.out.println();
-    }
-
-    // Clear queue
-    public static void clear() {
-        front = rear = -1;
-        System.out.println("Queue dikosongkan");
-    }
-
-    public static void main(String[] args) {
-        System.out.println("=== QUEUE TANPA OOP ===\n");
-
-        // Test enqueue
-        enqueue(10);
-        enqueue(20);
-        enqueue(30);
-        enqueue(40);
-        display();
-
-        System.out.println("\nUkuran queue: " + size());
-        System.out.println("Elemen depan: " + peek());
-        System.out.println("Elemen belakang: " + peekRear());
-
-        // Test dequeue
-        System.out.println();
-        dequeue();
-        dequeue();
-        display();
-
-        System.out.println("\nQueue kosong? " + isEmpty());
-
-        // Test enqueue lagi
-        System.out.println();
-        enqueue(50);
-        enqueue(60);
-        display();
-    }
-}
-```
-
-**Output:**
-```
-=== QUEUE TANPA OOP ===
-
-Enqueue: 10
-Enqueue: 20
-Enqueue: 30
-Enqueue: 40
-Queue (front to rear): 10 20 30 40
-
-Ukuran queue: 4
-Elemen depan: 10
-Elemen belakang: 40
-
-Dequeue: 10
-Dequeue: 20
-Queue (front to rear): 30 40
-
-Queue kosong? false
-
-Enqueue: 50
-Enqueue: 60
-Queue (front to rear): 30 40 50 60
-```
-
----
 
 ### Queue dengan OOP (Array-based)
 
@@ -1116,7 +799,6 @@ public class ArrayQueueDemo {
 }
 ```
 
----
 
 ### Queue dengan OOP (Circular Queue)
 
@@ -1349,7 +1031,6 @@ Array: [60] [70] [80] [40] [50]
 Queue penuh? true
 ```
 
----
 
 ### Queue dengan OOP (Linked List-based)
 
@@ -1571,7 +1252,6 @@ Queue (front to rear): 30 40 100 200 300 400 500
 Queue kosong? false
 ```
 
----
 
 ## Deque (Double-Ended Queue)
 
@@ -1775,7 +1455,6 @@ Insert front: 0
 Deque (front to rear): 0 5 10 30
 ```
 
----
 
 ## Priority Queue
 
@@ -1924,7 +1603,6 @@ Dequeue: 100 (priority: 3)
 Dequeue: 500 (priority: 5)
 ```
 
----
 
 ## Kapan Menggunakan Stack dan Queue
 
@@ -2046,7 +1724,6 @@ Dequeue: 500 (priority: 5)
 - Ukuran tidak diketahui/sering berubah → **Linked List-based**
 - Performance critical → **Array-based** (cache locality)
 
----
 
 ## Kompleksitas Stack dan Queue
 
@@ -2149,7 +1826,6 @@ public int dequeue() {
 }
 ```
 
----
 
 ## Perbandingan dengan Java Collections Framework
 
@@ -2384,7 +2060,6 @@ Low priority task (priority: 3)
 | | `poll()` | Hapus elemen prioritas tertinggi | null |
 | | `peek()` | Lihat elemen prioritas tertinggi | null |
 
----
 
 ## Latihan Praktikum
 
@@ -2686,7 +2361,6 @@ public class HotPotatoGame {
 }
 ```
 
----
 
 ## Ringkasan
 
@@ -2727,7 +2401,6 @@ public class HotPotatoGame {
 - Event-driven simulation
 - A* pathfinding
 
----
 
 ## Tugas Praktikum
 

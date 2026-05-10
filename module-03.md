@@ -1,4 +1,4 @@
-# Module 03: Konsep Dasar OOP
+# Modul 3. Konsep Dasar OOP
 
 Object-Oriented Programming (OOP) adalah cara menulis program dengan memodelkan **objek** seperti di dunia nyata.
 

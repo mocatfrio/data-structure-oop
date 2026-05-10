@@ -1,4 +1,4 @@
-# Module 01. Paradigma Pemrograman
+# Modul 1. Paradigma Pemrograman
 
 ## Daftar Isi
 

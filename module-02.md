@@ -1,4 +1,4 @@
-# Module 02: Pengenalan Java
+# Modul 2. Pengenalan Java
 
 ## Daftar Isi
 
