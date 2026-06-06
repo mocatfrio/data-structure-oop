@@ -55,3 +55,7 @@ Pada akhir mata kuliah, mahasiswa diharapkan mampu memilih struktur data yang se
 | 9 | Hash-Table dan Map | [Menuju modul](module-09.md) |
 | 10 | Tree, Traversal, dan Binary Search Tree | [Menuju modul](module-10.md) |
 | 11 | Tree Lanjutan (AVL, Heap, Trie) | [Menuju modul](module-11.md) |
+| 12 | Pengenalan Graph dan Representasi | [Menuju modul](module-12.md) |
+| 13 | Graph Traversal (BFS dan DFS) | [Menuju modul](module-13.md) |
+| 14 | Shortest Path dan Minimum Spanning Tree | [Menuju modul](module-14.md) |
+| 15 | Sorting Algorithms | [Menuju modul](module-15.md) |
